@@ -1,11 +1,12 @@
 import React from 'react';
-import './App.css';
-import './Styles/style.scss';
+import LogPanel from './Containers/logPanel/logPanel';
+import './App.scss';
+
 
 function App() {
   return (
     <div className="App">
-      
+      <LogPanel/>
     </div>
   );
 }
