@@ -1,83 +1,65 @@
 
-// variables & mixins
-$gray: rgb(14, 14, 14);
-$green: rgb(139, 211, 23);
+@import '../../variables.scss';
 
-@mixin flexCenter {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-
-.logPanel {
+.login {
     @include flexCenter();
-    height: 100vh;
+    height: 80vh;
     width: 100vw;
-    background-color: $gray;
+    background-color: $blue;
 }
 .form {
+    position: relative;
     @include flexCenter();
-    justify-content: center;
+    justify-content: space-evenly;
     flex-direction: column;
     width: 250px;
-    height: 200px;
-    background-color: rgba(0, 0, 0, 0.925);
-    border-radius: .2em;
-    padding: 1em;
+    height: 250px;
+    // border: .2em solid black;
+    background-color: $grayBlue;
+    border-radius: .5em;
+    padding: 4em 1em 1em 1em;
 
-    &__input-box {
-        display: flex;
-        justify-content: flex-start;
-        flex-direction: column;
-        width: 100%;
-        margin-bottom: 1em;
+    &__logo {
+        position: absolute;
+        top: 0;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        padding: .8em;
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        border: .2em solid $grayBlue;
+        background-color: $blue;
     }
+
     &__input {
-        background-color: $gray;
         border: none;
+        // border-bottom: .1em solid black;
         color: white;
         width: 100%;
-        height: 25px;
+        height: 35px;
         font-size: 1em;
+        border-radius: .2em;
         margin: .5em 0;
         padding: 0 .3em;
         &::placeholder {
             color: rgb(110, 110, 110)
         }
     }
-
-    &__button-box {
-        display: flex;
-        justify-content: flex-start;
-        width: 100%;
-        // border: 1px solid white;
-    }
     
     &__button {
-        background-color: $green;
+        background-color: $orange;
         color: white;
         border: none;
-        height: 25px;
+        height: 35px;
+        width: 100%;
         border-radius: .2em;
         font-size: 1em;
         font-weight: bold;
         padding: 0 .3em;
-        margin-right: .3em;
     }
 }
 
 
 
 
-// <section className="logPanel">
-// <form className="form">
-//     <input className="form__email" type="email" placeholder="email"/>
-//     <input className="form__password" type="password" placeholder="password"/>
-//     <div className="form__box">
-//         <button className="box__button box__button--login">Log in</button>
-//         <button className="box__button box__button--singUp" >Sign up</button>
-//         {/* <button className="box__button box__button--logOut" ></button> */}
-//     </div>
-// </form>
-// </section>

@@ -1,6 +1,6 @@
 @import './Containers/login/login.scss';
 @import './Containers/Home/home.scss';
-
+@import './Components//navbar/navbar.scss';
 * {
   box-sizing: border-box;
   padding: 0;
@@ -8,4 +8,5 @@
 }
 .App {
   text-align: center;
+  min-height: 100vh;
 }
