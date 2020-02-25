@@ -1,17 +1,23 @@
 import React, { Component } from "react";
 import app from '../../Components/base'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faUserPlus } from '@fortawesome/free-solid-svg-icons'
+import { faUserPlus, faUser } from '@fortawesome/free-solid-svg-icons'
 
 class Login extends Component {
     constructor(props) {
         super(props)
         this.logIn = this.logIn.bind(this);
         this.signUp = this.signUp.bind(this);
-        this.handleChange = this.handleChange.bind(this)
+        this.handleChange = this.handleChange.bind(this);
+        this.handleCreateAnchor = this.handleCreateAnchor.bind(this);
         this.state = {
             email: "",
-            password: ""
+            password: "",
+            nick: "",
+            buttonCaption: "Log in",
+            anchorCaption: "Create account",
+            isLoginForm: true,
+        
         }
     }
 
@@ -44,18 +50,34 @@ class Login extends Component {
         })
     }
 
+    handleCreateAnchor() {
+        this.setState({isLoginForm: !this.state.isLoginForm}, () => {
+            console.log(this.state.isLoginForm)
+        })
+        
+    }
     render() {
+        const { isLoginForm, nick, email, password, anchorCaption} = this.state;
         return (
             <section className="login">
                 <form className="form">
-                    {/* <div className="form__input-box"> */}
+                    
+                        {!isLoginForm ? <input 
+                            className="form__name form__input" 
+                            type="nick" 
+                            name="nick"
+                            placeholder="nick" 
+                            onChange={this.handleChange} 
+                            value={nick}
+                        /> : null}
+                        
                         <input 
                             className="form__email form__input" 
                             type="email" 
                             name="email"
                             placeholder="email" 
                             onChange={this.handleChange} 
-                            value={this.state.email}
+                            value={email}
                         />
                         <input 
                             className="form__password form__input" 
@@ -63,15 +85,23 @@ class Login extends Component {
                             name="password"
                             placeholder="password" 
                             onChange={this.handleChange} 
-                            value={this.state.password}
+                            value={password}
                         />
-                    {/* </div> */}
-                    {/* <div className="form__button-box"> */}
-                        <button className="form__button form__button--login" onClick={this.logIn}>Log in</button>
-                        {/* <button className="form__button form__button--singUp" onClick={this.signUp}>Sign up</button> */}
+                        { isLoginForm ?  
+                            <button className="form__button" onClick={this.logIn}> Log in </button> :
+                            <button className="form__button" onClick={this.signUp}> Sign up </button>
+                        }
+                       
+                        <a className="form__create-link" href="#" onClick={this.handleCreateAnchor}>
+                            {isLoginForm ? "Create account" : "Log in"}
+                        </a>
+                        
                     {/* </div> */}
                     <div className="form__logo">
-                        <FontAwesomeIcon icon={faUserPlus} color="#005D95" style={{fontSize:60}}/>
+                        {isLoginForm ? 
+                            <FontAwesomeIcon icon={faUser} color="#005D95" style={{fontSize:60}}/> : 
+                            <FontAwesomeIcon icon={faUserPlus} color="#005D95" style={{fontSize:60}}/>
+                        }
                     </div>
                 </form>
             </section>
