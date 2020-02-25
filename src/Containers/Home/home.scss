@@ -1,1 +1,79 @@
 @import '../../variables.scss';
+
+
+.main {
+    @include flexCenter();
+    justify-content: space-between;
+    flex-direction: column;
+    background-color: $grayBlue;
+    min-height: 100vh;
+    padding: 1em 0;
+}
+
+
+.box {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    grid-gap: .5em;
+    background-color: $grayBlue;
+    width: 320px;
+
+    &__item {
+        @include flexCenter();
+        flex-direction: column;
+        width: 8.5em;
+        height: 8.5em;
+        margin: 0 auto;
+        background-color: $blue;
+        border-radius: 1em;
+        // border: .2em solid white;
+    }
+}
+.item {
+    &__caption {
+        font-size: 1em;
+        color: white;
+    }
+}
+
+.button__logout {
+    background-color: $orange;
+    color: white;
+    border: none;
+    height: 3em;
+    width: 310px;
+    border-radius: .2em;
+    font-size: 1em;
+    font-weight: bold;
+}
+
+
+// @import '../../variables.scss';
+
+
+// .main {
+//     display: flex;
+//     justify-content: space-evenly;
+//     align-items: flex-start;
+//     flex-wrap: wrap;
+//     background-color: $grayBlue;
+//     min-height: 90vh;
+//     padding: 1em 0;
+    
+//     &__item {
+//         @include flexCenter();
+//         flex-direction: column;
+//         width: 9em;
+//         height: 9em;
+//         background-color: $blue;
+//         border-radius: 1em;
+//     }
+// }
+
+// .item {
+//     &__caption {
+//         font-size: 1em;
+//         color: white;
+//     }
+// }

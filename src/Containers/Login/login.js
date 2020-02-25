@@ -132,7 +132,6 @@ class Login extends Component {
                             value={password}
                         />   
                         <span className="form__validation-icon">
-                            {/* <FontAwesomeIcon icon={faExclamationCircle} color="#FF8E00" style={{fontSize:20}}/>        */}
                             {isPasswordCorrect ? null : <FontAwesomeIcon icon={faExclamationCircle} color="#FF8E00" style={{fontSize:20}}/>}
                         </span>    
                     </div>

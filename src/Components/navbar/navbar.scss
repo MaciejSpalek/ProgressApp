@@ -4,7 +4,8 @@
     @include flexCenter();
     justify-content: flex-start;
     padding: .5em 1em;
-    color: $blue;
+    color: $grayBlue;
+    min-height: 10vh
 }
 
 
