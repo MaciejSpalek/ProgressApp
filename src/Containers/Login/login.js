@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import app from '../../Components/base'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faUserPlus, faUser } from '@fortawesome/free-solid-svg-icons'
+import { faUserPlus, faUser, faExclamationCircle } from '@fortawesome/free-solid-svg-icons'
 
 class Login extends Component {
     constructor(props) {
@@ -10,14 +10,14 @@ class Login extends Component {
         this.signUp = this.signUp.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.handleCreateAnchor = this.handleCreateAnchor.bind(this);
+
         this.state = {
-            email: "",
-            password: "",
-            nick: "",
-            buttonCaption: "Log in",
-            anchorCaption: "Create account",
+            isPasswordCorrect: true,
+            isEmailCorrect: true,
             isLoginForm: true,
-        
+            password: "",
+            email: "",
+            nick: "",
         }
     }
 
@@ -27,7 +27,20 @@ class Login extends Component {
         .then(user => {
             console.log(user)
         })
-        .catch(function(error) {
+        .catch((error) => {
+            this.setState({
+                isEmailCorrect: true,
+                isPasswordCorrect: true 
+            })
+            if(error.code == "auth/invalid-email") {
+                this.setState({
+                    isEmailCorrect: false 
+                })
+            } else if(error.code == "auth/wrong-password") {
+                this.setState({
+                    isPasswordCorrect: false
+                })
+            }
             console.log(error);
         });
         
@@ -36,11 +49,32 @@ class Login extends Component {
     signUp(e) {
         e.preventDefault();
         app.auth().createUserWithEmailAndPassword(this.state.email, this.state.password)
-        .then(user => {
-            console.log(user)
+        .then(result => {
+            return result.user.updateProfile({
+                displayName: this.state.nick
+            })
         })
-        .catch(function(error) {
-            console.log(error);
+        .catch((error) => {
+            // validation
+            this.setState({
+                isEmailCorrect: true,
+                isPasswordCorrect: true 
+            })
+            if(this.state.password == "") {
+                this.setState({
+                    isPasswordCorrect: false
+                })
+            }
+            if(error.code == "auth/invalid-email" || error.code == "auth/email-already-in-use") {
+                this.setState({
+                    isEmailCorrect: false 
+                })
+            } else if(error.code == "auth/weak-password") {
+                this.setState({
+                    isPasswordCorrect: false
+                })
+            }
+            // console.log(error.code);
         });
     }
  
@@ -51,26 +85,30 @@ class Login extends Component {
     }
 
     handleCreateAnchor() {
-        this.setState({isLoginForm: !this.state.isLoginForm}, () => {
-            console.log(this.state.isLoginForm)
+        this.setState({
+            isLoginForm: !this.state.isLoginForm,
+            isEmailCorrect: true,
+            isPasswordCorrect: true 
         })
-        
     }
     render() {
-        const { isLoginForm, nick, email, password, anchorCaption} = this.state;
+        const { isLoginForm, nick, email, password, isPasswordCorrect, isEmailCorrect } = this.state;
         return (
             <section className="login">
                 <form className="form">
                     
-                        {!isLoginForm ? <input 
+                    {/* {!isLoginForm ? 
+                        <input 
                             className="form__name form__input" 
                             type="nick" 
                             name="nick"
                             placeholder="nick" 
                             onChange={this.handleChange} 
                             value={nick}
-                        /> : null}
-                        
+                        /> : null
+                    }
+                         */}
+                    <div className="form__email-container">
                         <input 
                             className="form__email form__input" 
                             type="email" 
@@ -79,6 +117,12 @@ class Login extends Component {
                             onChange={this.handleChange} 
                             value={email}
                         />
+                        <span className="form__validation-icon">
+                            {isEmailCorrect ? null : <FontAwesomeIcon icon={faExclamationCircle} color="#FF8E00" style={{fontSize:20}}/>}
+                        </span> 
+                    </div>
+
+                    <div className="form__password-container">
                         <input 
                             className="form__password form__input" 
                             type="password" 
@@ -86,17 +130,22 @@ class Login extends Component {
                             placeholder="password" 
                             onChange={this.handleChange} 
                             value={password}
-                        />
-                        { isLoginForm ?  
-                            <button className="form__button" onClick={this.logIn}> Log in </button> :
-                            <button className="form__button" onClick={this.signUp}> Sign up </button>
-                        }
-                       
-                        <a className="form__create-link" href="#" onClick={this.handleCreateAnchor}>
-                            {isLoginForm ? "Create account" : "Log in"}
-                        </a>
+                        />   
+                        <span className="form__validation-icon">
+                            {/* <FontAwesomeIcon icon={faExclamationCircle} color="#FF8E00" style={{fontSize:20}}/>        */}
+                            {isPasswordCorrect ? null : <FontAwesomeIcon icon={faExclamationCircle} color="#FF8E00" style={{fontSize:20}}/>}
+                        </span>    
+                    </div>
+
+                    {isLoginForm ?  
+                        <button className="form__button" onClick={this.logIn}> Log in </button> :
+                        <button className="form__button" onClick={this.signUp}> Sign up </button>
+                    }
+                    
+                    <a className="form__create-link" href="#" onClick={this.handleCreateAnchor}>
+                        {isLoginForm ? "Create account" : "Log in"}
+                    </a>
                         
-                    {/* </div> */}
                     <div className="form__logo">
                         {isLoginForm ? 
                             <FontAwesomeIcon icon={faUser} color="#005D95" style={{fontSize:60}}/> : 

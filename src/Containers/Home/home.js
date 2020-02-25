@@ -10,10 +10,11 @@ class Home extends Component {
     logout() {
         app.auth().signOut();
     }
+ 
     render() {
         return(
             <div>
-               <h1>You are logged in !!!</h1>
+               <h1>You are logged in !!! {app.auth().currentUser.displayName}</h1>
                 <button onClick={this.logout}>Logout</button>
             </div>
             )
