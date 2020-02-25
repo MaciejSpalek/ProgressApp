@@ -1,0 +1,10 @@
+@import '../../variables.scss';
+
+.navbar {
+    @include flexCenter();
+    justify-content: flex-start;
+    padding: .5em 1em;
+    color: $blue;
+}
+
+

@@ -1,0 +1,12 @@
+
+// variables & mixins
+$gray: rgb(14, 14, 14);
+$grayBlue: #005D95;
+$blue: #0080C8; 
+$orange: #FF8E00;
+
+@mixin flexCenter {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
