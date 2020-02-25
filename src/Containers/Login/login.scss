@@ -1,6 +1,6 @@
 
 // variables & mixins
-$gray: rgb(26, 26, 26);
+$gray: rgb(14, 14, 14);
 $green: rgb(139, 211, 23);
 
 @mixin flexCenter {
@@ -22,7 +22,7 @@ $green: rgb(139, 211, 23);
     flex-direction: column;
     width: 250px;
     height: 200px;
-    background-color: rgba(0, 0, 0, 0.637);
+    background-color: rgba(0, 0, 0, 0.925);
     border-radius: .2em;
     padding: 1em;
 
