@@ -1,0 +1,64 @@
+@import '../../variables.scss';
+
+.panel {
+    position: absolute;
+    top: 0;
+    left: 0;
+    min-height: 90vh;
+    width: 100%;
+    background-color: $blue;
+    &__box {
+        background-color: $grayBlue;
+        padding: .5em;
+    }
+
+    &__header {
+        @include flexCenter();
+        justify-content: space-between;
+    }
+
+    &__form {
+        // @include flexCenter();
+        // flex-direction: column;
+        display: grid;
+        grid-template-columns: repeat(1, 1fr);
+
+    }
+}
+
+.header {
+    &__title-box {
+        @include flexCenter;
+    }
+
+    &__caption {
+        font-size: 1.5em;
+        color: white;
+        margin-left: .2em;
+    }
+}
+
+.form {
+    &__label {
+        @include flexCenter;
+        font-size: 1.5em;
+        color: white;
+        width: 100%;
+    }
+    &__input {
+        width: 100%;
+        margin: .5em .2em .5em 0;
+        background-color: white;
+        color: $grayBlue;
+    }
+    &__button {
+        margin-left: .5em;
+        max-width: 100px;
+        &--save {
+            margin: 0;
+            max-width: none;
+            width: 100%;
+        }
+    }
+}
+
