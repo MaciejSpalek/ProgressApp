@@ -4,7 +4,7 @@ import styled from 'styled-components';
 const DataParagraph = styled.p`
   font-size: 1.5em;
   font-weight: bold;
-  color: #FF8E00;
+  color: white;
 `;
 
 const getCurrentDate = (separator='') => {

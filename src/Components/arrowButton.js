@@ -14,9 +14,9 @@ const Button = styled.button`
   border-radius: .2em;
 `;
 
-const ArrowButton = ({rotationDegree}) => {
+const ArrowButton = ({rotationDegree, isHide, handleClick}) => {
     return (
-        <Button>
+        <Button onClick={() => handleClick(isHide)}>
             <FontAwesomeIcon 
                 icon={faAngleDown} 
                 transform={{ rotate: rotationDegree }} 

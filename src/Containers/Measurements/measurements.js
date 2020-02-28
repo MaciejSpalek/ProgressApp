@@ -1,8 +1,21 @@
 import React, { Component } from "react";
 import app from '../../Components/base';
 import SaveBox from './saveBox';
+import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faRuler, faBicycle } from '@fortawesome/free-solid-svg-icons'
+import { faRuler, faBicycle, faAngleDown } from '@fortawesome/free-solid-svg-icons'
+
+const Button = styled.button`
+  font-weight: bold;
+  font-size: 1em;
+  color: white;
+  background-color: #FF8E00;
+  border: none;
+  width:35px;
+  height: 35px;
+  border-radius: .2em;
+`;
+
 
 class Measurements extends Component {
     constructor(props) {
@@ -10,10 +23,12 @@ class Measurements extends Component {
         this.handleNewMeasurements = this.handleNewMeasurements.bind(this);
         this.handleSaveButton = this.handleSaveButton.bind(this);
         this.handleChange = this.handleChange.bind(this);
+        // this.handleArrowButton = this.handleArrowButton.bind(this)
         this.state = {
             isPanelFormActive: true,
             buttonCaption: "hide",
             saveBoxes: [],
+            isSaveBoxHidden: false,
             neck: "",
             chest: "",
             biceps: "",
@@ -36,12 +51,15 @@ class Measurements extends Component {
             calf: calf
         }
         
-        this.setState({saveBoxes: [...saveBoxes, parameters]})
+        this.setState({
+            isPanelFormActive: false,
+            saveBoxes: [...saveBoxes, parameters]
+        })
     }
-    renderSaveBoxes() {
-        const { saveBoxes} = this.state;
+    renderSaveBoxes = () => {
+        const { saveBoxes, isSaveBoxHidden } = this.state;
         return saveBoxes.map((saveBox, index) => {
-            return (
+            return ( 
                 <SaveBox 
                     neck={saveBox.neck}
                     chest={saveBox.chest}
@@ -51,10 +69,12 @@ class Measurements extends Component {
                     thigh={saveBox.thigh}
                     calf={saveBox.calf}
                     key={index}
+                    isSaveBoxHidden={isSaveBoxHidden}
                 /> 
             )
         })
     }
+
     handleNewMeasurements() {
         const { isPanelFormActive } = this.state;
         this.setState({
@@ -62,6 +82,7 @@ class Measurements extends Component {
         })
         isPanelFormActive ? this.setState({buttonCaption: "show"}) : this.setState({buttonCaption: "hide"})
     }
+
     handleChange(e) {
         this.setState({
             [e.target.name]: e.target.value
@@ -79,7 +100,14 @@ class Measurements extends Component {
                             <FontAwesomeIcon icon={faRuler} color="#FF8E00" style={{fontSize:25}} />
                             <h2 className="header__caption">Measurements</h2>
                         </div>
-                        <button className="form__button" onClick={this.handleNewMeasurements}>{ buttonCaption }</button>
+                        <Button onClick={this.handleNewMeasurements}>
+                            <FontAwesomeIcon 
+                                icon={faAngleDown} 
+                                transform={!this.state.isPanelFormActive ? { rotate: 0 } : { rotate: 180 }}
+                                color="white" 
+                                style={{fontSize:30}}
+                            />
+                        </Button>
                     </div>
                     { isPanelFormActive ? 
                     <form className="panel__form">
