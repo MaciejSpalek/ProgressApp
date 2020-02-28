@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Login from './Containers/Login/login';
 import Home from './Containers/Home/home';
 import app from './Components/base';
-import Navbar from './Components/navbar/navbar';
+import Navbar from './Containers/navbar/navbar';
 import './App.scss';
 
 class App extends Component {

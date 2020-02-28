@@ -1,4 +1,5 @@
 @import '../../variables.scss';
+@import './saveBox.scss';
 
 .panel {
     position: absolute;
@@ -13,16 +14,13 @@
     }
 
     &__header {
-        @include flexCenter();
+        @include flexCenter;
         justify-content: space-between;
     }
 
     &__form {
-        // @include flexCenter();
-        // flex-direction: column;
-        display: grid;
-        grid-template-columns: repeat(1, 1fr);
-
+        @include flexCenter;
+        flex-direction: column;
     }
 }
 
@@ -41,6 +39,7 @@
 .form {
     &__label {
         @include flexCenter;
+        justify-content: flex-start;
         font-size: 1.5em;
         color: white;
         width: 100%;
@@ -55,7 +54,7 @@
         margin-left: .5em;
         max-width: 100px;
         &--save {
-            margin: 0;
+            margin: .5em 0;
             max-width: none;
             width: 100%;
         }
