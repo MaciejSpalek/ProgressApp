@@ -2,12 +2,12 @@
 
 .main {
     @include flexCenter();
+    position: relative;
     justify-content: space-between;
     flex-direction: column;
     background-color: $blue;
     min-height: 90vh;
     padding-bottom: 1em;
-    position: relative;
     padding: 1em 0;
 }
 

@@ -3,9 +3,11 @@
 .navbar {
     @include flexCenter();
     justify-content: flex-start;
-    padding: .5em 1em;
-    color: $grayBlue;
-    min-height: 10vh
+    padding: .2em .5em;
+    color: white;
+    background-color: $darkBlue;
+    height: 4em;
+    font-size: 1em;
 }
 
 

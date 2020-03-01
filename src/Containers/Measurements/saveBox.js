@@ -45,7 +45,7 @@ class SaveBox extends React.Component {
                 <div className="saveBox__header">
                     <Data/>
                     <Button onClick={this.handleArrowButton}>
-                        <FontAwesomeIcon icon={faAngleDown} transform={this.state.isSaveBoxHidden ? { rotate: 0 } : { rotate: 180 }} color="white" style={{fontSize:30}}/>
+                        <FontAwesomeIcon icon={faAngleDown} transform={isSaveBoxHidden ? { rotate: 0 } : { rotate: 180 }} color="white" style={{fontSize:30}}/>
                     </Button>
                 </div>
                 { !this.state.isSaveBoxHidden ?

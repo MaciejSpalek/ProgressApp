@@ -15,10 +15,11 @@ class App extends Component {
   
   componentDidMount() {
     this.authListener();
+    
   }
 
   authListener() {
-    app.auth().onAuthStateChanged((user) => {
+    app.getApp().auth().onAuthStateChanged((user) => {
       if(user) {
         this.setState({user})
       } else {
@@ -28,6 +29,7 @@ class App extends Component {
   }
 
   render() {
+    // console.log(app.getApp())
     return (
     <div className="App">
       <Navbar/>

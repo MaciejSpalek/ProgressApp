@@ -10,7 +10,6 @@ class Login extends Component {
         this.signUp = this.signUp.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.handleCreateAnchor = this.handleCreateAnchor.bind(this);
-
         this.state = {
             isPasswordCorrect: true,
             isEmailCorrect: true,
@@ -23,9 +22,9 @@ class Login extends Component {
 
     logIn(e) {
         e.preventDefault();
-        app.auth().signInWithEmailAndPassword(this.state.email, this.state.password)
+        const { email, password } = this.state;
+        app.login(email, password)
         .then(user => {
-            console.log(user)
         })
         .catch((error) => {
             this.setState({
@@ -41,17 +40,16 @@ class Login extends Component {
                     isPasswordCorrect: false
                 })
             }
-            console.log(error);
         });
         
     }
-
     signUp(e) {
         e.preventDefault();
-        app.auth().createUserWithEmailAndPassword(this.state.email, this.state.password)
+        const { email, password, nick } = this.state;
+        app.signUp(email, password)
         .then(result => {
             return result.user.updateProfile({
-                displayName: this.state.nick
+                displayName: nick
             })
         })
         .catch((error) => {
@@ -60,7 +58,7 @@ class Login extends Component {
                 isEmailCorrect: true,
                 isPasswordCorrect: true 
             })
-            if(this.state.password == "") {
+            if(password == "") {
                 this.setState({
                     isPasswordCorrect: false
                 })
@@ -74,16 +72,13 @@ class Login extends Component {
                     isPasswordCorrect: false
                 })
             }
-            // console.log(error.code);
         });
     }
- 
     handleChange(e) {
         this.setState({
             [e.target.name]: e.target.value
         })
     }
-
     handleCreateAnchor() {
         this.setState({
             isLoginForm: !this.state.isLoginForm,
@@ -127,7 +122,7 @@ class Login extends Component {
                             className="form__password form__input" 
                             type="password" 
                             name="password"
-                            placeholder="password" 
+                            placeholder="hasło" 
                             onChange={this.handleChange} 
                             value={password}
                         />   
@@ -137,12 +132,12 @@ class Login extends Component {
                     </div>
 
                     {isLoginForm ?  
-                        <button className="form__button" onClick={this.logIn}> Log in </button> :
-                        <button className="form__button" onClick={this.signUp}> Sign up </button>
+                        <button className="form__button" onClick={this.logIn}> Zaloguj </button> :
+                        <button className="form__button" onClick={this.signUp}> Stwórz </button>
                     }
                     
                     <a className="form__create-link" href="#" onClick={this.handleCreateAnchor}>
-                        {isLoginForm ? "Create account" : "Log in"}
+                        {isLoginForm ? "Nie masz konta ?" : "logowanie"}
                     </a>
                         
                     <div className="form__logo">

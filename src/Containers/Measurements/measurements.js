@@ -3,7 +3,7 @@ import app from '../../Components/base';
 import SaveBox from './saveBox';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faRuler, faBicycle, faAngleDown } from '@fortawesome/free-solid-svg-icons'
+import { faRuler, faAngleDown } from '@fortawesome/free-solid-svg-icons'
 
 const Button = styled.button`
   font-weight: bold;
@@ -23,7 +23,6 @@ class Measurements extends Component {
         this.handleNewMeasurements = this.handleNewMeasurements.bind(this);
         this.handleSaveButton = this.handleSaveButton.bind(this);
         this.handleChange = this.handleChange.bind(this);
-        // this.handleArrowButton = this.handleArrowButton.bind(this)
         this.state = {
             isPanelFormActive: true,
             buttonCaption: "hide",
@@ -37,6 +36,13 @@ class Measurements extends Component {
             calf: "",
             thigh: ""
         }
+    }
+
+    componentDidMount() {
+        console.log(this.getData())
+        // this.setState({
+        //     saveBoxes: this.getData()
+        // })
     }
     handleSaveButton(e) {
         e.preventDefault();
@@ -55,6 +61,7 @@ class Measurements extends Component {
             isPanelFormActive: false,
             saveBoxes: [...saveBoxes, parameters]
         })
+        this.updateSaveBoxes();
     }
     renderSaveBoxes = () => {
         const { saveBoxes, isSaveBoxHidden } = this.state;
@@ -74,7 +81,6 @@ class Measurements extends Component {
             )
         })
     }
-
     handleNewMeasurements() {
         const { isPanelFormActive } = this.state;
         this.setState({
@@ -82,23 +88,33 @@ class Measurements extends Component {
         })
         isPanelFormActive ? this.setState({buttonCaption: "show"}) : this.setState({buttonCaption: "hide"})
     }
-
     handleChange(e) {
         this.setState({
             [e.target.name]: e.target.value
         })
     }
-
+    getData() {
+        app.getDatabase().collection('measurements').get().then(snapshot => {
+            snapshot.forEach(x => {
+                return x.data().saveArray
+            })
+        })
+    }
+    updateSaveBoxes() {
+        const saveBoxDocument = app.getDatabase().collection('measurements').doc('saveBox');
+        saveBoxDocument.set({
+            "saveArray": this.state.saveBoxes
+        })
+    }
     render() {
-        const { isPanelFormActive, buttonCaption, saveBoxes, neck, chest, biceps, waist, forearm, thigh, calf } = this.state;
-        console.log(saveBoxes)
+        const { isPanelFormActive, neck, chest, biceps, waist, forearm, thigh, calf } = this.state;
         return (
             <section className="panel">
                 <div className="panel__box">
                     <div className="panel__header">
                         <div className="header__title-box">
                             <FontAwesomeIcon icon={faRuler} color="#FF8E00" style={{fontSize:25}} />
-                            <h2 className="header__caption">Measurements</h2>
+                            <h2 className="header__caption">Wymiary</h2>
                         </div>
                         <Button onClick={this.handleNewMeasurements}>
                             <FontAwesomeIcon 
@@ -111,17 +127,17 @@ class Measurements extends Component {
                     </div>
                     { isPanelFormActive ? 
                     <form className="panel__form">
-                        <label className="form__label"><input className="form__input" name="neck" placeholder="Neck"  value={neck} onChange={this.handleChange}/> cm </label>
-                        <label className="form__label"><input className="form__input" name="chest" placeholder="Chest" value={chest} onChange={this.handleChange}/> cm </label>
-                        <label className="form__label"><input className="form__input" name="biceps" placeholder="Biceps" value={biceps} onChange={this.handleChange}/> cm </label>
-                        <label className="form__label"><input className="form__input" name="forearm" placeholder="Forearm" value={forearm} onChange={this.handleChange}/> cm </label>
-                        <label className="form__label"><input className="form__input" name="waist" placeholder="Waist" value={waist} onChange={this.handleChange}/> cm </label>
-                        <label className="form__label"><input className="form__input" name="thigh" placeholder="Thigh" value={thigh} onChange={this.handleChange}/> cm </label>
-                        <label className="form__label"><input className="form__input" name="calf" placeholder="Calf" value={calf} onChange={this.handleChange}/> cm </label>
-                        <button className="form__button form__button--save" onClick={this.handleSaveButton}>save</button>
+                        <label className="form__label"><input className="form__input" name="neck" placeholder="szyja"  value={neck} onChange={this.handleChange}/> cm </label>
+                        <label className="form__label"><input className="form__input" name="chest" placeholder="klatka piersiowa" value={chest} onChange={this.handleChange}/> cm </label>
+                        <label className="form__label"><input className="form__input" name="biceps" placeholder="ramię" value={biceps} onChange={this.handleChange}/> cm </label>
+                        <label className="form__label"><input className="form__input" name="forearm" placeholder="przedramię" value={forearm} onChange={this.handleChange}/> cm </label>
+                        <label className="form__label"><input className="form__input" name="waist" placeholder="talia" value={waist} onChange={this.handleChange}/> cm </label>
+                        <label className="form__label"><input className="form__input" name="thigh" placeholder="udo" value={thigh} onChange={this.handleChange}/> cm </label>
+                        <label className="form__label"><input className="form__input" name="calf" placeholder="łydka" value={calf} onChange={this.handleChange}/> cm </label>
+                        <button className="form__button form__button--save" onClick={this.handleSaveButton}>Zapisz</button>
                     </form> :null }
-                    {this.renderSaveBoxes()}
                 </div>
+                {this.renderSaveBoxes()}
             </section>
         );
     }
