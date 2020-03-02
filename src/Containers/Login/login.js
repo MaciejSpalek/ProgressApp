@@ -45,11 +45,11 @@ class Login extends Component {
     }
     signUp(e) {
         e.preventDefault();
-        const { email, password, nick } = this.state;
-        app.signUp(email, password)
-        .then(result => {
-            return result.user.updateProfile({
-                displayName: nick
+        const { email, password } = this.state;
+        app.signUp(email, password).then(cred => {
+            // create document for user and create default fields
+            return app.getDatabase().collection('users').doc(cred.user.uid).set({
+                measurement: []
             })
         })
         .catch((error) => {

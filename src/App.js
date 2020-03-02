@@ -14,8 +14,7 @@ class App extends Component {
   }
   
   componentDidMount() {
-    this.authListener();
-    
+    this.authListener(); 
   }
 
   authListener() {
@@ -32,8 +31,8 @@ class App extends Component {
     // console.log(app.getApp())
     return (
     <div className="App">
-      <Navbar/>
-      {this.state.user ? (<Home/>): (<Login/>)}
+        <Navbar/>
+        {this.state.user ? (<Home/>): (<Login/>)}
     </div>
     );
   }

@@ -30,9 +30,7 @@ class Home extends Component {
     }
   
     render() {
-        const {
-            isMeasurementsActive
-        } = this.state;
+        const { isMeasurementsActive } = this.state;
         return (
             <>
             <div className = "main">

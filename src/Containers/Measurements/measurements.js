@@ -39,11 +39,20 @@ class Measurements extends Component {
     }
 
     componentDidMount() {
-        console.log(this.getData())
-        // this.setState({
-        //     saveBoxes: this.getData()
+        // app.getDatabase().collection('measurements').get().then(snapshot => {
+        //     const tempSaveArray = [];
+        //     snapshot.forEach(doc => {
+        //         const data = doc.data().saveArray;
+        //         tempSaveArray.push(data)
+        //     })
+        //     this.setState({
+        //         saveBoxes: tempSaveArray
+        //     })
         // })
+        this.setDataFromDocument()
+        // this.getData()
     }
+
     handleSaveButton(e) {
         e.preventDefault();
         const { saveBoxes, neck, chest, biceps, waist, forearm, thigh, calf } = this.state;
@@ -60,8 +69,40 @@ class Measurements extends Component {
         this.setState({
             isPanelFormActive: false,
             saveBoxes: [...saveBoxes, parameters]
+        }, ()=> {
+            this.updateSaveBoxes();
+        })   
+    }
+    getCurrentUser() {
+        return app.getApp().auth().currentUser.uid;
+    }
+    getDocument() {
+        return app.getDatabase().collection('users').doc(this.getCurrentUser());
+    }
+    setDataFromDocument() {
+        const document = this.getDocument();
+        document.get().then(doc => {
+            console.log(doc.data().measurement)
+            this.setState({
+                saveBoxes: doc.data().measurement
+            })
         })
-        this.updateSaveBoxes();
+    }
+    getData() {
+        app.getDatabase().collection('users').get().then(snapshot => {
+            snapshot.docs.forEach(doc => {
+                // this.setState({
+                //     saveBoxes: x.data().saveArray
+                // })
+                console.log(doc.data().dupa)
+            })
+        })
+       
+    }
+    updateSaveBoxes() {
+        this.getDocument().update({
+            "measurement": this.state.saveBoxes
+        })
     }
     renderSaveBoxes = () => {
         const { saveBoxes, isSaveBoxHidden } = this.state;
@@ -93,19 +134,7 @@ class Measurements extends Component {
             [e.target.name]: e.target.value
         })
     }
-    getData() {
-        app.getDatabase().collection('measurements').get().then(snapshot => {
-            snapshot.forEach(x => {
-                return x.data().saveArray
-            })
-        })
-    }
-    updateSaveBoxes() {
-        const saveBoxDocument = app.getDatabase().collection('measurements').doc('saveBox');
-        saveBoxDocument.set({
-            "saveArray": this.state.saveBoxes
-        })
-    }
+   
     render() {
         const { isPanelFormActive, neck, chest, biceps, waist, forearm, thigh, calf } = this.state;
         return (
