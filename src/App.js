@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Login from './Containers/Login/login';
 import Home from './Containers/Home/home';
 import app from './Components/base';
-import Navbar from './Components/navbar/navbar';
+import Navbar from './Containers/navbar/navbar';
 import './App.scss';
 
 class App extends Component {
@@ -14,14 +14,13 @@ class App extends Component {
   }
   
   componentDidMount() {
-    this.authListener();
+    this.authListener(); 
   }
 
   authListener() {
-    app.auth().onAuthStateChanged((user) => {
+    app.getApp().auth().onAuthStateChanged((user) => {
       if(user) {
         this.setState({user})
-        console.log(user)
       } else {
         this.setState({user: null})
       }
@@ -29,10 +28,11 @@ class App extends Component {
   }
 
   render() {
+    // console.log(app.getApp())
     return (
     <div className="App">
-      <Navbar/>
-      {this.state.user ? (<Home/>): (<Login/>)}
+        <Navbar/>
+        {this.state.user ? (<Home/>): (<Login/>)}
     </div>
     );
   }

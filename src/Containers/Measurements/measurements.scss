@@ -1,0 +1,69 @@
+@import '../../variables.scss';
+@import './saveBox.scss';
+
+.panel {
+    position: absolute;
+    top: 0;
+    left: 0;
+    min-height: 90vh;
+    width: 100%;
+    background-color: $grayBlue;
+    padding: .5em;
+
+    &__box {
+        background-color: $blue;
+        border: .2em solid $blue;
+        border-radius: .3em;
+    }
+
+    &__header {
+        @include flexCenter;
+        justify-content: space-between;
+        background-color: $darkBlue;
+        padding: .5em;
+    }
+
+    &__form {
+        @include flexCenter;
+        flex-direction: column;
+        padding: 3em .5em .5em .5em;
+    }
+}
+
+.header {
+    &__title-box {
+        @include flexCenter;
+    }
+
+    &__caption {
+        font-size: 1.5em;
+        color: white;
+        margin-left: .2em;
+    }
+}
+
+.form {
+    &__label {
+        @include flexCenter;
+        justify-content: flex-start;
+        font-size: 1.5em;
+        color: white;
+        width: 100%;
+    }
+    &__input {
+        width: 100%;
+        margin: .5em .2em .5em 0;
+        background-color: white;
+        color: $grayBlue;
+    }
+    &__button {
+        margin-left: .5em;
+        max-width: 100px;
+        &--save {
+            margin: .5em 0;
+            max-width: none;
+            width: 100%;
+        }
+    }
+}
+
