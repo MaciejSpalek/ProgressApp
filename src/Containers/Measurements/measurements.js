@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import app from '../../Components/base';
 import helpers from '../../Components/helpers';
 import SaveBox from './saveBox';
+import Input from './input';
+
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faRuler, faAngleDown } from '@fortawesome/free-solid-svg-icons'
@@ -43,6 +45,18 @@ class Measurements extends Component {
         this.setDataFromDocument()
     }
 
+    clearInputs() {
+        this.setState({
+            neck: "",
+            chest: "",
+            biceps: "",
+            waist: "",
+            forearm: "",
+            calf: "",
+            thigh: ""
+        })
+    }
+
     handleSaveButton(e) {
         e.preventDefault();
         const { saveBoxes, neck, chest, biceps, waist, forearm, thigh, calf } = this.state;
@@ -63,6 +77,7 @@ class Measurements extends Component {
         }, ()=> {
             this.updateSaveBoxes();
         })   
+        this.clearInputs()
     }
     getCurrentUser() {
         return app.getApp().auth().currentUser.uid;
@@ -78,7 +93,6 @@ class Measurements extends Component {
             })
         })
     }
-  
     updateSaveBoxes() {
         this.getDocument().update({
             "measurement": this.state.saveBoxes
@@ -137,13 +151,13 @@ class Measurements extends Component {
                     </div>
                     { isPanelFormActive ? 
                     <form className="panel__form">
-                        <label className="form__label"><input className="form__input" name="neck" placeholder="szyja"  value={neck} onChange={this.handleChange}/> cm </label>
-                        <label className="form__label"><input className="form__input" name="chest" placeholder="klatka piersiowa" value={chest} onChange={this.handleChange}/> cm </label>
-                        <label className="form__label"><input className="form__input" name="biceps" placeholder="ramię" value={biceps} onChange={this.handleChange}/> cm </label>
-                        <label className="form__label"><input className="form__input" name="forearm" placeholder="przedramię" value={forearm} onChange={this.handleChange}/> cm </label>
-                        <label className="form__label"><input className="form__input" name="waist" placeholder="talia" value={waist} onChange={this.handleChange}/> cm </label>
-                        <label className="form__label"><input className="form__input" name="thigh" placeholder="udo" value={thigh} onChange={this.handleChange}/> cm </label>
-                        <label className="form__label"><input className="form__input" name="calf" placeholder="łydka" value={calf} onChange={this.handleChange}/> cm </label>
+                        <Input className="form__input" name="neck" placeholder="szyja"  value={neck} onChange={this.handleChange}/>
+                        <Input className="form__input" name="chest" placeholder="klatka piersiowa" value={chest} onChange={this.handleChange}/>
+                        <Input className="form__input" name="biceps" placeholder="ramię" value={biceps} onChange={this.handleChange}/>
+                        <Input className="form__input" name="forearm" placeholder="przedramię" value={forearm} onChange={this.handleChange}/>
+                        <Input className="form__input" name="waist" placeholder="talia" value={waist} onChange={this.handleChange}/>
+                        <Input className="form__input" name="thigh" placeholder="udo" value={thigh} onChange={this.handleChange}/>
+                        <Input className="form__input" name="calf" placeholder="łydka" value={calf} onChange={this.handleChange}/>
                         <button className="form__button form__button--save" onClick={this.handleSaveButton}>Zapisz</button>
                     </form> :null }
                 </div>
