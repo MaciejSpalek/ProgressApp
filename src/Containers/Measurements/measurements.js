@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import app from '../../Components/base';
+import helpers from '../../Components/helpers';
 import SaveBox from './saveBox';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -27,7 +28,7 @@ class Measurements extends Component {
             isPanelFormActive: true,
             buttonCaption: "hide",
             saveBoxes: [],
-            isSaveBoxHidden: false,
+            isSaveBoxHidden: true,
             neck: "",
             chest: "",
             biceps: "",
@@ -39,24 +40,14 @@ class Measurements extends Component {
     }
 
     componentDidMount() {
-        // app.getDatabase().collection('measurements').get().then(snapshot => {
-        //     const tempSaveArray = [];
-        //     snapshot.forEach(doc => {
-        //         const data = doc.data().saveArray;
-        //         tempSaveArray.push(data)
-        //     })
-        //     this.setState({
-        //         saveBoxes: tempSaveArray
-        //     })
-        // })
         this.setDataFromDocument()
-        // this.getData()
     }
 
     handleSaveButton(e) {
         e.preventDefault();
         const { saveBoxes, neck, chest, biceps, waist, forearm, thigh, calf } = this.state;
         const parameters = {
+            data: helpers.getCurrentDate("-"),
             neck: neck,
             chest: chest,
             biceps: biceps,
@@ -82,23 +73,12 @@ class Measurements extends Component {
     setDataFromDocument() {
         const document = this.getDocument();
         document.get().then(doc => {
-            console.log(doc.data().measurement)
             this.setState({
                 saveBoxes: doc.data().measurement
             })
         })
     }
-    getData() {
-        app.getDatabase().collection('users').get().then(snapshot => {
-            snapshot.docs.forEach(doc => {
-                // this.setState({
-                //     saveBoxes: x.data().saveArray
-                // })
-                console.log(doc.data().dupa)
-            })
-        })
-       
-    }
+  
     updateSaveBoxes() {
         this.getDocument().update({
             "measurement": this.state.saveBoxes
@@ -109,6 +89,7 @@ class Measurements extends Component {
         return saveBoxes.map((saveBox, index) => {
             return ( 
                 <SaveBox 
+                    data={saveBox.data}
                     neck={saveBox.neck}
                     chest={saveBox.chest}
                     biceps={saveBox.biceps}
@@ -143,7 +124,7 @@ class Measurements extends Component {
                     <div className="panel__header">
                         <div className="header__title-box">
                             <FontAwesomeIcon icon={faRuler} color="#FF8E00" style={{fontSize:25}} />
-                            <h2 className="header__caption">Wymiary</h2>
+                            <h2 className="header__caption">Dodaj wymiary</h2>
                         </div>
                         <Button onClick={this.handleNewMeasurements}>
                             <FontAwesomeIcon 

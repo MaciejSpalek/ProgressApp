@@ -20,10 +20,10 @@ const Button = styled.button`
 class SaveBox extends React.Component {
     constructor(props) {
         super(props);
+        this.handleArrowButton = this.handleArrowButton.bind(this)
         this.state = {
             isSaveBoxHidden: props.isSaveBoxHidden
         }
-        this.handleArrowButton = this.handleArrowButton.bind(this)
     }
 
     getText = (bodyPartName, variable) => {
@@ -39,13 +39,18 @@ class SaveBox extends React.Component {
         })
     }
     render() {
-        const { neck, chest, biceps, forearm, waist, thigh, calf, isSaveBoxHidden } = this.props;
+        const { data, neck, chest, biceps, forearm, waist, thigh, calf } = this.props;
         return (
             <div className="saveBox">
                 <div className="saveBox__header">
-                    <Data/>
+                    <Data data={data} />
                     <Button onClick={this.handleArrowButton}>
-                        <FontAwesomeIcon icon={faAngleDown} transform={isSaveBoxHidden ? { rotate: 0 } : { rotate: 180 }} color="white" style={{fontSize:30}}/>
+                        <FontAwesomeIcon 
+                            icon={faAngleDown} 
+                            transform={this.state.isSaveBoxHidden ? { rotate: 0 } : { rotate: 180 }} 
+                            color="white" 
+                            style={{fontSize:30}}
+                        />
                     </Button>
                 </div>
                 { !this.state.isSaveBoxHidden ?

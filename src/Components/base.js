@@ -23,20 +23,24 @@ class FireBase {
   getDatabase() {
     return this.dataBase;
   }
+
   getApp() {
     return this.app;
   }
+
   signUp(email, password) {
     return this.getApp().auth().createUserWithEmailAndPassword(email, password);
   }
+
   login(email, password) {
     return  this.app.auth().signInWithEmailAndPassword(email, password)
   }
 
   logout() {
     return this.getApp().auth().signOut();
+  }
 }
-}
-export default new FireBase();
+
+export default new FireBase()
 
   
