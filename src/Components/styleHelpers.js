@@ -1,5 +1,3 @@
-
-
 export const variables = {
     $gray: "rgb(14, 14, 14)",
     $grayBlue: "#005D95",

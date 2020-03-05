@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import app from '../../Components/base';
-import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { 
     faChartBar, 

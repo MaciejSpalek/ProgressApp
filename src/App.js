@@ -17,13 +17,13 @@ const App = ()=> {
       <div className="App">
         <AuthProvider>
           <Router>  
-          <Navbar />
-              <Switch>
-                  <PrivateRoute exact path="/" component={Home} />
-                  <Route exact path="/measurements" component={Measurements}/>
-                  <Route exact path="/signup" component={SignUp} />
-                  <Route exact path="/login" component={Login} />
-              </Switch>
+            <Navbar />
+            <Switch>
+                <PrivateRoute exact path="/" component={Home} />
+                <Route exact path="/measurements" component={Measurements}/>
+                <Route exact path="/signup" component={SignUp} />
+                <Route exact path="/login" component={Login} />
+            </Switch>
           </Router> 
         </AuthProvider>
       </div>
