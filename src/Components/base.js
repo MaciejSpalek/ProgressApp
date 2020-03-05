@@ -39,6 +39,10 @@ class FireBase {
   logout() {
     return this.getApp().auth().signOut();
   }
+
+  getCurrentUser() {
+    return this.app.auth().currentUser;
+  }
 }
 
 export default new FireBase()

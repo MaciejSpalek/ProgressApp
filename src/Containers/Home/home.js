@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import app from '../../Components/base';
-import Measurements from '../Measurements/measurements';
+import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { 
     faChartBar, 
@@ -14,23 +14,12 @@ import {
 class Home extends Component {
     constructor(props) {
         super(props)
-        this.measurements = this.measurements.bind(this);
-        this.state = {
-            isMeasurementsActive: false
-        }
     }
     async logout() {
         await app.logout();
     }
-    
-    measurements() {
-        this.setState({
-            isMeasurementsActive: true
-        })
-    }
   
     render() {
-        const { isMeasurementsActive } = this.state;
         return (
             <>
             <div className = "main">
@@ -55,13 +44,12 @@ class Home extends Component {
                         <FontAwesomeIcon icon={faStar} color="#FF8E00" style={{fontSize:80}} />
                         <h2 className="item__caption">Rekordy</h2>
                     </div>
-                    <div className="box__item" onClick={this.measurements}>
+                    <Link to="/measurements" className="box__item">
                         <FontAwesomeIcon icon={faRuler} color="#FF8E00" style={{fontSize:80}} />
                         <h2 className="item__caption">Wymiary ciała</h2>
-                    </div>
+                    </Link>
                 </div>
                 <button className="button__logout" onClick={this.logout}>Wyloguj</button>
-                {isMeasurementsActive ? <Measurements/> : null}
             </div>
             </>
         )
