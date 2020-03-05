@@ -104,8 +104,11 @@
 
 import React, { useCallback, useContext } from "react";
 import { withRouter, Redirect } from "react-router";
+import { Link } from "react-router-dom";
 import app from "../../Components/base"
 import { AuthContext } from "../../Auth"
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faUser, faExclamationCircle } from '@fortawesome/free-solid-svg-icons'
 
 const Login = ({ history }) => {
   const handleLogin = useCallback(
@@ -114,7 +117,7 @@ const Login = ({ history }) => {
       const { email, password } = event.target.elements;
       try {
         await app.getApp().auth().signInWithEmailAndPassword(email.value, password.value);
-        history.push("/home");
+        history.push("/");
       } catch (error) {
         alert(error);
       }
@@ -125,24 +128,59 @@ const Login = ({ history }) => {
   const { currentUser } = useContext(AuthContext);
 
   if (currentUser) {
-    return <Redirect to="/home" />;
+    return <Redirect to="/" />;
   }
-
+//   const { email, password, isPasswordCorrect, isEmailCorrect } = this.state;
   return (
-    <div>
-      <h1>Log in</h1>
-      <form onSubmit={handleLogin}>
-        <label>
-          Email
-          <input name="email" type="email" placeholder="Email" />
-        </label>
-        <label>
-          Password
-          <input name="password" type="password" placeholder="Password" />
-        </label>
-        <button type="submit">Log in</button>
-      </form>
-    </div>
+    // <div>
+    //   <h1>Log in</h1>
+    //   <form onSubmit={handleLogin}>
+    //     <label>
+    //       Email
+    //       <input name="email" type="email" placeholder="Email" />
+    //     </label>
+    //     <label>
+    //       Password
+    //       <input name="password" type="password" placeholder="Password" />
+    //     </label>
+    //     <button type="submit">Log in</button>
+    //   </form>
+    // </div>
+
+    <section className="login">
+        <form className="form" onSubmit={handleLogin}>
+            <div className="form__email-container">
+                <input 
+                    className="form__email form__input" 
+                    type="email" 
+                    name="email"
+                    placeholder="email" 
+                />
+                {/* <span className="form__validation-icon">
+                    {isEmailCorrect ? null : <FontAwesomeIcon icon={faExclamationCircle} color="#FF8E00" style={{fontSize:20}}/>}
+                </span>  */}
+            </div>
+
+            <div className="form__password-container">
+                <input 
+                    className="form__password form__input" 
+                    type="password" 
+                    name="password"
+                    placeholder="hasło" 
+                />   
+                {/* <span className="form__validation-icon">
+                    {isPasswordCorrect ? null : <FontAwesomeIcon icon={faExclamationCircle} color="#FF8E00" style={{fontSize:20}}/>}
+                </span>     */}
+            </div>
+            <button className="form__button"> Zaloguj </button> 
+            <Link to="/signup" className="form__link">
+                Stwórz konto
+            </Link>
+            <div className="form__logo">
+                <FontAwesomeIcon icon={faUser} color="#005D95" style={{fontSize:60}}/>
+            </div>
+        </form>
+    </section>
   );
 };
 

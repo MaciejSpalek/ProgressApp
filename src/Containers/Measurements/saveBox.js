@@ -1,7 +1,6 @@
 import React from "react"
 import Data from '../../Components/data'
 import styled from 'styled-components';
-import ArrowButton from '../../Components/arrowButton'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faAngleDown } from '@fortawesome/free-solid-svg-icons'
 

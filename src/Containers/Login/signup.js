@@ -112,7 +112,12 @@
 
 import React, { useCallback } from "react";
 import { withRouter } from "react-router";
+import { Link } from "react-router-dom";
 import app from "../../Components/base"
+
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faUserPlus,  faExclamationCircle } from '@fortawesome/free-solid-svg-icons'
+
 
 const SignUp = ({ history }) => {
   const handleSignUp = useCallback(async event => {
@@ -120,27 +125,47 @@ const SignUp = ({ history }) => {
     const { email, password } = event.target.elements;
     try {
       await app.getApp().auth().createUserWithEmailAndPassword(email.value, password.value);
-      history.push("/home");
+      history.push("/");
     } catch (error) {
       alert(error);
     }
   }, [history]);
 
   return (
-    <div>
-      <h1>Sign up</h1>
-      <form onSubmit={handleSignUp}>
-        <label>
-          Email
-          <input name="email" type="email" placeholder="Email" />
-        </label>
-        <label>
-          Password
-          <input name="password" type="password" placeholder="Password" />
-        </label>
-        <button type="submit">Sign Up</button>
-      </form>
-    </div>
+    <section className="login">
+        <form className="form" onSubmit={handleSignUp}>
+            <div className="form__email-container">
+                <input 
+                    className="form__email form__input" 
+                    type="email" 
+                    name="email"
+                    placeholder="email"
+                />
+                {/* <span className="form__validation-icon">
+                    {isEmailCorrect ? null : <FontAwesomeIcon icon={faExclamationCircle} color="#FF8E00" style={{fontSize:20}}/>}
+                </span>  */}
+            </div>
+
+            <div className="form__password-container">
+                <input 
+                    className="form__password form__input" 
+                    type="password" 
+                    name="password"
+                    placeholder="hasło" 
+                />   
+                {/* <span className="form__validation-icon">
+                    {isPasswordCorrect ? null : <FontAwesomeIcon icon={faExclamationCircle} color="#FF8E00" style={{fontSize:20}}/>}
+                </span>     */}
+            </div>
+            <button className="form__button"> Stwórz </button>
+            <Link to="/login" className="form__link">
+                Przejdź do logowania
+            </Link>
+            <div className="form__logo">
+                <FontAwesomeIcon icon={faUserPlus} color="#005D95" style={{fontSize:60}}/>
+            </div>
+        </form>
+    </section>
   );
 };
 

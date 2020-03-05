@@ -79,11 +79,9 @@ class Measurements extends Component {
         })   
         this.clearInputs()
     }
-    getCurrentUser() {
-        return app.getApp().auth().currentUser.uid;
-    }
+   
     getDocument() {
-        return app.getDatabase().collection('users').doc(this.getCurrentUser());
+        return app.getDatabase().collection('users').doc(app.getCurrentUser().uid);
     }
     setDataFromDocument() {
         const document = this.getDocument();
@@ -100,7 +98,8 @@ class Measurements extends Component {
     }
     renderSaveBoxes = () => {
         const { saveBoxes, isSaveBoxHidden } = this.state;
-        return saveBoxes.map((saveBox, index) => {
+        const reversedSaveBoxes = saveBoxes.reverse();
+        return reversedSaveBoxes.map((saveBox, index) => {
             return ( 
                 <SaveBox 
                     data={saveBox.data}

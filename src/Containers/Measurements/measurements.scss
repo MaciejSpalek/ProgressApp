@@ -2,10 +2,7 @@
 @import './saveBox.scss';
 
 .panel {
-    position: absolute;
-    top: 0;
-    left: 0;
-    min-height: 90vh;
+    min-height: calc(100vh - 4em);
     width: 100%;
     background-color: $grayBlue;
     padding: .5em;
@@ -26,7 +23,7 @@
     &__form {
         @include flexCenter;
         flex-direction: column;
-        padding: 3em .5em .5em .5em;
+        padding: .5em;
     }
 }
 
