@@ -1,14 +1,15 @@
 // import React, { Component } from "react";
 // import app from '../../Components/base'
 // import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-// import { faUser, faExclamationCircle } from '@fortawesome/free-solid-svg-icons'
+// import { faUserPlus,  faExclamationCircle } from '@fortawesome/free-solid-svg-icons'
+// import { BrowserRouter as Link, Route } from 'react-router-dom';
 
-// class Login extends Component {
+
+// class SignUp extends Component {
 //     constructor(props) {
 //         super(props)
-//         this.logIn = this.logIn.bind(this);
+//         this.signUp = this.signUp.bind(this);
 //         this.handleChange = this.handleChange.bind(this);
-//         this.handleCreateAnchor = this.handleCreateAnchor.bind(this);
 //         this.state = {
 //             isPasswordCorrect: true,
 //             isEmailCorrect: true,
@@ -18,30 +19,37 @@
 //         }
 //     }
 
-//     logIn(e) {
+//     signUp(e) {
 //         e.preventDefault();
 //         const { email, password } = this.state;
-//         app.login(email, password)
-//         .then(user => {
+//         app.signUp(email, password).then(cred => {
+//             // create document for user and create default fields
+//             return app.getDatabase().collection('users').doc(cred.user.uid).set({
+//                 measurement: []
+//             })
 //         })
 //         .catch((error) => {
+//             // validation
 //             this.setState({
 //                 isEmailCorrect: true,
 //                 isPasswordCorrect: true 
 //             })
-//             if(error.code == "auth/invalid-email") {
+//             if(password == "") {
+//                 this.setState({
+//                     isPasswordCorrect: false
+//                 })
+//             }
+//             if(error.code == "auth/invalid-email" || error.code == "auth/email-already-in-use") {
 //                 this.setState({
 //                     isEmailCorrect: false 
 //                 })
-//             } else if(error.code == "auth/wrong-password") {
+//             } else if(error.code == "auth/weak-password") {
 //                 this.setState({
 //                     isPasswordCorrect: false
 //                 })
 //             }
 //         });
-        
 //     }
-  
 //     handleChange(e) {
 //         this.setState({
 //             [e.target.name]: e.target.value
@@ -86,10 +94,11 @@
 //                             {isPasswordCorrect ? null : <FontAwesomeIcon icon={faExclamationCircle} color="#FF8E00" style={{fontSize:20}}/>}
 //                         </span>    
 //                     </div>
-//                     <button className="form__button"  onClick={this.logIn} > Zaloguj </button> 
-//                     <a className="form__create-link">Stwórz konto</a>
+//                     <button className="form__button" onClick={this.signUp}> Stwórz </button>
+//                     <a className="form__create-link"> Przejdź do logowania </a>
+
 //                     <div className="form__logo">
-//                         <FontAwesomeIcon icon={faUser} color="#005D95" style={{fontSize:60}}/>
+//                         <FontAwesomeIcon icon={faUserPlus} color="#005D95" style={{fontSize:60}}/>
 //                     </div>
 //                 </form>
 //             </section>
@@ -97,41 +106,30 @@
 //     }
 // }
 
-// export default Login
+// export default SignUp
 
 
 
-
-import React, { useCallback, useContext } from "react";
-import { withRouter, Redirect } from "react-router";
+import React, { useCallback } from "react";
+import { withRouter } from "react-router";
 import app from "../../Components/base"
-import { AuthContext } from "../../Auth"
 
-const Login = ({ history }) => {
-  const handleLogin = useCallback(
-    async event => {
-      event.preventDefault();
-      const { email, password } = event.target.elements;
-      try {
-        await app.getApp().auth().signInWithEmailAndPassword(email.value, password.value);
-        history.push("/home");
-      } catch (error) {
-        alert(error);
-      }
-    },
-    [history]
-  );
-
-  const { currentUser } = useContext(AuthContext);
-
-  if (currentUser) {
-    return <Redirect to="/home" />;
-  }
+const SignUp = ({ history }) => {
+  const handleSignUp = useCallback(async event => {
+    event.preventDefault();
+    const { email, password } = event.target.elements;
+    try {
+      await app.getApp().auth().createUserWithEmailAndPassword(email.value, password.value);
+      history.push("/home");
+    } catch (error) {
+      alert(error);
+    }
+  }, [history]);
 
   return (
     <div>
-      <h1>Log in</h1>
-      <form onSubmit={handleLogin}>
+      <h1>Sign up</h1>
+      <form onSubmit={handleSignUp}>
         <label>
           Email
           <input name="email" type="email" placeholder="Email" />
@@ -140,10 +138,10 @@ const Login = ({ history }) => {
           Password
           <input name="password" type="password" placeholder="Password" />
         </label>
-        <button type="submit">Log in</button>
+        <button type="submit">Sign Up</button>
       </form>
     </div>
   );
 };
 
-export default withRouter(Login);
+export default withRouter(SignUp);

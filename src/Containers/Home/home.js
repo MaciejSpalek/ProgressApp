@@ -61,7 +61,7 @@ class Home extends Component {
                     </div>
                 </div>
                 <button className="button__logout" onClick={this.logout}>Wyloguj</button>
-                {isMeasurementsActive ? <Measurements/> : null}
+                {/* {isMeasurementsActive ? <Measurements/> : null} */}
             </div>
             </>
         )
