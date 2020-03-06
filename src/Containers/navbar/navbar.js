@@ -3,7 +3,7 @@ import Hamburger from "./hamburger"
 import Menu from "./menu"
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faChartLine, faBars } from '@fortawesome/free-solid-svg-icons'
+import { faChartLine, faBars, faTimes } from '@fortawesome/free-solid-svg-icons'
 import * as styleHelpers  from '../../Components/styleHelpers'
 import styled from 'styled-components';
 
@@ -11,11 +11,13 @@ import styled from 'styled-components';
 const flexCenter = styleHelpers.flexCenter;
 const variables = styleHelpers.variables;
 const Nav = styled.div`
+    position: fixed;
     ${flexCenter};
     justify-content: space-between;
     padding: .2em .5em;
     color: white;
     background-color: ${variables.$darkBlue};
+    width: 100%;
     height: 64px;
     font-size: 1em;
     z-index: 999999;
@@ -52,9 +54,13 @@ class Navbar extends React.Component {
                     <Title> ProgressApp </Title>
                 </Logo>
                 {/* <Hamburger onClick={handler}/> */}
-                <FontAwesomeIcon icon={faBars} color="#FF8E00" style={{fontSize:40}} onClick={this.handleHamburger}/>
+                <FontAwesomeIcon 
+                    icon={!this.state.isMenuActive ? faBars: faTimes} 
+                    color="#FF8E00" 
+                    style={!this.state.isMenuActive ? {fontSize:40, transition: ".4s cubic-bezier(0.785, 0.135, 0.15, 0.86)"} : {fontSize: 50, transition: ".4s cubic-bezier(0.785, 0.135, 0.15, 0.86)"}} 
+                    onClick={this.handleHamburger}
+                />
                 <Menu isMenuActive={this.state.isMenuActive}/>
-                
             </Nav>
         );
     }

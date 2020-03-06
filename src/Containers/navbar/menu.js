@@ -13,7 +13,7 @@ const transformMenu = {
 
 const MenuComponent = styled.div`
     position: fixed;
-    top: 0;
+    top: 64px;
     left: 0;
     width: 100vw;
     height: 100vh;
@@ -32,13 +32,12 @@ const MenuList = styled.ul`
     grid-template-rows: repeat(6, 1fr);
     background-color: $grayBlue;
     width: 100%;
-    margin-top: 64px;
+    /* margin-top: 64px; */
 
 `
 const ListItem = styled.li`
         ${flexCenter};
         justify-content: flex-start;
-        background-color: ${variables.$blue};
         transition: .5s linear;
         text-decoration: none;
         padding: .5em;
@@ -51,43 +50,51 @@ const Icon = styled.div`
     width: 5em;
 `
 
-const Menu = ({isMenuActive}) => {
-    return (
-        <MenuComponent style={isMenuActive ? transformMenu:null}>
-            <MenuList>
-                <ListItem>
-                    <Icon><FontAwesomeIcon icon={faIdCard} color="#FF8E00" style={{fontSize:50}} /></Icon>
-                    <Caption>Profil</Caption>
-                </ListItem>
+// const Menu = ({isMenuActive}) => {
+    class Menu extends React.Component {
+        constructor(props) {
+            super(props);
+        }
 
-                <ListItem>
-                    <Icon><FontAwesomeIcon icon={faListOl} color="#FF8E00" style={{fontSize:50}} /></Icon>
-                    <Caption>Plan</Caption>
-                 </ListItem>
+        render() {
+            return (
+                <MenuComponent style={this.props.isMenuActive ? transformMenu:null}>
+                    <MenuList>
+                        <ListItem>
+                            <Icon><FontAwesomeIcon icon={faIdCard} color="#FF8E00" style={{fontSize:50}} /></Icon>
+                            <Caption>Profil</Caption>
+                        </ListItem>
 
-                <ListItem>
-                    <Icon><FontAwesomeIcon icon={faUsers} color="#FF8E00" style={{fontSize:50}} /></Icon>
-                    <Caption>Znajomi</Caption>
-                </ListItem>
+                        <ListItem>
+                            <Icon><FontAwesomeIcon icon={faListOl} color="#FF8E00" style={{fontSize:50}} /></Icon>
+                            <Caption>Plan</Caption>
+                        </ListItem>
 
-                <ListItem>
-                    <Icon><FontAwesomeIcon icon={faChartBar} color="#FF8E00" style={{fontSize:50}} /></Icon>
-                    <Caption>Wykresy</Caption>
-                </ListItem>
+                        <ListItem>
+                            <Icon><FontAwesomeIcon icon={faUsers} color="#FF8E00" style={{fontSize:50}} /></Icon>
+                            <Caption>Znajomi</Caption>
+                        </ListItem>
 
-                <ListItem>
-                    <Icon><FontAwesomeIcon icon={faStar} color="#FF8E00" style={{fontSize:50}} /></Icon>
-                    <Caption>Rekordy</Caption>
-                </ListItem>
+                        <ListItem>
+                            <Icon><FontAwesomeIcon icon={faChartBar} color="#FF8E00" style={{fontSize:50}} /></Icon>
+                            <Caption>Wykresy</Caption>
+                        </ListItem>
 
-                <Link to="/measurements" className="box__item">
-                    <Icon><FontAwesomeIcon icon={faRuler} color="#FF8E00" style={{fontSize:50}} /></Icon>
-                    <Caption>Wymiary ciała</Caption>
-                </Link>
-            </MenuList>
-            {/* <button className="button__logout" onClick={this.logout}>Wyloguj</button> */}
-        </MenuComponent>
-    )
+                        <ListItem>
+                            <Icon><FontAwesomeIcon icon={faStar} color="#FF8E00" style={{fontSize:50}} /></Icon>
+                            <Caption>Rekordy</Caption>
+                        </ListItem>
+                        <ListItem>
+                            <Link to="/measurements" className="box__item">
+                                <Icon><FontAwesomeIcon icon={faRuler} color="#FF8E00" style={{fontSize:50}} /></Icon>
+                                <Caption>Wymiary</Caption>
+                            </Link>
+                        </ListItem>
+                    </MenuList>
+                    {/* <button className="button__logout" onClick={this.logout}>Wyloguj</button> */}
+                </MenuComponent>
+            )
+        }
 }
 
 export default Menu;
