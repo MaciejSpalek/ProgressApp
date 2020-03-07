@@ -2,10 +2,15 @@
 @import './saveBox.scss';
 
 .panel {
-    min-height: calc(100vh - 4em);
+    // min-height: calc(100vh - 4em);
+    position: fixed;
+    top: 64px;
+    left: 0;
     width: 100%;
+    height: calc(100vh - 64px);
     background-color: $grayBlue;
     padding: .5em;
+    overflow-y: scroll;
 
     &__box {
         background-color: $blue;

@@ -125,28 +125,13 @@ const Login = ({ history }) => {
     [history]
   );
 
-  const { currentUser } = useContext(AuthContext);
-
+  const currentUser = useContext(AuthContext);
+    // console.log(currentUser)
   if (currentUser) {
     return <Redirect to="/" />;
   }
 //   const { email, password, isPasswordCorrect, isEmailCorrect } = this.state;
   return (
-    // <div>
-    //   <h1>Log in</h1>
-    //   <form onSubmit={handleLogin}>
-    //     <label>
-    //       Email
-    //       <input name="email" type="email" placeholder="Email" />
-    //     </label>
-    //     <label>
-    //       Password
-    //       <input name="password" type="password" placeholder="Password" />
-    //     </label>
-    //     <button type="submit">Log in</button>
-    //   </form>
-    // </div>
-
     <section className="login">
         <form className="form" onSubmit={handleLogin}>
             <div className="form__email-container">

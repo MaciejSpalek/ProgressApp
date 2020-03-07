@@ -1,10 +1,10 @@
 import React from "react"
-import Hamburger from "./hamburger"
 import Menu from "./menu"
+import app from '../../Components/base';
 
+import * as styleHelpers  from '../../Components/styleHelpers'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChartLine, faBars, faTimes } from '@fortawesome/free-solid-svg-icons'
-import * as styleHelpers  from '../../Components/styleHelpers'
 import styled from 'styled-components';
 
 
@@ -20,24 +20,26 @@ const Nav = styled.div`
     width: 100%;
     height: 64px;
     font-size: 1em;
-    z-index: 999999;
+    z-index: 1;
+    box-shadow: 0 .05em .5em .1em black;
 `;
-
 const Logo = styled.div`
     ${flexCenter};
 `;
-
 const Title = styled.span`
     font-size: 1.8em;
     font-weight: bold;
 `;
+
+
 
 class Navbar extends React.Component {
     constructor(props) {
         super(props);
         this.handleHamburger = this.handleHamburger.bind(this)
         this.state = {
-            isMenuActive: false
+            isMenuActive: false,
+            currentUser: app.getCurrentUser()
         }
     }
     
@@ -46,6 +48,14 @@ class Navbar extends React.Component {
             isMenuActive: !prevstate.isMenuActive
         }))
     }
+
+    componentDidUpdate() {
+        // this.setState({
+        //     currentUser: app.getCurrentUser()
+        // })
+        
+    }
+
     render() {
         return (
             <Nav >
@@ -54,13 +64,15 @@ class Navbar extends React.Component {
                     <Title> ProgressApp </Title>
                 </Logo>
                 {/* <Hamburger onClick={handler}/> */}
-                <FontAwesomeIcon 
-                    icon={!this.state.isMenuActive ? faBars: faTimes} 
-                    color="#FF8E00" 
-                    style={!this.state.isMenuActive ? {fontSize:40, transition: ".4s cubic-bezier(0.785, 0.135, 0.15, 0.86)"} : {fontSize: 50, transition: ".4s cubic-bezier(0.785, 0.135, 0.15, 0.86)"}} 
-                    onClick={this.handleHamburger}
-                />
-                <Menu isMenuActive={this.state.isMenuActive}/>
+                {/* { this.getCurrentUser() ? */}
+                     <FontAwesomeIcon 
+                     icon={!this.state.isMenuActive ? faBars: faTimes} 
+                     color="#FF8E00" 
+                     style={!this.state.isMenuActive ? {fontSize:40, transition: ".4s cubic-bezier(0.785, 0.135, 0.15, 0.86)"} : {fontSize: 50, transition: ".4s cubic-bezier(0.785, 0.135, 0.15, 0.86)"}} 
+                     onClick={this.handleHamburger}
+                /> 
+
+                <Menu handleHamburger={this.handleHamburger} isMenuActive={this.state.isMenuActive}/>
             </Nav>
         );
     }
