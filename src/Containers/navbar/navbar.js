@@ -49,7 +49,6 @@ class Navbar extends React.Component {
     }
     
     render() {
-        console.log("Navbar: ", this.props.user);
         return (
             <Nav >
                 <Logo>

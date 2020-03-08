@@ -54,13 +54,13 @@ class SaveBox extends React.Component {
                 </div>
                 { !this.state.isSaveBoxHidden ?
                 <div className="saveBox__content">
-                    <span className="saveBox__item">{this.getText("Neck", neck)}</span>
-                    <span className="saveBox__item">{this.getText("Chest", chest)}</span>
-                    <span className="saveBox__item">{this.getText("Biceps", biceps)}</span>
-                    <span className="saveBox__item">{this.getText("Forearm", forearm)}</span>
-                    <span className="saveBox__item">{this.getText("Waist", waist)}</span>
-                    <span className="saveBox__item">{this.getText("Thigh", thigh)}</span>
-                    <span className="saveBox__item">{this.getText("Calf", calf)}</span>
+                    <span className="saveBox__item">{this.getText("Szyja", neck)}</span>
+                    <span className="saveBox__item">{this.getText("Klatka", chest)}</span>
+                    <span className="saveBox__item">{this.getText("Ramię", biceps)}</span>
+                    <span className="saveBox__item">{this.getText("Przedramię", forearm)}</span>
+                    <span className="saveBox__item">{this.getText("Talia", waist)}</span>
+                    <span className="saveBox__item">{this.getText("Udo", thigh)}</span>
+                    <span className="saveBox__item">{this.getText("Łydka", calf)}</span>
                 </div> : null
                 }
             </div>

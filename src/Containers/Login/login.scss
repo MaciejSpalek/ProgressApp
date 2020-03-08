@@ -9,7 +9,7 @@
     width: 100%;
     height: calc(100vh - 64px);
     background-color: $blue;
-    overflow-y: scroll;
+    // overflow-y: scroll;
 }
 .form {
     @include flexCenter();
@@ -38,6 +38,13 @@
 
     &__password-container, &__email-container {
         position: relative;
+    }
+
+    &__data-container {
+        @include flexCenter;
+        justify-content: space-between;;
+        width: 100%;
+        
     }
 
     &__validation-icon {
