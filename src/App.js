@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 
 import Navbar from './Containers/navbar/navbar';
 import Login from './Containers/Login/login';
@@ -8,27 +8,50 @@ import Measurements from './Containers/Measurements/measurements'
 
 import PrivateRoute from "./PrivateRoute";
 import { AuthProvider } from "./Auth";
-
+import app from "./Components/base";
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import './App.scss';
 
-const App = ()=> {
-    return (
-      <div className="App">
-        <AuthProvider>
-          <Router>  
-          <Navbar />
+  class App extends Component {
+    constructor(props) {
+      super(props);
+      this.state = {
+        user: null
+      }
+    }
+
+    componentDidMount() {
+      this.authListener();
+    }
+
+    authListener() {
+      app.getApp().auth().onAuthStateChanged(user => {
+          this.setState({
+            user: user
+          })  
+      })
+    }
+
+    render() {
+      return (
+        <div className="App">
+          <AuthProvider>
+            <Router>  
+              <Navbar user={this.state.user}/>
               <Switch>
                   <PrivateRoute exact path="/" component={Home} />
-                  <Route exact path="/measurements" component={Measurements}/>
+                  <PrivateRoute exact path="/measurements" component={Measurements}/>
                   <Route exact path="/signup" component={SignUp} />
                   <Route exact path="/login" component={Login} />
               </Switch>
-          </Router> 
-        </AuthProvider>
-      </div>
-    );
+            </Router> 
+          </AuthProvider>
+        </div>
+      );
+    }
   }
+   
+  
 
 
 export default App;

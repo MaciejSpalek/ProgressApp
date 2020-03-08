@@ -3,13 +3,17 @@
 
 .login {
     @include flexCenter();
-    min-height: 90vh;
-    width: 100vw;
+    position: fixed;
+    top: 64px;
+    left: 0;
+    width: 100%;
+    height: calc(100vh - 64px);
     background-color: $blue;
+    // overflow-y: scroll;
 }
 .form {
-    position: relative;
     @include flexCenter();
+    position: relative;
     justify-content: space-evenly;
     flex-direction: column;
     width: 250px;
@@ -17,6 +21,7 @@
     background-color: $grayBlue;
     border-radius: .5em;
     padding: 4em 1em 1em 1em;
+    
 
     &__logo {
         position: absolute;
@@ -33,6 +38,13 @@
 
     &__password-container, &__email-container {
         position: relative;
+    }
+
+    &__data-container {
+        @include flexCenter;
+        justify-content: space-between;;
+        width: 100%;
+        
     }
 
     &__validation-icon {

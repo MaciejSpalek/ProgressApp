@@ -73,7 +73,7 @@ class Measurements extends Component {
         
         this.setState({
             isPanelFormActive: false,
-            saveBoxes: [...saveBoxes, parameters]
+            saveBoxes: [...saveBoxes, parameters].reverse()
         }, ()=> {
             this.updateSaveBoxes();
         })   
@@ -98,8 +98,7 @@ class Measurements extends Component {
     }
     renderSaveBoxes = () => {
         const { saveBoxes, isSaveBoxHidden } = this.state;
-        const reversedSaveBoxes = saveBoxes.reverse();
-        return reversedSaveBoxes.map((saveBox, index) => {
+        return saveBoxes.map((saveBox, index) => {
             return ( 
                 <SaveBox 
                     data={saveBox.data}

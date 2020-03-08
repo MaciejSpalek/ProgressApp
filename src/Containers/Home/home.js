@@ -1,57 +1,55 @@
 import React, { Component } from "react";
-import app from '../../Components/base';
-import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
+import app from "../../Components/base";
+import styled from "styled-components"
+import * as styleHelpers  from '../../Components/styleHelpers'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { 
-    faChartBar, 
-    faStar, 
-    faRuler, 
-    faListOl, 
-    faUsers, 
-    faIdCard 
-} from '@fortawesome/free-solid-svg-icons'
+import { faUserSecret } from '@fortawesome/free-solid-svg-icons'
+
+const flexCenter = styleHelpers.flexCenter;
+const variables = styleHelpers.variables;
+
+const Container = styled.section`
+    ${flexCenter}
+    flex-direction: column;
+    justify-content: flex-start;
+    position: fixed;
+    top: 64px;
+    left: 0;
+    height: calc(100vh - 64px);
+    width: 100%;
+    background-color: ${variables.$blue};
+    padding: 2em .5em 0 .5em;
+    overflow-y: scroll;
+`;
+
+const Photo = styled.section`
+    ${flexCenter}
+    width: 15em;
+    height: 15em;
+    border: .3em solid ${variables.$grayBlue};
+    border-radius: 50%;
+`
+
+const Nick = styled.span`
+    font-size: 2em;
+    font-weight: bold;
+    color: white;
+    
+`
 
 class Home extends Component {
-    constructor(props) {
-        super(props)
+
+    capitalizeFirstLetter(string) {
+        return string.charAt(0).toUpperCase() + string.slice(1);
     }
-    async logout() {
-        await app.logout();
-    }
-  
     render() {
         return (
-            <>
-            <div className = "main">
-                <div className="box">
-                    <div className="box__item">
-                        <FontAwesomeIcon icon={faIdCard} color="#FF8E00" style={{fontSize:80}} />
-                        <h2 className="item__caption">Profil</h2>
-                    </div>
-                    <div className="box__item">
-                        <FontAwesomeIcon icon={faListOl} color="#FF8E00" style={{fontSize:80}} />
-                        <h2 className="item__caption">Plan</h2>
-                    </div>
-                    <div className="box__item">
-                        <FontAwesomeIcon icon={faUsers} color="#FF8E00" style={{fontSize:80}} />
-                        <h2 className="item__caption">Znajomi</h2>
-                    </div>
-                    <div className="box__item">
-                        <FontAwesomeIcon icon={faChartBar} color="#FF8E00" style={{fontSize:80}} />
-                        <h2 className="item__caption">Wykresy</h2>
-                    </div>
-                    <div className="box__item">
-                        <FontAwesomeIcon icon={faStar} color="#FF8E00" style={{fontSize:80}} />
-                        <h2 className="item__caption">Rekordy</h2>
-                    </div>
-                    <Link to="/measurements" className="box__item">
-                        <FontAwesomeIcon icon={faRuler} color="#FF8E00" style={{fontSize:80}} />
-                        <h2 className="item__caption">Wymiary ciała</h2>
-                    </Link>
-                </div>
-                <button className="button__logout" onClick={this.logout}>Wyloguj</button>
-            </div>
-            </>
+            <Container>
+                <Photo>
+                    <FontAwesomeIcon icon={faUserSecret} style={{fontSize: 150}} color={variables.$darkBlue} />
+                </Photo>
+                <Nick> {app.getCurrentUser() ? this.capitalizeFirstLetter(app.getCurrentUser().displayName) : null} </Nick>
+            </Container>
         )
     }
 }
