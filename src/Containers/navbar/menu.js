@@ -50,9 +50,6 @@ const Icon = styled.div`
 
 // const Menu = ({isMenuActive}) => {
     class Menu extends React.Component {
-        constructor(props) {
-            super(props);
-        }
 
         logout() {
             app.logout();
@@ -77,7 +74,7 @@ const Icon = styled.div`
                                 <Caption>Plan</Caption>
                             </ListItem>
                         </Link>
-                        
+
                         <Link style={{textDecoration: "none"}} onClick={handleHamburger}  to="/friends">
                             <ListItem>
                                 <Icon><FontAwesomeIcon icon={faUsers} color="#FF8E00" style={{fontSize:50}} /></Icon>

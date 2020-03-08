@@ -26,7 +26,7 @@ class SaveBox extends React.Component {
     }
 
     getText = (bodyPartName, variable) => {
-        if(variable != "") {
+        if(variable !== "") {
             return `${bodyPartName}: ${variable}cm`;
         } else {
             return `${bodyPartName}: -`;

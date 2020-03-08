@@ -108,7 +108,8 @@ import { Link } from "react-router-dom";
 import app from "../../Components/base"
 import { AuthContext } from "../../Auth"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faUser, faExclamationCircle } from '@fortawesome/free-solid-svg-icons'
+import { faUser } from '@fortawesome/free-solid-svg-icons'
+// , faExclamationCircle
 
 const Login = ({ history }) => {
   const handleLogin = useCallback(
@@ -126,7 +127,6 @@ const Login = ({ history }) => {
   );
 
   const currentUser = useContext(AuthContext);
-    // console.log(currentUser)
   if (currentUser) {
     return <Redirect to="/" />;
   }

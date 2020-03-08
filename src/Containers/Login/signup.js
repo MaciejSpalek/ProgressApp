@@ -115,8 +115,8 @@ import app from "../../Components/base"
 import { withRouter } from "react-router";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faUserPlus,  faExclamationCircle } from '@fortawesome/free-solid-svg-icons'
-
+import { faUserPlus } from '@fortawesome/free-solid-svg-icons'
+// ,  faExclamationCircle
 
 const SignUp = ({ history }) => {
   const handleSignUp = useCallback(async event => {

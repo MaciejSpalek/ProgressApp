@@ -38,8 +38,7 @@ class Navbar extends React.Component {
         super(props);
         this.handleHamburger = this.handleHamburger.bind(this)
         this.state = {
-            isMenuActive: false,
-            currentUser: app.getCurrentUser()
+            isMenuActive: false
         }
     }
     
@@ -48,30 +47,23 @@ class Navbar extends React.Component {
             isMenuActive: !prevstate.isMenuActive
         }))
     }
-
-    componentDidUpdate() {
-        // this.setState({
-        //     currentUser: app.getCurrentUser()
-        // })
-        
-    }
-
+    
     render() {
+        console.log("Navbar: ", this.props.user);
         return (
             <Nav >
                 <Logo>
                     <FontAwesomeIcon icon={faChartLine} color="#FF8E00" style={{fontSize:30}} />
                     <Title> ProgressApp </Title>
                 </Logo>
-                {/* <Hamburger onClick={handler}/> */}
-                {/* { this.getCurrentUser() ? */}
+                { this.props.user ?
                      <FontAwesomeIcon 
                      icon={!this.state.isMenuActive ? faBars: faTimes} 
                      color="#FF8E00" 
                      style={!this.state.isMenuActive ? {fontSize:40, transition: ".4s cubic-bezier(0.785, 0.135, 0.15, 0.86)"} : {fontSize: 50, transition: ".4s cubic-bezier(0.785, 0.135, 0.15, 0.86)"}} 
                      onClick={this.handleHamburger}
-                /> 
-
+                /> : null
+                }
                 <Menu handleHamburger={this.handleHamburger} isMenuActive={this.state.isMenuActive}/>
             </Nav>
         );
