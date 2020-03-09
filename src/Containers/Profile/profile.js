@@ -3,7 +3,7 @@ import app from "../../Components/base";
 import styled from "styled-components"
 import * as styleHelpers  from '../../Components/styleHelpers'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import {} from '@fortawesome/free-solid-svg-icons'
+import { faUserSecret } from '@fortawesome/free-solid-svg-icons'
 
 const flexCenter = styleHelpers.flexCenter;
 const variables = styleHelpers.variables;
@@ -22,33 +22,35 @@ const Container = styled.section`
     overflow-y: scroll;
 `;
 
-const Board = styled.textarea`
+const Photo = styled.section`
     ${flexCenter}
-    width: 100%;
-    height:200px;
-    border-radius: .5em;
-    border: none;
-    background-color: white;
-    color: black;
-    padding: .5em;
-    font-size: 1.2em;
-    font-weight:bold;
-    resize:none;
-    &::placeholder {
-        color: ${variables.$blue}
-    }
+    width: 15em;
+    height: 15em;
+    border: .3em solid ${variables.$grayBlue};
+    border-radius: 50%;
 `
 
-class Home extends Component {
+const Nick = styled.span`
+    font-size: 2em;
+    font-weight: bold;
+    color: white;
+    
+`
+
+class Profile extends Component {
+    capitalizeFirstLetter(string) {
+        return string.charAt(0).toUpperCase() + string.slice(1);
+    }
     render() {
         return (
             <Container>
-               <Board type="text" placeholder="Jak tam dzisiaj trening ?">
-
-               </Board>
+                <Photo>
+                    <FontAwesomeIcon icon={faUserSecret} style={{fontSize: 150}} color={variables.$darkBlue} />
+                </Photo>
+                <Nick> {app.getCurrentUser() ? this.capitalizeFirstLetter(app.getCurrentUser().displayName) : null} </Nick>
             </Container>
         )
     }
 }
 
-export default Home;
+export default Profile;

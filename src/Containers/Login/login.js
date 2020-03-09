@@ -105,12 +105,12 @@
 import React, { useCallback, useContext } from "react";
 import { withRouter, Redirect } from "react-router";
 import { Link } from "react-router-dom";
+import { Logo, Container, Form, Input, Button } from "../../Components/styleHelpers"
 import app from "../../Components/base"
 import { AuthContext } from "../../Auth"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faUser } from '@fortawesome/free-solid-svg-icons'
-// , faExclamationCircle
-
+import { variables } from "../../Components/styleHelpers";
 const Login = ({ history }) => {
   const handleLogin = useCallback(
     async event => {
@@ -130,42 +130,25 @@ const Login = ({ history }) => {
   if (currentUser) {
     return <Redirect to="/" />;
   }
-//   const { email, password, isPasswordCorrect, isEmailCorrect } = this.state;
-  return (
-    <section className="login">
-        <form className="form" onSubmit={handleLogin}>
-            <div className="form__email-container">
-                <input 
-                    className="form__email form__input" 
-                    type="email" 
-                    name="email"
-                    placeholder="email" 
-                />
-                {/* <span className="form__validation-icon">
-                    {isEmailCorrect ? null : <FontAwesomeIcon icon={faExclamationCircle} color="#FF8E00" style={{fontSize:20}}/>}
-                </span>  */}
-            </div>
 
-            <div className="form__password-container">
-                <input 
-                    className="form__password form__input" 
-                    type="password" 
-                    name="password"
-                    placeholder="hasło" 
-                />   
-                {/* <span className="form__validation-icon">
-                    {isPasswordCorrect ? null : <FontAwesomeIcon icon={faExclamationCircle} color="#FF8E00" style={{fontSize:20}}/>}
-                </span>     */}
-            </div>
-            <button className="form__button"> Zaloguj </button> 
-            <Link to="/signup" className="form__link">
-                Stwórz konto
-            </Link>
-            <div className="form__logo">
-                <FontAwesomeIcon icon={faUser} color="#005D95" style={{fontSize:60}}/>
-            </div>
-        </form>
-    </section>
+  return (
+    <Container>
+    <Form onSubmit={handleLogin}>
+      <Input type="email" name="email" placeholder="email"></Input>
+      <Input type="password" name="password" placeholder="hasło"></Input>
+      <Button className="form__button"> Zaloguj </Button>
+      <Link to="/signup" className="form__link">
+      Stwórz konto
+      </Link>
+      <Logo>
+      <FontAwesomeIcon
+        icon={faUser}
+        color={variables.$grayBlue}
+        style={{ fontSize: 60 }}
+      />
+    </Logo>
+    </Form>
+  </Container>
   );
 };
 

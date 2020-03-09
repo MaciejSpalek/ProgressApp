@@ -109,81 +109,12 @@
 
 import React, { useCallback } from "react";
 import app from "../../Components/base";
-import styled from "styled-components";
+import { Logo, Container, Form, Input, Button } from "../../Components/styleHelpers"
 import { withRouter } from "react-router";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUserPlus } from "@fortawesome/free-solid-svg-icons";
-import { variables, flexCenter } from "../../Components/styleHelpers";
-// ,  faExclamationCircle
-
-
-
-const LoginContainer = styled.section`
-  ${flexCenter};
-  position: fixed;
-  top: 64px;
-  left: 0;
-  width: 100%;
-  height: calc(100vh - 64px);
-  background-color: ${variables.$blue};
-`
-
-const Form = styled.form`
-  ${flexCenter};
-  position: relative;
-  justify-content: space-evenly;
-  flex-direction: column;
-  width: 250px;
-  height: 300px;
-  background-color: ${variables.$grayBlue};
-  border-radius: .5em;
-  padding: 4em 1em 1em 1em;
-`
-
-export const Logo = styled.div`
-  position: absolute;
-  top: 0;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  padding: 0.8em;
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
-  border: 0.2em solid ${variables.$grayBlue};
-  background-color: ${variables.$blue};
-`
-
-export const Input = styled.input`
-  background-color: white;
-  color: ${variables.grayBlue};
-  width: 100%;
-  height: 35px;
-  font-size: 1em;
-  font-weight: bold;
-  border-radius: 0.2em;
-  border: none;
-  padding: 0 0.3em;
-  &::placeholder {
-    color: ${variables.blue};
-    font-weight: 100;
-  }
-`
-
-export const Button = styled.button`
-  background-color: ${variables.orange};
-  color: white;
-  border: none;
-  height: 35px;
-  width: 100%;
-  border-radius: 0.2em;
-  font-size: 1em;
-  font-weight: bold;
-  padding: 0 0.3em;
-  cursor: pointer;
-`
-
-
+import { variables } from "../../Components/styleHelpers";
 
 
 const SignUp = ({ history }) => {
@@ -215,7 +146,7 @@ const SignUp = ({ history }) => {
   );
 
   return (
-    <LoginContainer>
+    <Container>
       <Form onSubmit={handleSignUp}>
         <Input type="text" name="nick" placeholder="nick"></Input>
         <Input type="email" name="email" placeholder="email"></Input>
@@ -232,7 +163,7 @@ const SignUp = ({ history }) => {
         />
       </Logo>
       </Form>
-    </LoginContainer>
+    </Container>
   );
 };
 

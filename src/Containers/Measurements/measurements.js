@@ -73,7 +73,7 @@ class Measurements extends Component {
         
         this.setState({
             isPanelFormActive: false,
-            saveBoxes: [...saveBoxes, parameters].reverse()
+            saveBoxes: [...saveBoxes, parameters]
         }, ()=> {
             this.updateSaveBoxes();
         })   
