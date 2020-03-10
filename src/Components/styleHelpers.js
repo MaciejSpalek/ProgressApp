@@ -50,22 +50,22 @@ export const Logo = styled.div`
 
 export const Input = styled.input`
   background-color: white;
-  color: ${variables.grayBlue};
+  color: ${variables.$grayBlue};
   width: 100%;
   height: 35px;
   font-size: 1em;
   font-weight: bold;
   border-radius: 0.2em;
   border: none;
-  padding: 0 0.3em;
+  padding: 0 .3em;
   &::placeholder {
-    color: ${variables.blue};
+    color: ${variables.$blue};
     font-weight: 100;
   }
 `
 
 export const Button = styled.button`
-  background-color: ${variables.orange};
+  background-color: ${variables.$orange};
   color: white;
   border: none;
   height: 35px;

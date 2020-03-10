@@ -4,7 +4,7 @@ import app from '../../Components/base'
 import { Link } from 'react-router-dom';
 import styled from 'styled-components'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faChartBar, faStar, faRuler, faListOl, faUsers, faSignOutAlt, faIgloo, faUser } from '@fortawesome/free-solid-svg-icons'
+import { faChartBar, faStar, faRuler, faListOl, faUsers, faSignOutAlt, faHome, faUser } from '@fortawesome/free-solid-svg-icons'
 
 const flexCenter = styleHelpers.flexCenter;
 const variables = styleHelpers.variables;
@@ -58,7 +58,7 @@ const Menu = ({isMenuActive, handleHamburger}) => {
             <MenuList>
                 <Link style={{textDecoration: "none"}} onClick={handleHamburger}  to="/">
                     <ListItem>
-                        <Icon><FontAwesomeIcon icon={faIgloo} color="#FF8E00" style={{fontSize:50}} /></Icon>
+                        <Icon><FontAwesomeIcon icon={faHome} color="#FF8E00" style={{fontSize:50}} /></Icon>
                         <Caption>Główna</Caption>
                     </ListItem>
                 </Link>

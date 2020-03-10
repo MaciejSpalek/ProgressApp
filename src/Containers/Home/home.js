@@ -43,7 +43,7 @@ class Home extends Component {
     render() {
         return (
             <Container>
-               <Board type="text" placeholder="Jak tam dzisiaj trening ?">
+               <Board type="text" placeholder="Co tam na treningu ?">
 
                </Board>
             </Container>

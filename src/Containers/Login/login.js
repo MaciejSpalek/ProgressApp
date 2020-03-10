@@ -136,9 +136,9 @@ const Login = ({ history }) => {
     <Form onSubmit={handleLogin}>
       <Input type="email" name="email" placeholder="email"></Input>
       <Input type="password" name="password" placeholder="hasło"></Input>
-      <Button className="form__button"> Zaloguj </Button>
-      <Link to="/signup" className="form__link">
-      Stwórz konto
+      <Button> Zaloguj </Button>
+      <Link to="/signup">
+        Stwórz konto
       </Link>
       <Logo>
       <FontAwesomeIcon
