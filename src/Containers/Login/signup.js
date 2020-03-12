@@ -132,12 +132,16 @@ const SignUp = ({ history }) => {
               displayName: nick.value
             })
           })
+          
         history.push("/");
         return app
           .getDatabase()
           .collection("users")
           .doc(app.getCurrentUser().uid)
-          .set({ measurement: [] });
+          .set({ 
+            measurement: [],
+            profileData: {} 
+          });
       } catch (error) {
         alert(error);
       }
@@ -148,9 +152,9 @@ const SignUp = ({ history }) => {
   return (
     <Container>
       <Form onSubmit={handleSignUp}>
-        <Input type="text" name="nick" placeholder="nick"></Input>
-        <Input type="email" name="email" placeholder="email"></Input>
-        <Input type="password" name="password" placeholder="hasło"></Input>
+        <Input type="text" name="nick" placeholder="nick" required></Input>
+        <Input type="email" name="email" placeholder="email" required></Input>
+        <Input type="password" name="password" placeholder="hasło" required></Input>
         <Button className="form__button"> Stwórz </Button>
         <Link to="/login" className="form__link">
           Przejdź do logowania

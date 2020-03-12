@@ -1,10 +1,9 @@
 import React, { Component } from "react";
 import app from "../../Components/base";
 import styled from "styled-components"
-import classNames from "classnames";
 import * as styleHelpers  from '../../Components/styleHelpers'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faUserSecret, faImages, faPenSquare, faCameraRetro, faUser, faExternalLinkSquareAlt } from '@fortawesome/free-solid-svg-icons'
+import {  faImages, faPenSquare, faCameraRetro, faUser, faExternalLinkSquareAlt } from '@fortawesome/free-solid-svg-icons'
 
 const flexCenter = styleHelpers.flexCenter;
 const variables = styleHelpers.variables;
@@ -84,7 +83,7 @@ const ButtonBox = styled.div`
 
 
 
-const AddBox = styled.div`
+const AddBox = styled.form`
     display:grid;
     grid-template-columns: repeat(1, 1fr);
     grid-gap: .5em;
@@ -108,7 +107,13 @@ const Input = styled.input`
         color: ${variables.$blue};
         font-weight: 100;
     }
+`
 
+const DataItem = styled.h2`
+
+`
+
+const ProfileBox = styled.div`
 `
 
 
@@ -116,21 +121,95 @@ class Profile extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            isEditButtonActive: false
+            isRotateCard: false,
+            isEditButtonActive: true,
+            profileData: {
+                sex: "",
+                age: "",
+                weight: "",
+                height: "",
+                yourSport: "",
+                trainingExperience: ""
+            }
         }
+    }
+
+    componentDidMount() {
+        this.setDataFromDocument()
     }
 
     capitalizeFirstLetter(string) {
         return string.charAt(0).toUpperCase() + string.slice(1);
     }
-
-    editButtonHandle() {
+    rotateCardHandler() {
+        this.setState(prevState => ({
+            isRotateCard: !prevState.isRotateCard
+        }))
+    }
+    editButtonHandler() {
         this.setState(prevState => ({
             isEditButtonActive: !prevState.isEditButtonActive
         }))
     }
+
+
+    getDocument() {
+        return app.getDatabase().collection('users').doc(app.getCurrentUser().uid);
+    }
+    setDataFromDocument() {
+        const document = this.getDocument();
+        document.get().then(doc => {
+            this.setState({
+                profileData: doc.data().profileData
+            })
+        })
+    }
+
+    updateProfileHandler = (e) => {
+        e.preventDefault();
+        const { sex, age, weight, height, yourSport, trainingExperience } = e.target.elements;
+        
+
+        const parameters = {
+            sex: sex.value,
+            age: age.value,
+            weight: weight.value,
+            height: height.value,
+            yourSport: yourSport.value,
+            trainingExperience: trainingExperience.value
+        }
+    
+        this.setState({
+            isEditButtonActive: !this.state.isEditButtonActive,
+            profileData: parameters
+        }, ()=> {
+            this.updateProfileData();
+        })   
+    }
+
+    updateProfileData() {
+        this.getDocument().update({
+            "profileData": this.state.profileData
+        })
+    }
+
+    renderProfileData = () => {
+        const { profileData } = this.state;
+            return ( 
+                <ProfileBox>
+                    <DataItem> { profileData.sex } </DataItem>
+                    <DataItem> { profileData.weight } </DataItem>
+                    <DataItem> { profileData.height } </DataItem>
+                    <DataItem> { profileData.trainingExperience } </DataItem>
+                    <DataItem> { profileData.yourSport } </DataItem>
+                    <DataItem> { profileData.age } </DataItem>
+                </ProfileBox>
+            )
+        }
+    
+
     render() {
-        const { isEditButtonActive } = this.state;
+        const { isRotateCard, isEditButtonActive } = this.state;
         const frontActive = {
             transform:  "rotateY(360deg)",
             zIndex: 1
@@ -138,11 +217,10 @@ class Profile extends Component {
         const backActive = {
             transform: "rotateY(180deg)"
         }
-       
         return (
             <Container>
                 <ProfileCard>
-                    <Frontside style={isEditButtonActive ? backActive : null}>
+                    <Frontside style={isRotateCard ? backActive : null}>
                         <PhotoBox>
                             <FontAwesomeIcon icon={faUser} style={{fontSize: 150}} color={variables.$darkBlue} />
                             <Nick> {app.getCurrentUser() ? this.capitalizeFirstLetter(app.getCurrentUser().displayName) : null} </Nick>
@@ -150,25 +228,28 @@ class Profile extends Component {
                         <ButtonBox>
                             <FontAwesomeIcon icon={faCameraRetro} style={{fontSize: 35, margin: '.1em'}} color={variables.$orange} />
                             <FontAwesomeIcon icon={faImages} style={{fontSize: 35, margin: '.1em'}} color={variables.$orange}/>
-                            <FontAwesomeIcon icon={faExternalLinkSquareAlt} style={{fontSize: 35, margin: '.1em'}} color={variables.$orange}  onClick={this.editButtonHandle.bind(this)}/>
+                            <FontAwesomeIcon icon={faExternalLinkSquareAlt} style={{fontSize: 35, margin: '.1em'}} color={variables.$orange}  onClick={this.rotateCardHandler.bind(this)}/>
                         </ButtonBox>
                     </Frontside>
-                    <Backside style={isEditButtonActive ? frontActive : null}>
+                    <Backside style={isRotateCard ? frontActive : null}>
                         <ButtonBox style={{borderBottomLeftRadius: 0, borderBottomRightRadius: 0}}>
-                            <FontAwesomeIcon icon={faPenSquare} style={{fontSize: 35, margin: '.1em'}} color={variables.$orange}/>
-                            <FontAwesomeIcon icon={faExternalLinkSquareAlt} style={{fontSize: 35 , margin: '.1em'}} color={variables.$orange}  onClick={this.editButtonHandle.bind(this)}/>
+                            <FontAwesomeIcon icon={faPenSquare} style={{fontSize: 35, margin: '.1em'}} color={variables.$orange} onClick={this.editButtonHandler.bind(this)}/>
+                            <FontAwesomeIcon icon={faExternalLinkSquareAlt} style={{fontSize: 35 , margin: '.1em'}} color={variables.$orange}  onClick={this.rotateCardHandler.bind(this)}/>
                         </ButtonBox>
-                        <AddBox>
-                            <Input placeholder="staż tren."></Input>
-                            <Input placeholder="wiek"></Input>
-                            <Input placeholder="waga"></Input>
-                            <Input placeholder="wzrost"></Input>
-                            <Input placeholder="sport"></Input>
-                            <Input placeholder="płeć"></Input>
-
-                            {/* <Input placeholder="..."></Input>
-                            <Input placeholder="..."></Input> */}
-                        </AddBox> 
+                        {
+                            isEditButtonActive ? 
+                                <AddBox onSubmit={(e) => {this.updateProfileHandler(e)}}>
+                                    <Input name="age" placeholder="wiek" required></Input>
+                                    <Input name="sex" placeholder="płeć" required></Input>
+                                    <Input name="trainingExperience" placeholder="staż tren." required></Input>
+                                    <Input name="weight" placeholder="waga" required></Input>
+                                    <Input name="height" placeholder="wzrost" required></Input>
+                                    <Input name="yourSport" placeholder="sport" required></Input>
+                                    <styleHelpers.Button>Zapisz</styleHelpers.Button>
+                                </AddBox> 
+                                : 
+                                this.renderProfileData()
+                        }
                     </Backside>
                 </ProfileCard>
             </Container>
