@@ -1,6 +1,7 @@
 import * as app from "firebase/app";
 import "firebase/auth";
 import "firebase/firebase-firestore";
+import 'firebase/storage' ;
 
 const config = {
   apiKey: "AIzaSyC41kFgPkCn32-MNYWfW06owFMIC4gEEnU",
@@ -18,30 +19,34 @@ class FireBase {
   constructor() {
     this.app = app.initializeApp(config);
     this.dataBase = app.firestore();
+    this.storage = app.storage();
   }
 
   getDatabase() {
     return this.dataBase;
   }
-
   getApp() {
     return this.app;
   }
+  getStorage() {
+    return this.storage;
+  }
+
 
   signUp(email, password) {
     return this.getApp().auth().createUserWithEmailAndPassword(email, password);
   }
-
   login(email, password) {
-    return  this.app.auth().signInWithEmailAndPassword(email, password)
+    return  this.getApp().auth().signInWithEmailAndPassword(email, password)
   }
-
   logout() {
     return this.getApp().auth().signOut();
   }
-
   getCurrentUser() {
-    return this.app.auth().currentUser;
+    return this.getApp().auth().currentUser;
+  }
+  getUserID() {
+    return this.getCurrentUser().uid;
   }
 }
 

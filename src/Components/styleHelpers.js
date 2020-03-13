@@ -55,7 +55,7 @@ export const Input = styled.input`
   height: 35px;
   font-size: 1em;
   font-weight: bold;
-  border-radius: 0.2em;
+  border-radius: .2em;
   border: none;
   padding: 0 .3em;
   &::placeholder {
@@ -73,6 +73,6 @@ export const Button = styled.button`
   border-radius: 0.2em;
   font-size: 1em;
   font-weight: bold;
-  padding: 0 0.3em;
+  padding: 0 .3em;
   cursor: pointer;
 `
