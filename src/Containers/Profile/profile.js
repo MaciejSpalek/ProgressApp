@@ -1,12 +1,20 @@
 import React, { Component } from "react";
 import app from "../../Components/base";
-import styled from "styled-components"
+import styled from "styled-components";
+import userPhoto from "../../images/user-solid.svg"
 import * as styleHelpers  from '../../Components/styleHelpers'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {  faImages, faFileUpload, faPenSquare, faCameraRetro, faUser, faExternalLinkSquareAlt } from '@fortawesome/free-solid-svg-icons'
 
 const flexCenter = styleHelpers.flexCenter;
 const variables = styleHelpers.variables;
+const frontActive = {
+    transform:  "rotateY(360deg)",
+    zIndex: 1
+}
+const backActive = {
+    transform: "rotateY(180deg)"
+}
 const Container = styled.section`
     ${flexCenter}
     position: fixed;
@@ -60,11 +68,14 @@ const PhotoBox = styled.section`
     position: relative;
     width: 100%;
     flex: 1;
-    background-color: ${variables.$blue};
     border-top-right-radius: .5em;
     border-top-left-radius: .5em;
     transition: .5s linear;
+    background-color: ${variables.$blue};
+    overflow: hidden;
+   
 `
+
 const Nick = styled.span`
     position:absolute;
     bottom: .5em;
@@ -144,15 +155,17 @@ const ProfileBox = styled.div`
     justify-content: flex-start;
     align-items: flex-start;
     flex-direction: column;
+    position: relative;
     width: 100%;
     height: 100%;
     padding: .5em;
     overflow-y: scroll;
 `
 
-
-
-
+const Photo = styled.img`
+    width: auto;
+    height: 100%;
+`
 
 
 
@@ -184,11 +197,7 @@ class Profile extends Component {
 
     componentDidMount() {
         this.setDataFromDocument()
-        const userID = app.getUserID();
-        app.getStorage().ref('images').child(`profilePhoto-${userID}`).getDownloadURL().then(url => {
-            console.log(url);
-            this.setState({url});
-        })
+        this.getPhotoFromStorage();
     }
     capitalizeFirstLetter(string) {
         return string.charAt(0).toUpperCase() + string.slice(1);
@@ -258,42 +267,52 @@ class Profile extends Component {
             </ProfileBox>
         )
     }
-    
+    doesProfilePhotoExist(userStorage) {
+        if(userStorage.filter(element => element.name === "profilePhoto")[0]) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    getPhotoFromStorage() {
+        const userID = app.getUserID();
+        app.getStorage().ref(`users/${userID}`).listAll().then(list => {
+            console.log(this.doesProfilePhotoExist(list.items));
+            if(this.doesProfilePhotoExist(list.items)) {
+                app.getStorage().ref(`users/${userID}`).child(`profilePhoto`).getDownloadURL().then(url => {
+                    this.setState({url});
+                })
+            }
+        });
+    }
+
     choosePhotoHandler = async (e) => {
         if (e.target.files[0]) {
             const image = e.target.files[0];
             await this.setState({image})
-            this.handleUpload();
+            await this.handleUpload();
         }
     }
     handleUpload = () => {
-        const {image} = this.state;
+        const { image } = this.state;
         const userID = app.getUserID();
-        const uploadTask = app.getStorage().ref(`images/profilePhoto-${userID}`).put(image);
+        const uploadTask = app.getStorage().ref(`users/${userID}/profilePhoto`).put(image);
         uploadTask.on('state_changed', () => {
-          app.getStorage().ref('images').child(`profilePhoto-${userID}`).getDownloadURL().then(url => {
-              console.log(url);
+          app.getStorage().ref(`users/${userID}`).child(`profilePhoto`).getDownloadURL().then(url => {
               this.setState({url});
           })
       });
     }
 
     render() {
-        const { isRotateCard, isEditButtonActive, url } = this.state;
-        const frontActive = {
-            transform:  "rotateY(360deg)",
-            zIndex: 1
-        }
-        const backActive = {
-            transform: "rotateY(180deg)"
-        }
-
+        const { isRotateCard, isEditButtonActive } = this.state;
         return (
             <Container>
                 <ProfileCard>
                     <Frontside style={isRotateCard ? backActive : null}>
-                        <PhotoBox style={{ backgroundImage: `url(${this.state.url})`, backgroundSize: "cover", backgroundPosition: "center"}}>
-                            {/* <FontAwesomeIcon icon={faUser} style={{fontSize: 150}} color={variables.$darkBlue} /> */}
+                        <PhotoBox>
+                            <Photo src={this.state.url ? this.state.url : userPhoto}></Photo>
                             <Nick> {app.getCurrentUser() ? `${this.capitalizeFirstLetter(app.getCurrentUser().displayName)}, ${this.state.profileData.age}l` : null} </Nick>
                         </PhotoBox>
                         <ButtonBox>

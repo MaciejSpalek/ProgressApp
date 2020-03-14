@@ -116,35 +116,35 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUserPlus } from "@fortawesome/free-solid-svg-icons";
 import { variables } from "../../Components/styleHelpers";
 
-
 const SignUp = ({ history }) => {
   const handleSignUp = useCallback(
     async event => {
       event.preventDefault();
       const { email, password, nick} = event.target.elements;
-      try {
+     
         await app
           .getApp()
           .auth()
           .createUserWithEmailAndPassword(email.value, password.value)
           .then(result => {
-            return result.user.updateProfile({
+            result.user.updateProfile({
               displayName: nick.value
             })
           })
           
-        history.push("/");
-        return app
+        await app
           .getDatabase()
           .collection("users")
           .doc(app.getCurrentUser().uid)
           .set({ 
             measurement: [],
             profileData: {} 
-          });
-      } catch (error) {
-        alert(error);
-      }
+        });
+
+        history.push("/");
+        
+
+      
     },
     [history]
   );
