@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import app from "../../Components/base";
 import styled from "styled-components";
+import ShareBox from "../../Components/shareBox"
 import userPhoto from "../../images/user-solid.svg"
 import * as styleHelpers  from '../../Components/styleHelpers'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -15,25 +16,28 @@ const frontActive = {
 const backActive = {
     transform: "rotateY(180deg)"
 }
+
 const Container = styled.section`
     ${flexCenter}
+    justify-content: flex-start;
+    flex-direction: column;
     position: fixed;
     top: 64px;
     left: 0;
     height: calc(100vh - 64px);
     width: 100%;
-    background-color: ${variables.$grayBlue};
+    background-color: ${variables.$blue};
     padding: .5em;
-    overflow-y: scroll;
+    overflow-x: scroll;
 `
+
 const ProfileCard = styled.div`
     ${flexCenter};
     position: relative;
     width: 280px;
     height: 500px;
+    margin: 2em 0;
 `
-
-
 
 const Frontside = styled.div`
     ${flexCenter}
@@ -45,7 +49,7 @@ const Frontside = styled.div`
     transform-origin: center;
     z-index: 1;
     backface-visibility: hidden;
-    box-shadow: 0 .2em .5em .1em black;
+    /* box-shadow: 0 0 .5em .1em black; */
 `
 const Backside = styled.div`
     ${flexCenter};
@@ -58,7 +62,7 @@ const Backside = styled.div`
     transition: .3s linear;
     transform-origin: center;
     transform:  rotateY(180deg);
-    box-shadow: 0 .2em .5em .1em black;
+    /* box-shadow: 0 0 .5em .1em black; */
     background-color: ${variables.$blue};
     padding-bottom: .5em;
     z-index: -1;
@@ -148,8 +152,6 @@ const About = styled.textarea `
         font-weight: 200;
     }
 `
-
-
 const ProfileBox = styled.div`
     ${flexCenter};
     justify-content: flex-start;
@@ -161,11 +163,15 @@ const ProfileBox = styled.div`
     padding: .5em;
     overflow-y: scroll;
 `
-
 const Photo = styled.img`
     width: auto;
     height: 100%;
 `
+
+
+
+
+
 
 
 
@@ -190,9 +196,6 @@ class Profile extends Component {
             }
         }
     }
-
-   
-
 
 
     componentDidMount() {
@@ -274,7 +277,6 @@ class Profile extends Component {
             return false;
         }
     }
-
     getPhotoFromStorage() {
         const userID = app.getUserID();
         app.getStorage().ref(`users/${userID}`).listAll().then(list => {
@@ -286,7 +288,6 @@ class Profile extends Component {
             }
         });
     }
-
     choosePhotoHandler = async (e) => {
         if (e.target.files[0]) {
             const image = e.target.files[0];
@@ -327,7 +328,7 @@ class Profile extends Component {
                         </ButtonBox>
                     </Frontside>
                     <Backside style={isRotateCard ? frontActive : null}>
-                        <ButtonBox style={{borderBottomLeftRadius: 0, borderBottomRightRadius: 0}}>
+                        <ButtonBox style={{borderBottomLeftRadius: 0, borderBottomRightRadius: 0, borderTopLeftRadius: ".5em", borderTopRightRadius: ".5em"}}>
                             <FontAwesomeIcon icon={faPenSquare} style={{fontSize: 35, margin: '.1em'}} color={variables.$orange} onClick={this.editButtonHandler.bind(this)}/>
                             <FontAwesomeIcon icon={faExternalLinkSquareAlt} style={{fontSize: 35 , margin: '.1em'}} color={variables.$orange}  onClick={this.rotateCardHandler.bind(this)}/>
                         </ButtonBox>
@@ -352,6 +353,7 @@ class Profile extends Component {
                         }
                     </Backside>
                 </ProfileCard>
+                <ShareBox/>
             </Container>
         )
     }

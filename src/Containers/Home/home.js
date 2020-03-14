@@ -4,6 +4,7 @@ import styled from "styled-components"
 import * as styleHelpers  from '../../Components/styleHelpers'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {} from '@fortawesome/free-solid-svg-icons'
+import ShareBox from "../../Components/shareBox";
 
 const flexCenter = styleHelpers.flexCenter;
 const variables = styleHelpers.variables;
@@ -22,30 +23,12 @@ const Container = styled.section`
     overflow-y: scroll;
 `;
 
-const Board = styled.textarea`
-    ${flexCenter}
-    width: 100%;
-    height:200px;
-    border-radius: .5em;
-    border: none;
-    background-color: white;
-    color: black;
-    padding: .5em;
-    font-size: 1.2em;
-    font-weight:bold;
-    resize:none;
-    &::placeholder {
-        color: ${variables.$blue}
-    }
-`
 
 class Home extends Component {
     render() {
         return (
             <Container>
-               <Board type="text" placeholder="Co tam na treningu ?">
-
-               </Board>
+                <ShareBox/>
             </Container>
         )
     }
