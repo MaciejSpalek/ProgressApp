@@ -201,6 +201,7 @@ class Profile extends Component {
     componentDidMount() {
         this.setDataFromDocument()
         this.getPhotoFromStorage();
+        this.getUserParameter()
     }
     capitalizeFirstLetter(string) {
         return string.charAt(0).toUpperCase() + string.slice(1);
@@ -306,6 +307,25 @@ class Profile extends Component {
       });
     }
 
+
+
+
+    //////// Realtime Database /////////
+    getCurrentUserProperties(property) {
+        const rootRef = app.getRootRef();
+        const userID = app.getUserID();
+        rootRef.child(userID).orderByKey().on("value", snapshot => {
+            console.log(snapshot.val().property);
+        })
+    }
+
+
+
+
+
+
+
+
     render() {
         const { isRotateCard, isEditButtonActive } = this.state;
         return (
@@ -314,7 +334,7 @@ class Profile extends Component {
                     <Frontside style={isRotateCard ? backActive : null}>
                         <PhotoBox>
                             <Photo src={this.state.url ? this.state.url : userPhoto}></Photo>
-                            <Nick> {app.getCurrentUser() ? `${this.capitalizeFirstLetter(app.getCurrentUser().displayName)}, ${this.state.profileData.age}l` : null} </Nick>
+                            {/* <Nick> {app.getCurrentUser() ? `${this.capitalizeFirstLetter(app.getCurrentUser().displayName)}, ${this.state.profileData.age}l` : null} </Nick> */}
                         </PhotoBox>
                         <ButtonBox>
                             <FontAwesomeIcon icon={faCameraRetro} style={{fontSize: 35, margin: '.1em'}} color={variables.$orange} />

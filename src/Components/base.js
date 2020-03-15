@@ -1,7 +1,8 @@
 import * as app from "firebase/app";
 import "firebase/auth";
 import "firebase/firebase-firestore";
-import 'firebase/storage' ;
+import 'firebase/storage';
+import 'firebase/database';
 
 const config = {
   apiKey: "AIzaSyC41kFgPkCn32-MNYWfW06owFMIC4gEEnU",
@@ -19,14 +20,18 @@ class FireBase {
   constructor() {
     this.app = app.initializeApp(config);
     this.dataBase = app.firestore();
+    this.realTimeDatabase = app.database();
     this.storage = app.storage();
   }
 
+  getApp() {
+    return this.app;
+  }
   getDatabase() {
     return this.dataBase;
   }
-  getApp() {
-    return this.app;
+  getRealTimeDatabase() {
+    return this.realTimeDatabase;
   }
   getStorage() {
     return this.storage;
@@ -48,6 +53,14 @@ class FireBase {
   getUserID() {
     return this.getCurrentUser().uid;
   }
+  getRootRef() {
+    return this.getRealTimeDatabase().ref("users")
+    
+  }
+  // getCurrentRealTimeDatabaseUser() {
+    // return this.getRealTimeDatabase().ref
+  // }
+
 }
 
 export default new FireBase()
