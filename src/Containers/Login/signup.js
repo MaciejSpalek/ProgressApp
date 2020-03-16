@@ -18,8 +18,9 @@ const SignUp = ({ history }) => {
           .auth()
           .createUserWithEmailAndPassword(email.value, password.value)
           
+      
         await app
-          .getRootRef()
+          .getRootRef("users")
           .child(app.getUserID())
           .set({
             profileData: {
@@ -33,9 +34,8 @@ const SignUp = ({ history }) => {
           .collection("users")
           .doc(app.getUserID())
           .set({ 
-            measurement: [],
-            profileData: {} 
-        });
+            measurement: [] 
+          });
 
         history.push("/");
     },

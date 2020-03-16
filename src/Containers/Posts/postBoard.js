@@ -9,18 +9,28 @@ import {   } from '@fortawesome/free-solid-svg-icons'
 const flexCenter = styleHelpers.flexCenter;
 const variables = styleHelpers.variables;
 
+
+const Container = styled.div`
+    width: 100%;
+`
+
+
 class PostBoard extends Component {
     constructor() {
         this.state = {
-
+            
         }
+    }
+
+    renderPosts() {
+
     }
 
     render() {
         return (
-            <div>
-                
-            </div>
+            <Container>
+                {this.renderPosts()}
+            </Container>
         )
     }
 }

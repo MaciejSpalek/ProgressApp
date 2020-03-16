@@ -186,7 +186,8 @@ class Profile extends Component {
                 yourSport: "",
                 priority: "",
                 trainingExperience: "",
-                aboutMe: ""
+                aboutMe: "",
+                url: ""
             }
         }
     }
@@ -224,9 +225,10 @@ class Profile extends Component {
             yourSport: yourSport.value,
             priority: priority.value,
             trainingExperience: trainingExperience.value,
-            aboutMe: aboutMe.value
+            aboutMe: aboutMe.value,
+            url: this.state.url
         }
-        app.getRootRef().child(app.getUserID()).update({
+        app.getRootRef("users").child(app.getUserID()).update({
             profileData: tempProfileData
         });
 
@@ -290,10 +292,10 @@ class Profile extends Component {
 
 
 
-
+    
     //////// Realtime Database /////////
-    setProfileData(property) {
-        const rootRef = app.getRootRef();
+    setProfileData() {
+        const rootRef = app.getRootRef("users");
         const userID = app.getUserID();
         rootRef.child(userID).orderByKey().on("value", snapshot => {
             this.setState({
@@ -307,15 +309,11 @@ class Profile extends Component {
                     trainingExperience:  snapshot.val().profileData.trainingExperience,
                     priority:  snapshot.val().profileData.priority,
                     aboutMe:  snapshot.val().profileData.aboutMe,
-
+                    url:  snapshot.val().profileData.url
                 }
             })
         })
     }
-
-
-
-
 
 
 
@@ -332,12 +330,10 @@ class Profile extends Component {
                         </PhotoBox>
                         <ButtonBox>
                             <FontAwesomeIcon icon={faCameraRetro} style={{fontSize: 35, margin: '.1em'}} color={variables.$orange} />
-                            <div>
-                                <label htmlFor="file-input">
-                                    <FontAwesomeIcon icon={faImages} style={{fontSize: 35, margin: '.1em'}} color={variables.$orange} />
-                                </label>
-                                <input id="file-input" type="file" style={{display: "none"}} onChange={this.choosePhoto}/>
-                            </div>
+                            <label>
+                                <FontAwesomeIcon icon={faImages} style={{fontSize: 35, margin: '.1em'}} color={variables.$orange} />
+                                <input type="file" style={{display: "none"}} onChange={this.choosePhoto}/>
+                            </label>
                             <FontAwesomeIcon icon={faExternalLinkSquareAlt} style={{fontSize: 35, margin: '.1em'}} color={variables.$orange}  onClick={this.rotateCardHandler.bind(this)}/>
                         </ButtonBox>
                     </Frontside>

@@ -1,13 +1,16 @@
 import React from "react"
 import styled from 'styled-components';
-import * as styleHelpers  from './styleHelpers'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faFileUpload } from '@fortawesome/free-solid-svg-icons'
+import app from "./base";
+import * as styleHelpers  from './styleHelpers';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faFileUpload } from '@fortawesome/free-solid-svg-icons';
+import { text } from "@fortawesome/fontawesome-svg-core";
+import { Component } from "react";
 
 const flexCenter = styleHelpers.flexCenter;
 const variables = styleHelpers.variables;
 
-const Container = styled.div`
+const Container = styled.form`
     ${flexCenter}
     flex-direction: column;
     width: 280px;
@@ -38,19 +41,63 @@ const AddArea = styled.div`
     width: 100%;
 ` 
 
-const ShareBox = () => {
-    return (
-        <Container>
-            <TextArea placeholder="Napisz coś..."></TextArea>
-            <AddArea>
-                <label>
-                    <FontAwesomeIcon icon={faFileUpload} style={{fontSize: 35, margin: '.1em'}} color={variables.$orange} />
-                    <input type="file" style={{display: "none"}}/>
-                </label>
-                <styleHelpers.Button>Opublikuj</styleHelpers.Button>
-            </AddArea>
-        </Container>
-    )
+
+
+
+
+
+
+
+
+class ShareBox extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            url: "",
+            nick: ""
+        }
+        this.addPostToDatabase = this.addPostToDatabase.bind(this);
+    }
+
+    componentDidMount() {
+        const rootRef = app.getRootRef("users");
+        const userID = app.getUserID();
+
+        rootRef.child(userID).on('value', snapshot => {
+            this.setState({
+                nick: snapshot.val().profileData.nick,
+                url: snapshot.val().profileData.url
+            })
+        })
+    }
+
+    addPostToDatabase = (e) => {
+        e.preventDefault();
+        const { textarea } = e.target.elements;
+        const { url, nick } = this.state;
+        const rootRef = app.getRootRef("posts");
+        const userID = app.getUserID();
+        
+        rootRef.child(userID).push({
+            content: textarea.value,
+            url: url,
+            nick: nick
+        })
+    }
+    render() {
+        return (
+            <Container onSubmit={(e) => {this.addPostToDatabase(e)}}>
+                <TextArea name="textarea" placeholder="Napisz coś..."></TextArea>
+                <AddArea>
+                    <label>
+                        <FontAwesomeIcon icon={faFileUpload} style={{fontSize: 35, margin: '.1em'}} color={variables.$orange} />
+                        <input type="file" style={{display: "none"}}/>
+                    </label>
+                    <styleHelpers.Button>Opublikuj</styleHelpers.Button>
+                </AddArea>
+            </Container>
+        )
+    }
 }
                 
 export default ShareBox;
