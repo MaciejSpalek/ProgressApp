@@ -185,6 +185,7 @@ class Profile extends Component {
             image: "",
             url: "",
             profileData: {
+                nick: "",
                 sex: "",
                 age: "",
                 weight: "",
@@ -199,12 +200,13 @@ class Profile extends Component {
 
 
     componentDidMount() {
-        this.setDataFromDocument()
-        this.getPhotoFromStorage();
-        this.getUserParameter()
+        this.setPhoto();
+        this.setProfileData();
     }
     capitalizeFirstLetter(string) {
-        return string.charAt(0).toUpperCase() + string.slice(1);
+        if(typeof string !== "undefined") {
+            return string.charAt(0).toUpperCase() + string.slice(1);
+        }
     }
     rotateCardHandler() {
         this.setState(prevState => ({
@@ -216,24 +218,15 @@ class Profile extends Component {
             isEditButtonActive: !prevState.isEditButtonActive
         }))
     }
-    getDocument() {
-        return app.getDatabase().collection('users').doc(app.getCurrentUser().uid);
-    }
-    setDataFromDocument() {
-        const document = this.getDocument();
-        document.get().then(doc => {
-            this.setState({
-                profileData: doc.data().profileData
-            })
-        })
-    }
-    updateProfileHandler = (e) => {
+   
+    updateProfileData = (e) => {
         e.preventDefault();
-        const { sex, age, weight, height, yourSport, priority, trainingExperience, aboutMe } = e.target.elements;
+        const { sex, weight, height, yourSport, priority, trainingExperience, aboutMe } = e.target.elements;
         
-        const parameters = {
+        const tempProfileData = {
+            nick: this.state.profileData.nick,
+            age: this.state.profileData.age,
             sex: sex.value,
-            age: age.value,
             weight: weight.value,
             height: height.value,
             yourSport: yourSport.value,
@@ -241,23 +234,20 @@ class Profile extends Component {
             trainingExperience: trainingExperience.value,
             aboutMe: aboutMe.value
         }
-    
+        app.getRootRef().child(app.getUserID()).update({
+            profileData: tempProfileData
+        });
+
         this.setState({
             isEditButtonActive: !this.state.isEditButtonActive,
-            profileData: parameters
-        }, ()=> {
-            this.updateProfileData();
+            profileData: tempProfileData
         })   
     }
-    updateProfileData() {
-        this.getDocument().update({
-            "profileData": this.state.profileData
-        })
-    }
+    
     getText = (caption, profileData, unit="") => {
         return `${caption}: ${profileData}${unit}`;
     }
-    renderProfileData = () => {
+    renderProfileBox = () => {
         const { profileData } = this.state;
         return ( 
             <ProfileBox>
@@ -267,7 +257,7 @@ class Profile extends Component {
                 <DataItem> { this.getText("Staż tren.", profileData.trainingExperience, "l") } </DataItem>
                 <DataItem> { this.getText("Priorytet", profileData.priority) } </DataItem>
                 <DataItem> { this.getText("Sport",profileData.yourSport) } </DataItem>
-                <DataItem style={{marginTop: "1.5em"}}> { this.getText("O mnie",profileData.aboutMe) } </DataItem>
+                <DataItem style={{marginTop: "1.5em"}}> { this.getText("O mnie", profileData.aboutMe) } </DataItem>
             </ProfileBox>
         )
     }
@@ -278,10 +268,9 @@ class Profile extends Component {
             return false;
         }
     }
-    getPhotoFromStorage() {
+    setPhoto() {
         const userID = app.getUserID();
         app.getStorage().ref(`users/${userID}`).listAll().then(list => {
-            console.log(this.doesProfilePhotoExist(list.items));
             if(this.doesProfilePhotoExist(list.items)) {
                 app.getStorage().ref(`users/${userID}`).child(`profilePhoto`).getDownloadURL().then(url => {
                     this.setState({url});
@@ -289,14 +278,14 @@ class Profile extends Component {
             }
         });
     }
-    choosePhotoHandler = async (e) => {
+    choosePhoto = async (e) => {
         if (e.target.files[0]) {
             const image = e.target.files[0];
             await this.setState({image})
-            await this.handleUpload();
+            await this.setPhotoURL();
         }
     }
-    handleUpload = () => {
+    setPhotoURL = () => {
         const { image } = this.state;
         const userID = app.getUserID();
         const uploadTask = app.getStorage().ref(`users/${userID}/profilePhoto`).put(image);
@@ -311,11 +300,24 @@ class Profile extends Component {
 
 
     //////// Realtime Database /////////
-    getCurrentUserProperties(property) {
+    setProfileData(property) {
         const rootRef = app.getRootRef();
         const userID = app.getUserID();
         rootRef.child(userID).orderByKey().on("value", snapshot => {
-            console.log(snapshot.val().property);
+            this.setState({
+                profileData: {
+                    nick:  snapshot.val().profileData.nick,
+                    age:  snapshot.val().profileData.age,
+                    sex:  snapshot.val().profileData.sex,
+                    weight:  snapshot.val().profileData.weight,
+                    height:  snapshot.val().profileData.height,
+                    yourSport:  snapshot.val().profileData.yourSport,
+                    trainingExperience:  snapshot.val().profileData.trainingExperience,
+                    priority:  snapshot.val().profileData.priority,
+                    aboutMe:  snapshot.val().profileData.aboutMe,
+
+                }
+            })
         })
     }
 
@@ -327,14 +329,14 @@ class Profile extends Component {
 
 
     render() {
-        const { isRotateCard, isEditButtonActive } = this.state;
+        const { isRotateCard, isEditButtonActive, profileData } = this.state;
         return (
             <Container>
                 <ProfileCard>
                     <Frontside style={isRotateCard ? backActive : null}>
                         <PhotoBox>
                             <Photo src={this.state.url ? this.state.url : userPhoto}></Photo>
-                            {/* <Nick> {app.getCurrentUser() ? `${this.capitalizeFirstLetter(app.getCurrentUser().displayName)}, ${this.state.profileData.age}l` : null} </Nick> */}
+                            <Nick> { app.getCurrentUser() ? `${this.capitalizeFirstLetter(profileData.nick)}, ${profileData.age}l` : null} </Nick>
                         </PhotoBox>
                         <ButtonBox>
                             <FontAwesomeIcon icon={faCameraRetro} style={{fontSize: 35, margin: '.1em'}} color={variables.$orange} />
@@ -342,7 +344,7 @@ class Profile extends Component {
                                 <label htmlFor="file-input">
                                     <FontAwesomeIcon icon={faImages} style={{fontSize: 35, margin: '.1em'}} color={variables.$orange} />
                                 </label>
-                                <input id="file-input" type="file" style={{display: "none"}} onChange={this.choosePhotoHandler}/>
+                                <input id="file-input" type="file" style={{display: "none"}} onChange={this.choosePhoto}/>
                             </div>
                             <FontAwesomeIcon icon={faExternalLinkSquareAlt} style={{fontSize: 35, margin: '.1em'}} color={variables.$orange}  onClick={this.rotateCardHandler.bind(this)}/>
                         </ButtonBox>
@@ -355,9 +357,8 @@ class Profile extends Component {
                         {
                         isEditButtonActive ? 
                             <>
-                            <AddBox onSubmit={(e) => {this.updateProfileHandler(e)}}>
+                            <AddBox onSubmit={(e) => {this.updateProfileData(e)}}>
                                 <Caption> Podstawowe dane: </Caption>
-                                <Input name="age" type="number" placeholder="Wiek" required></Input>
                                 <Input name="sex" placeholder="Płeć" required></Input>
                                 <Input name="trainingExperience" type="Number" placeholder="Staż tren." required></Input>
                                 <Input name="weight" type="number" placeholder="Waga" required></Input>
@@ -369,7 +370,7 @@ class Profile extends Component {
                             </AddBox>
                             </>
                         : 
-                            this.renderProfileData()
+                            this.renderProfileBox()
                         }
                     </Backside>
                 </ProfileCard>

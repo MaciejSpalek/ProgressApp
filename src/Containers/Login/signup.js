@@ -12,26 +12,22 @@ const SignUp = ({ history }) => {
     async event => {
       event.preventDefault();
       const { email, password, nick, age} = event.target.elements;
-      const usersRef = app.getRealTimeDatabase.ref('/users');
       
         await app
           .getApp()
           .auth()
           .createUserWithEmailAndPassword(email.value, password.value)
-          // .then(result => {
-          //   result.user.updateProfile({
-          //     displayName: nick.value
-          //   })
-          // })
           
-
-         app.getRealTimeDatabase()
-          .ref(usersRef).child(app.getUserID()).set({
-            nick: nick.value,
-            age: age.value
+        await app
+          .getRootRef()
+          .child(app.getUserID())
+          .set({
+            profileData: {
+              nick: nick.value,
+              age: age.value
+            }
           })
 
-          
         await app
           .getDatabase()
           .collection("users")
