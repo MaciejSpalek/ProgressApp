@@ -169,13 +169,6 @@ const Photo = styled.img`
 `
 
 
-
-
-
-
-
-
-
 class Profile extends Component {
     constructor(props) {
         super(props);
@@ -218,7 +211,6 @@ class Profile extends Component {
             isEditButtonActive: !prevState.isEditButtonActive
         }))
     }
-   
     updateProfileData = (e) => {
         e.preventDefault();
         const { sex, weight, height, yourSport, priority, trainingExperience, aboutMe } = e.target.elements;
