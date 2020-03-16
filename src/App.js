@@ -5,6 +5,7 @@ import Login from './Containers/Login/login';
 import SignUp from './Containers/Login/signup';
 import Home from './Containers/Home/home';
 import Measurements from './Containers/Measurements/measurements'
+import Profile from './Containers/Profile/profile'
 
 import PrivateRoute from "./PrivateRoute";
 import { AuthProvider } from "./Auth";
@@ -40,6 +41,7 @@ import './App.scss';
               <Navbar user={this.state.user}/>
               <Switch>
                   <PrivateRoute exact path="/" component={Home} />
+                  <PrivateRoute exact path="/profile" component={Profile}/>
                   <PrivateRoute exact path="/measurements" component={Measurements}/>
                   <Route exact path="/signup" component={SignUp} />
                   <Route exact path="/login" component={Login} />
