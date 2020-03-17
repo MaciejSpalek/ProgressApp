@@ -1,11 +1,9 @@
-import React from "react"
+import React, { Component } from "react"
 import styled from 'styled-components';
 import app from "./base";
 import * as styleHelpers  from './styleHelpers';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFileUpload } from '@fortawesome/free-solid-svg-icons';
-import { text } from "@fortawesome/fontawesome-svg-core";
-import { Component } from "react";
 
 const flexCenter = styleHelpers.flexCenter;
 const variables = styleHelpers.variables;
@@ -65,8 +63,8 @@ class ShareBox extends Component {
 
         rootRef.child(userID).on('value', snapshot => {
             this.setState({
-                nick: snapshot.val().profileData.nick,
-                url: snapshot.val().profileData.url
+                nick: snapshot.val().nick,
+                url: snapshot.val().url
             })
         })
     }
@@ -76,14 +74,14 @@ class ShareBox extends Component {
         const { textarea } = e.target.elements;
         const { url, nick } = this.state;
         const rootRef = app.getRootRef("posts");
-        const userID = app.getUserID();
-        
-        rootRef.child(userID).push({
+        rootRef.push({
             content: textarea.value,
             url: url,
             nick: nick
         })
     }
+
+    
     render() {
         return (
             <Container onSubmit={(e) => {this.addPostToDatabase(e)}}>

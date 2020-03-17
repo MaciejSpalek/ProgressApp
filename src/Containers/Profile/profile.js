@@ -1,11 +1,19 @@
 import React, { Component } from "react";
 import app from "../../Components/base";
 import styled from "styled-components";
-import ShareBox from "../../Components/shareBox"
-import userPhoto from "../../images/user-solid.svg"
-import * as styleHelpers  from '../../Components/styleHelpers'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import {  faImages, faFileUpload, faPenSquare, faCameraRetro, faUser, faExternalLinkSquareAlt } from '@fortawesome/free-solid-svg-icons'
+import ShareBox from "../../Components/shareBox";
+import PostBoard from "../MyPosts/postBoard";
+
+import * as styleHelpers  from '../../Components/styleHelpers';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {  
+    faImages, 
+    faPenSquare, 
+    faCameraRetro, 
+    faExternalLinkSquareAlt
+} from '@fortawesome/free-solid-svg-icons';
+
+
 
 const flexCenter = styleHelpers.flexCenter;
 const variables = styleHelpers.variables;
@@ -421,7 +429,8 @@ class Profile extends Component {
                         }
                     </Backside>
                 </ProfileCard>
-                {/* <ShareBox/> */}
+                <ShareBox/>
+                <PostBoard/>
             </Container>
         )
     }
