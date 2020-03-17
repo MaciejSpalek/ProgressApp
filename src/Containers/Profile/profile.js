@@ -169,6 +169,25 @@ const Photo = styled.img`
 `
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 class Profile extends Component {
     constructor(props) {
         super(props);
@@ -176,26 +195,22 @@ class Profile extends Component {
             isRotateCard: false,
             isEditButtonActive: true,
             image: "",
+            nick: "",
+            age: "",
             url: "",
-            profileData: {
-                nick: "",
-                sex: "",
-                age: "",
-                weight: "",
-                height: "",
-                yourSport: "",
-                priority: "",
-                trainingExperience: "",
-                aboutMe: "",
-                url: ""
-            }
+            sex: "-",
+            weight: "-",
+            height: "-",
+            yourSport: "-",
+            priority: "-",
+            trainingExperience: "-",
+            aboutMe: "-",
         }
     }
 
 
     componentDidMount() {
-        this.setPhoto();
-        this.setProfileData();
+        this.setProfileData(); // at the beginning function pull out data from Realtime database
     }
     capitalizeFirstLetter(string) {
         if(typeof string !== "undefined") {
@@ -212,13 +227,17 @@ class Profile extends Component {
             isEditButtonActive: !prevState.isEditButtonActive
         }))
     }
+
+    // function invoke on button
     updateProfileData = (e) => {
         e.preventDefault();
         const { sex, weight, height, yourSport, priority, trainingExperience, aboutMe } = e.target.elements;
-        
-        const tempProfileData = {
-            nick: this.state.profileData.nick,
-            age: this.state.profileData.age,
+
+        // update profileData in realtime database 
+        app.getRootRef("users").child(app.getUserID()).update({
+            nick: this.state.nick,
+            age: this.state.age,
+            url: this.state.url,
             sex: sex.value,
             weight: weight.value,
             height: height.value,
@@ -226,15 +245,20 @@ class Profile extends Component {
             priority: priority.value,
             trainingExperience: trainingExperience.value,
             aboutMe: aboutMe.value,
-            url: this.state.url
-        }
-        app.getRootRef("users").child(app.getUserID()).update({
-            profileData: tempProfileData
         });
 
         this.setState({
             isEditButtonActive: !this.state.isEditButtonActive,
-            profileData: tempProfileData
+            nick: this.state.nick,
+            age: this.state.age,
+            url: this.state.url,
+            sex: sex.value,
+            weight: weight.value,
+            height: height.value,
+            yourSport: yourSport.value,
+            priority: priority.value,
+            trainingExperience: trainingExperience.value,
+            aboutMe: aboutMe.value,
         })   
     }
     
@@ -242,16 +266,23 @@ class Profile extends Component {
         return `${caption}: ${profileData}${unit}`;
     }
     renderProfileBox = () => {
-        const { profileData } = this.state;
+        const { sex,
+            weight,
+            height,
+            trainingExperience,
+            priority,
+            yourSport,
+            aboutMe
+        } = this.state;
         return ( 
             <ProfileBox>
-                <DataItem> { this.getText("Płeć", profileData.sex) } </DataItem>
-                <DataItem> { this.getText("Waga", profileData.weight, "kg") } </DataItem>
-                <DataItem> { this.getText("Wzrost", profileData.height, "cm") } </DataItem>
-                <DataItem> { this.getText("Staż tren.", profileData.trainingExperience, "l") } </DataItem>
-                <DataItem> { this.getText("Priorytet", profileData.priority) } </DataItem>
-                <DataItem> { this.getText("Sport",profileData.yourSport) } </DataItem>
-                <DataItem style={{marginTop: "1.5em"}}> { this.getText("O mnie", profileData.aboutMe) } </DataItem>
+                <DataItem> { this.getText("Płeć", sex) } </DataItem>
+                <DataItem> { this.getText("Waga", weight, "kg") } </DataItem>
+                <DataItem> { this.getText("Wzrost", height, "cm") } </DataItem>
+                <DataItem> { this.getText("Staż tren.", trainingExperience, "l") } </DataItem>
+                <DataItem> { this.getText("Priorytet", priority) } </DataItem>
+                <DataItem> { this.getText("Sport",yourSport) } </DataItem>
+                <DataItem style={{marginTop: "1.5em"}}> { this.getText("O mnie", aboutMe) } </DataItem>
             </ProfileBox>
         )
     }
@@ -262,31 +293,61 @@ class Profile extends Component {
             return false;
         }
     }
-    setPhoto() {
-        const userID = app.getUserID();
-        app.getStorage().ref(`users/${userID}`).listAll().then(list => {
-            if(this.doesProfilePhotoExist(list.items)) {
-                app.getStorage().ref(`users/${userID}`).child(`profilePhoto`).getDownloadURL().then(url => {
-                    this.setState({url});
-                })
-            }
-        });
-    }
+    // setPhoto() {
+    //     const userID = app.getUserID();
+    //     app.getStorage().ref(`users/${userID}`).listAll().then(list => {
+    //         if(this.doesProfilePhotoExist(list.items)) {
+    //             app.getStorage().ref(`users/${userID}`).child(`profilePhoto`).getDownloadURL().then(URL => {
+    //                 this.setState({profileData: {
+    //                     ...this.state.profileData,
+    //                     url: URL
+    //                 }});
+    //             })
+    //         }
+    //     });
+    // }
     choosePhoto = async (e) => {
         if (e.target.files[0]) {
             const image = e.target.files[0];
-            await this.setState({image})
-            await this.setPhotoURL();
+            await this.setState({image});
+            this.setPhotoURL();
         }
     }
+
     setPhotoURL = () => {
         const { image } = this.state;
         const userID = app.getUserID();
         const uploadTask = app.getStorage().ref(`users/${userID}/profilePhoto`).put(image);
         uploadTask.on('state_changed', () => {
-          app.getStorage().ref(`users/${userID}`).child(`profilePhoto`).getDownloadURL().then(url => {
-              this.setState({url});
-          })
+          app.getStorage().ref(`users/${userID}`).child(`profilePhoto`).getDownloadURL().then(URL => {
+            this.setState({
+                nick: this.state.nick,
+                age: this.state.age,
+                url: URL,
+                sex:  this.state.sex,
+                weight:  this.state.weight,
+                height:  this.state.height,
+                yourSport:  this.state.yourSport,
+                trainingExperience:  this.state.trainingExperience,
+                priority:  this.state.priority,
+                aboutMe:  this.state.aboutMe
+            })
+
+            app.getRootRef("users").child(app.getUserID()).update({
+                nick: this.state.nick,
+                age: this.state.age,
+                url: this.state.url,
+                sex: this.state.sex,
+                weight:  this.state.weight,
+                height:  this.state.height,
+                yourSport:  this.state.yourSport,
+                trainingExperience:  this.state.trainingExperience,
+                priority:  this.state.priority,
+                aboutMe:  this.state.aboutMe
+            });
+            
+            console.log(`setPhotoURL() => ${this.state.url}`)
+          }) 
       });
     }
 
@@ -299,18 +360,16 @@ class Profile extends Component {
         const userID = app.getUserID();
         rootRef.child(userID).orderByKey().on("value", snapshot => {
             this.setState({
-                profileData: {
-                    nick:  snapshot.val().profileData.nick,
-                    age:  snapshot.val().profileData.age,
-                    sex:  snapshot.val().profileData.sex,
-                    weight:  snapshot.val().profileData.weight,
-                    height:  snapshot.val().profileData.height,
-                    yourSport:  snapshot.val().profileData.yourSport,
-                    trainingExperience:  snapshot.val().profileData.trainingExperience,
-                    priority:  snapshot.val().profileData.priority,
-                    aboutMe:  snapshot.val().profileData.aboutMe,
-                    url:  snapshot.val().profileData.url
-                }
+                    nick:  snapshot.val().nick,
+                    age:  snapshot.val().age,
+                    url:  snapshot.val().url,
+                    sex:  snapshot.val().sex,
+                    weight:  snapshot.val().weight,
+                    height:  snapshot.val().height,
+                    yourSport:  snapshot.val().yourSport,
+                    trainingExperience:  snapshot.val().trainingExperience,
+                    priority:  snapshot.val().priority,
+                    aboutMe:  snapshot.val().aboutMe
             })
         })
     }
@@ -319,14 +378,14 @@ class Profile extends Component {
 
 
     render() {
-        const { isRotateCard, isEditButtonActive, profileData } = this.state;
+        const { isRotateCard, isEditButtonActive, nick, age, url } = this.state;
         return (
             <Container>
                 <ProfileCard>
                     <Frontside style={isRotateCard ? backActive : null}>
                         <PhotoBox>
-                            <Photo src={this.state.url ? this.state.url : userPhoto}></Photo>
-                            <Nick> { app.getCurrentUser() ? `${this.capitalizeFirstLetter(profileData.nick)}, ${profileData.age}l` : null} </Nick>
+                            <Photo src={url}></Photo>
+                            <Nick> { app.getCurrentUser() ? `${this.capitalizeFirstLetter(nick)}, ${age}l` : null} </Nick>
                         </PhotoBox>
                         <ButtonBox>
                             <FontAwesomeIcon icon={faCameraRetro} style={{fontSize: 35, margin: '.1em'}} color={variables.$orange} />
@@ -362,7 +421,7 @@ class Profile extends Component {
                         }
                     </Backside>
                 </ProfileCard>
-                <ShareBox/>
+                {/* <ShareBox/> */}
             </Container>
         )
     }

@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUserPlus } from "@fortawesome/free-solid-svg-icons";
 import { variables } from "../../Components/styleHelpers";
-
+import userPhoto from "../../images/user-solid.svg";
 const SignUp = ({ history }) => {
   const handleSignUp = useCallback(
     async event => {
@@ -23,10 +23,16 @@ const SignUp = ({ history }) => {
           .getRootRef("users")
           .child(app.getUserID())
           .set({
-            profileData: {
               nick: nick.value,
-              age: age.value
-            }
+              age: age.value,
+              url: userPhoto,
+              sex: "-",
+              weight: "-",
+              height: "-",
+              yourSport: "-",
+              trainingExperience: "-",
+              priority: "-",
+              aboutMe: "-"
           })
 
         await app
