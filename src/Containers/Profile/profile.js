@@ -353,7 +353,17 @@ class Profile extends Component {
                 priority:  this.state.priority,
                 aboutMe:  this.state.aboutMe
             });
-            
+
+            const postsRef = app.getRootRef("posts");
+            postsRef.on('key', snapshot => {
+                // console.log(snapshot.val())
+                // for(let postID in snapshot.val()) {
+                //     console.log(postsRef.child(postID))
+                //     postsRef.child(postID).update({
+                //         url: this.state.url
+                //     })
+                // }
+            });
             console.log(`setPhotoURL() => ${this.state.url}`)
           }) 
       });

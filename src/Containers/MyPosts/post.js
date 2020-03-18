@@ -1,63 +1,125 @@
 import React from "react";
 import app from "../../Components/base";
 import styled from "styled-components";
-
 import * as styleHelpers  from '../../Components/styleHelpers'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-// import {   } from '@fortawesome/free-solid-svg-icons'
+import { faComment, faDumbbell, faThumbsUp } from '@fortawesome/free-solid-svg-icons'
 
 const flexCenter = styleHelpers.flexCenter;
 const variables = styleHelpers.variables;
 
+
+
+
+
 const Container = styled.div`
     ${flexCenter}
+    background-color: rgb(0, 111, 175);
     flex-direction: column;
     width: 100%;
-    border-radius: .5em;
-    background-color: ${variables.$grayBlue};
-    padding: .5em;
-    margin: 2em 0;
+    border-radius: .2em;
+    /* padding: .5em; */
+    margin: 1em 0;
 `
+
+
+
+
 const TopBox = styled.div`
     ${flexCenter};
     justify-content: flex-start;
     width: 100%;
-    border-bottom: .15em solid ${variables.$darkBlue};
+    background-color: ${variables.$grayBlue};
+    /* border-bottom: .1em solid ${variables.$grayBlue}; */
+    padding: .3em;
 `
-
-const ContentBox = styled.div`
-    width: 100%;
+const DescriptionWrapper = styled.div`
+    ${flexCenter};
+    align-items: flex-start;
+    flex-direction: column;
 `
-
-const BottomBox = styled.div`
-`
-
 const Image = styled.div`
     border-radius: 50%;
-    border: .3em solid ${variables.$grayBlue};
-    width: 3em;
-    height: 3em;
+    width: 3.5em;
+    height: 3.5em;
     background-position: center;
     background-size: cover;
+    background-color: ${variables.$blue};
+    margin-right: .5em;
 `
 const Nick = styled.div`
     color: white;
-    font-size: 1.5em;
+    font-size: 1em;
+    font-weight: bold;
+`
+const Date = styled.span`
+    color: white;
+    font-size: .8em;   
 `
 
-const Post = ({ url, nick, content }) => {
+
+
+
+const ContentBox = styled.div`
+    ${flexCenter};
+    justify-content: flex-start;
+    width: 100%;
+    color: white;
+    text-align: left;
+    padding: .5em;
+`
+
+
+
+
+const BottomBox = styled.div`
+    ${flexCenter};
+    width: 100%;
+    justify-content: flex-start;
+`
+const IconBox = styled.div`
+    ${flexCenter};
+    margin-right: 1em;
+    padding: .3em;
+`
+const IconCaption = styled.span`
+    color: white;
+    font-size: 1em;
+    font-weight: bold;
+`
+
+
+
+
+
+const capitalizeFirstLetter = (string) => {
+    if(typeof string !== "undefined") {
+        return string.charAt(0).toUpperCase() + string.slice(1);
+    }
+}
+const Post = ({ url, nick, content, date }) => {
     return (
         <Container>
             <TopBox>
                 <Image style={{backgroundImage: `url(${url})`}}></Image>
-                <Nick> { nick }</Nick>
+                <DescriptionWrapper>
+                    <Nick> { capitalizeFirstLetter(nick) }</Nick>
+                    <Date> {date} </Date>
+                </DescriptionWrapper>
             </TopBox>
             <ContentBox>
                 { content }
             </ContentBox>
-            {/* <BottomBox>
-
-            </BottomBox> */}
+            <BottomBox>
+                <IconBox>
+                    <FontAwesomeIcon icon={faThumbsUp} style={{fontSize: 25, margin: '.2em'}} color={variables.$orange} />
+                    <IconCaption>Like</IconCaption>
+                </IconBox>
+                <IconBox>
+                    <FontAwesomeIcon icon={faComment} style={{fontSize: 25, margin: '.2em'}} color={variables.$orange} />
+                    <IconCaption>Komentarz</IconCaption>
+                </IconBox>
+            </BottomBox>
         </Container>
     )
 }

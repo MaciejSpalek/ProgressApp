@@ -1,6 +1,7 @@
 import React, { Component } from "react"
 import styled from 'styled-components';
 import app from "./base";
+import Helpers from "./helpers";
 import * as styleHelpers  from './styleHelpers';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFileUpload } from '@fortawesome/free-solid-svg-icons';
@@ -11,10 +12,10 @@ const variables = styleHelpers.variables;
 const Container = styled.form`
     ${flexCenter}
     flex-direction: column;
-    width: 280px;
+    width: 100%;
     border-radius: .5em;
     /* background-color: ${variables.$grayBlue}; */
-    padding: .5em ;
+    /* padding: .5em ; */
 `
 const TextArea = styled.textarea`
     ${flexCenter}
@@ -61,6 +62,7 @@ class ShareBox extends Component {
         const rootRef = app.getRootRef("users");
         const userID = app.getUserID();
 
+        // set basic data about user from realtime database
         rootRef.child(userID).on('value', snapshot => {
             this.setState({
                 nick: snapshot.val().nick,
@@ -74,11 +76,16 @@ class ShareBox extends Component {
         const { textarea } = e.target.elements;
         const { url, nick } = this.state;
         const rootRef = app.getRootRef("posts");
-        rootRef.push({
-            content: textarea.value,
-            url: url,
-            nick: nick
-        })
+        if(textarea.value !== "") {
+            rootRef.push({
+                ID: app.getUserID(),
+                content: textarea.value,
+                url: url,
+                nick: nick,
+                date: Helpers.getFullDate()
+            })
+        }
+        textarea.value = "";
     }
 
     

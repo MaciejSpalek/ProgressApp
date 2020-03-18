@@ -34,6 +34,7 @@ class PostBoard extends Component {
         return returnArr;
     };
 
+    // assign data from realtime database to state "posts"
     setPosts() {
         const rootRef = app.getRootRef("posts");
         rootRef.on("value", snapshot => {
@@ -43,13 +44,14 @@ class PostBoard extends Component {
     }
 
     renderPosts() {
-        console.log(this.state.posts)
+        // console.log(this.state.posts)
         return this.state.posts.map((post, index) => {
             return ( 
                 <Post 
                     url={post.url}
                     nick={post.nick}
                     content={post.content}
+                    date={post.date}
                     key={index}
                 />
             )
