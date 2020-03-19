@@ -312,6 +312,7 @@ class Profile extends Component {
         if (e.target.files[0]) {
             const image = e.target.files[0];
                 await this.setState({image});
+                this.setPhotoURL();
         }
     }
 
@@ -321,7 +322,7 @@ class Profile extends Component {
         const uploadTask = app.getStorage().ref(`users/${userID}/profilePhoto`).put(image);
 
         uploadTask.on('state_changed', () => {
-          app.getStorage().ref(`users/${userID}`).child(`profilePhoto`).getDownloadURL().then(URL => {
+            app.getStorage().ref(`users/${userID}`).child(`profilePhoto`).getDownloadURL().then(URL => {
                 this.setState({
                     url: URL
                 })
@@ -386,10 +387,6 @@ class Profile extends Component {
                             <label>
                                 <FontAwesomeIcon icon={faImages} style={{fontSize: 35, margin: '.1em'}} color={variables.$orange} />
                                 <input type="file" style={{display: "none"}} onChange={this.choosePhoto}/>
-                            </label>
-                            <label>
-                                <FontAwesomeIcon icon={faUpload} style={{fontSize: 35, margin: '.1em'}} color={variables.$orange} />
-                                <input style={{display: "none"}} onClick={this.setPhotoURL}/>
                             </label>
                             <FontAwesomeIcon icon={faExternalLinkSquareAlt} style={{fontSize: 35, margin: '.1em'}} color={variables.$orange}  onClick={this.rotateCardHandler.bind(this)}/>
                         </ButtonBox>
