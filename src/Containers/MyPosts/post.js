@@ -1,9 +1,8 @@
 import React from "react";
-import app from "../../Components/base";
 import styled from "styled-components";
 import * as styleHelpers  from '../../Components/styleHelpers'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faComment, faDumbbell, faThumbsUp } from '@fortawesome/free-solid-svg-icons'
+import { faComment, faThumbsUp } from '@fortawesome/free-solid-svg-icons'
 
 const flexCenter = styleHelpers.flexCenter;
 const variables = styleHelpers.variables;

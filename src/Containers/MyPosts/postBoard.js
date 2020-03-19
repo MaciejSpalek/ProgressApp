@@ -1,11 +1,11 @@
 import React, { Component } from "react";
 import app from "../../Components/base";
 import styled from "styled-components";
-import * as styleHelpers  from '../../Components/styleHelpers';
+// import * as styleHelpers  from '../../Components/styleHelpers';
 import Post from './post';
 
-const flexCenter = styleHelpers.flexCenter;
-const variables = styleHelpers.variables;
+// const flexCenter = styleHelpers.flexCenter;
+// const variables = styleHelpers.variables;
 
 
 const Container = styled.div`
@@ -14,6 +14,7 @@ const Container = styled.div`
 
 
 class PostBoard extends Component {
+    _isMounted = false;
     constructor(props) {
         super(props)
         this.state = {
@@ -21,9 +22,12 @@ class PostBoard extends Component {
         }
     }
     componentDidMount() {
+        this._isMounted = true;
         this.setPosts();
     }
-
+    componentWillUnmount() {
+        this._isMounted = false;
+    }
     snapshotToArray(snapshot) {
         const returnArr = [];
         snapshot.forEach(childSnapshot => {
@@ -39,12 +43,13 @@ class PostBoard extends Component {
         const rootRef = app.getRootRef("posts");
         rootRef.on("value", snapshot => {
             const posts = this.snapshotToArray(snapshot);
-            this.setState({posts})
+            if (this._isMounted) {
+                this.setState({posts})
+            }
         })
     }
 
     renderPosts() {
-        // console.log(this.state.posts)
         return this.state.posts.map((post, index) => {
             return ( 
                 <Post 

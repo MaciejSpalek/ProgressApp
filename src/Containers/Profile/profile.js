@@ -10,7 +10,8 @@ import {
     faImages, 
     faPenSquare, 
     faCameraRetro, 
-    faExternalLinkSquareAlt
+    faExternalLinkSquareAlt,
+    faUpload
 } from '@fortawesome/free-solid-svg-icons';
 
 
@@ -197,6 +198,7 @@ const Photo = styled.img`
 
 
 class Profile extends Component {
+    _isMounted = false;
     constructor(props) {
         super(props);
         this.state = {
@@ -218,7 +220,12 @@ class Profile extends Component {
 
 
     componentDidMount() {
+        this._isMounted = true;
         this.setProfileData(); // at the beginning function pull out data from Realtime database
+    }
+
+    componentWillUnmount() {
+        this._isMounted = false;
     }
     capitalizeFirstLetter(string) {
         if(typeof string !== "undefined") {
@@ -252,7 +259,7 @@ class Profile extends Component {
             yourSport: yourSport.value,
             priority: priority.value,
             trainingExperience: trainingExperience.value,
-            aboutMe: aboutMe.value,
+            aboutMe: aboutMe.value
         });
 
         this.setState({
@@ -268,8 +275,7 @@ class Profile extends Component {
             trainingExperience: trainingExperience.value,
             aboutMe: aboutMe.value,
         })   
-    }
-    
+    } 
     getText = (caption, profileData, unit="") => {
         return `${caption}: ${profileData}${unit}`;
     }
@@ -301,24 +307,11 @@ class Profile extends Component {
             return false;
         }
     }
-    // setPhoto() {
-    //     const userID = app.getUserID();
-    //     app.getStorage().ref(`users/${userID}`).listAll().then(list => {
-    //         if(this.doesProfilePhotoExist(list.items)) {
-    //             app.getStorage().ref(`users/${userID}`).child(`profilePhoto`).getDownloadURL().then(URL => {
-    //                 this.setState({profileData: {
-    //                     ...this.state.profileData,
-    //                     url: URL
-    //                 }});
-    //             })
-    //         }
-    //     });
-    // }
+  
     choosePhoto = async (e) => {
         if (e.target.files[0]) {
             const image = e.target.files[0];
-            await this.setState({image});
-            this.setPhotoURL();
+                await this.setState({image});
         }
     }
 
@@ -326,43 +319,26 @@ class Profile extends Component {
         const { image } = this.state;
         const userID = app.getUserID();
         const uploadTask = app.getStorage().ref(`users/${userID}/profilePhoto`).put(image);
+
         uploadTask.on('state_changed', () => {
           app.getStorage().ref(`users/${userID}`).child(`profilePhoto`).getDownloadURL().then(URL => {
-            this.setState({
-                nick: this.state.nick,
-                age: this.state.age,
-                url: URL,
-                sex:  this.state.sex,
-                weight:  this.state.weight,
-                height:  this.state.height,
-                yourSport:  this.state.yourSport,
-                trainingExperience:  this.state.trainingExperience,
-                priority:  this.state.priority,
-                aboutMe:  this.state.aboutMe
-            })
+                this.setState({
+                    url: URL
+                })
 
             app.getRootRef("users").child(app.getUserID()).update({
-                nick: this.state.nick,
-                age: this.state.age,
                 url: this.state.url,
-                sex: this.state.sex,
-                weight:  this.state.weight,
-                height:  this.state.height,
-                yourSport:  this.state.yourSport,
-                trainingExperience:  this.state.trainingExperience,
-                priority:  this.state.priority,
-                aboutMe:  this.state.aboutMe
             });
 
             const postsRef = app.getRootRef("posts");
-            postsRef.on('key', snapshot => {
-                // console.log(snapshot.val())
-                // for(let postID in snapshot.val()) {
-                //     console.log(postsRef.child(postID))
-                //     postsRef.child(postID).update({
-                //         url: this.state.url
-                //     })
-                // }
+            postsRef.on('value', snapshot => {
+                for(let postID in snapshot.val()) {
+                    if(snapshot.val()[postID].ID === userID) {
+                        postsRef.child(postID).update({
+                            url: this.state.url
+                        })
+                    }
+                }
             });
             console.log(`setPhotoURL() => ${this.state.url}`)
           }) 
@@ -377,18 +353,18 @@ class Profile extends Component {
         const rootRef = app.getRootRef("users");
         const userID = app.getUserID();
         rootRef.child(userID).orderByKey().on("value", snapshot => {
-            this.setState({
-                    nick:  snapshot.val().nick,
-                    age:  snapshot.val().age,
-                    url:  snapshot.val().url,
-                    sex:  snapshot.val().sex,
-                    weight:  snapshot.val().weight,
-                    height:  snapshot.val().height,
-                    yourSport:  snapshot.val().yourSport,
-                    trainingExperience:  snapshot.val().trainingExperience,
-                    priority:  snapshot.val().priority,
-                    aboutMe:  snapshot.val().aboutMe
-            })
+                this.setState({
+                        nick:  snapshot.val().nick,
+                        age:  snapshot.val().age,
+                        url:  snapshot.val().url,
+                        sex:  snapshot.val().sex,
+                        weight:  snapshot.val().weight,
+                        height:  snapshot.val().height,
+                        yourSport:  snapshot.val().yourSport,
+                        trainingExperience:  snapshot.val().trainingExperience,
+                        priority:  snapshot.val().priority,
+                        aboutMe:  snapshot.val().aboutMe
+                })
         })
     }
 
@@ -411,6 +387,10 @@ class Profile extends Component {
                                 <FontAwesomeIcon icon={faImages} style={{fontSize: 35, margin: '.1em'}} color={variables.$orange} />
                                 <input type="file" style={{display: "none"}} onChange={this.choosePhoto}/>
                             </label>
+                            <label>
+                                <FontAwesomeIcon icon={faUpload} style={{fontSize: 35, margin: '.1em'}} color={variables.$orange} />
+                                <input style={{display: "none"}} onClick={this.setPhotoURL}/>
+                            </label>
                             <FontAwesomeIcon icon={faExternalLinkSquareAlt} style={{fontSize: 35, margin: '.1em'}} color={variables.$orange}  onClick={this.rotateCardHandler.bind(this)}/>
                         </ButtonBox>
                     </Frontside>
@@ -421,7 +401,6 @@ class Profile extends Component {
                         </ButtonBox>
                         {
                         isEditButtonActive ? 
-                            <>
                             <AddBox onSubmit={(e) => {this.updateProfileData(e)}}>
                                 <Caption> Podstawowe dane: </Caption>
                                 <Input name="sex" placeholder="Płeć" required></Input>
@@ -433,7 +412,6 @@ class Profile extends Component {
                                 <About name="aboutMe" placeholder="O mnie"></About>
                                 <styleHelpers.Button>Zapisz</styleHelpers.Button>
                             </AddBox>
-                            </>
                         : 
                             this.renderProfileBox()
                         }

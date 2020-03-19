@@ -16,6 +16,7 @@ class Helpers {
         let minutes = newDate.getMinutes();
         return `${date}${separator}${ month<10 ? `0${month}` : month }${separator}${ year } ${ hour }:${ minutes<10 ? `0${minutes}` : minutes }`;
     }
+
 }
 
 

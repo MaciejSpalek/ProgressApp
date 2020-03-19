@@ -14,8 +14,6 @@ const Container = styled.form`
     flex-direction: column;
     width: 100%;
     border-radius: .5em;
-    /* background-color: ${variables.$grayBlue}; */
-    /* padding: .5em ; */
 `
 const TextArea = styled.textarea`
     ${flexCenter}
@@ -49,6 +47,7 @@ const AddArea = styled.div`
 
 
 class ShareBox extends Component {
+    _isMounted = false;
     constructor(props) {
         super(props);
         this.state = {
@@ -59,16 +58,24 @@ class ShareBox extends Component {
     }
 
     componentDidMount() {
+        this._isMounted = true;
+
         const rootRef = app.getRootRef("users");
         const userID = app.getUserID();
 
         // set basic data about user from realtime database
         rootRef.child(userID).on('value', snapshot => {
-            this.setState({
-                nick: snapshot.val().nick,
-                url: snapshot.val().url
-            })
+            if(this._isMounted) {
+                this.setState({
+                    nick: snapshot.val().nick,
+                    url: snapshot.val().url
+                })
+            }
         })
+    }
+
+    componentWillUnmount() {
+        this._isMounted = false;
     }
 
     addPostToDatabase = (e) => {
