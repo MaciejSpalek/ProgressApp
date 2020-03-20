@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import app from "../../Components/base";
 import styled from "styled-components";
+import Helpers from "../../Components/helpers.js";
 // import * as styleHelpers  from '../../Components/styleHelpers';
 import Post from './post';
 
@@ -28,21 +29,13 @@ class PostBoard extends Component {
     componentWillUnmount() {
         this._isMounted = false;
     }
-    snapshotToArray(snapshot) {
-        const returnArr = [];
-        snapshot.forEach(childSnapshot => {
-            const item = childSnapshot.val();
-            item.key = childSnapshot.key;
-            returnArr.push(item);
-        });
-        return returnArr;
-    };
+    
 
     // assign data from realtime database to state "posts"
     setPosts() {
         const rootRef = app.getRootRef("posts");
         rootRef.on("value", snapshot => {
-            const posts = this.snapshotToArray(snapshot);
+            const posts = Helpers.snapshotToArray(snapshot);
             if (this._isMounted) {
                 this.setState({posts})
             }
@@ -53,8 +46,12 @@ class PostBoard extends Component {
         return this.state.posts.map((post, index) => {
             return ( 
                 <Post 
+                    userID={post.userID}
+                    postKey={post.postKey}
                     url={post.url}
                     nick={post.nick}
+                    likes={post.likes}
+                    comments={post.comments}
                     content={post.content}
                     date={post.date}
                     key={index}

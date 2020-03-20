@@ -16,15 +16,25 @@ class Helpers {
         let minutes = newDate.getMinutes();
         return `${date}${separator}${ month<10 ? `0${month}` : month }${separator}${ year } ${ hour }:${ minutes<10 ? `0${minutes}` : minutes }`;
     }
+    snapshotToArray(snapshot) {
+        const returnArr = [];
+        snapshot.forEach(childSnapshot => {
+            const item = childSnapshot.val();
+            item.key = childSnapshot.key;
+            returnArr.push(item);
+        });
+        return returnArr;
+    };
 
-    dataURLtoFile(dataurl, filename) {
-        var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
-            bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
-            while(n--){
-                u8arr[n] = bstr.charCodeAt(n);
-            }
-            return new File([u8arr], filename, {type:mime});
+    getAmountOfObjectProperties(object) {
+        return Object.keys(object).length;
+    }
+    
+    capitalizeFirstLetter = (string) => {
+        if(typeof string !== "undefined") {
+            return string.charAt(0).toUpperCase() + string.slice(1);
         }
+    }
 }
 
 

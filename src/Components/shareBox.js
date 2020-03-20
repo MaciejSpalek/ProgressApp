@@ -82,14 +82,17 @@ class ShareBox extends Component {
         e.preventDefault();
         const { textarea } = e.target.elements;
         const { url, nick } = this.state;
-        const rootRef = app.getRootRef("posts");
+        const postsRef = app.getRootRef("posts");
         if(textarea.value !== "") {
-            rootRef.push({
-                ID: app.getUserID(),
+            postsRef.push({
+                userID: app.getUserID(),
+                postKey: postsRef.push().key,
                 content: textarea.value,
                 url: url,
                 nick: nick,
-                date: Helpers.getFullDate()
+                date: Helpers.getFullDate(),
+                likes: 0,
+                comments: 0
             })
         }
         textarea.value = "";

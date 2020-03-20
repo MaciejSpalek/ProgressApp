@@ -10,8 +10,7 @@ import {
     faImages, 
     faPenSquare, 
     faCameraRetro, 
-    faExternalLinkSquareAlt,
-    faUpload
+    faExternalLinkSquareAlt
 } from '@fortawesome/free-solid-svg-icons';
 
 
@@ -328,13 +327,13 @@ class Profile extends Component {
                 })
 
             app.getRootRef("users").child(app.getUserID()).update({
-                url: this.state.url,
+                url: this.state.url
             });
 
             const postsRef = app.getRootRef("posts");
             postsRef.on('value', snapshot => {
                 for(let postID in snapshot.val()) {
-                    if(snapshot.val()[postID].ID === userID) {
+                    if(snapshot.val()[postID].userID === userID) {
                         postsRef.child(postID).update({
                             url: this.state.url
                         })
@@ -354,18 +353,18 @@ class Profile extends Component {
         const rootRef = app.getRootRef("users");
         const userID = app.getUserID();
         rootRef.child(userID).orderByKey().on("value", snapshot => {
-                this.setState({
-                        nick:  snapshot.val().nick,
-                        age:  snapshot.val().age,
-                        url:  snapshot.val().url,
-                        sex:  snapshot.val().sex,
-                        weight:  snapshot.val().weight,
-                        height:  snapshot.val().height,
-                        yourSport:  snapshot.val().yourSport,
-                        trainingExperience:  snapshot.val().trainingExperience,
-                        priority:  snapshot.val().priority,
-                        aboutMe:  snapshot.val().aboutMe
-                })
+            this.setState({
+                nick:  snapshot.val().nick,
+                age:  snapshot.val().age,
+                url:  snapshot.val().url,
+                sex:  snapshot.val().sex,
+                weight:  snapshot.val().weight,
+                height:  snapshot.val().height,
+                yourSport:  snapshot.val().yourSport,
+                trainingExperience:  snapshot.val().trainingExperience,
+                priority:  snapshot.val().priority,
+                aboutMe:  snapshot.val().aboutMe
+            })
         })
     }
 
