@@ -115,7 +115,8 @@ class Post extends Component  {
         super(props);
         this.state = {
             tempLikes: 0,
-            isCommentBoxActive: false
+            isCommentBoxActive: false,
+            isPossibleAddLike: true
         }
     }
 
@@ -133,23 +134,68 @@ class Post extends Component  {
             return ref.child(postKey).child('likes').set(this.state.tempLikes - 1)
         }
     }
+
+    isRepeatedValue(singlePost, userID) {
+        let counter = 0;
+        for(let userLike in singlePost) {
+            if(userID === singlePost[userLike]) {
+                counter++;
+            }
+        }
+        
+        if(counter > 1) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    removeLike(likesRef, singlePost, userID, postKey) {
+        for(let userLike in singlePost) {
+            if(userID === singlePost[userLike]) {
+                likesRef.child(postKey).child(userLike).remove();
+            }
+        }
+        this.setState({
+            isPossibleAddLike: true
+        })
+    }
+
     handleLike = (postKey) => {
         const postsRef = app.getRootRef("posts");
+        const likesRef = app.getRootRef("likes");
         const userID = app.getUserID();
+        
+        if(this.state.isPossibleAddLike) {
+            likesRef.child(postKey).push(userID)
+        }
 
-        postsRef.once('value', snapshot => { 
-            const currentLikesValue = snapshot.val()[postKey].likes;
-            this.setState({
-                tempLikes: currentLikesValue
-            }, ()=> {
-                if(true) {
-                    this.modifyLikesValue(postsRef, postKey, "+");
-                } else {
-                    this.modifyLikesValue(postsRef, postKey, "-");
-                }
+        likesRef.child(postKey).once('value', snapshot =>{
+            const singlePost = snapshot.val();
+            const amountOfLikes = Helpers.getAmountOfObjectProperties(snapshot.val())
+            // if it was like
+            if(this.isRepeatedValue(singlePost, userID)) {
+                this.setState({
+                    isPossibleAddLike: false
+                })
+                this.removeLike(likesRef, singlePost, userID, postKey)
+                console.log("powtórzyło się!");
+            } 
+            // console.log(amountOfLikes)
+            postsRef.child(postKey).child('likes').set(amountOfLikes)
+        })
+       
+        
+        // postsRef.once('value', snapshot => { 
+            // const currentLikesValue = snapshot.val()[postKey].likes;
+            // this.setState({
+            //     tempLikes: currentLikesValue
+            // }, ()=> {
+               
                 
-            })
-        });
+            // })
+            
+        // });
     }
 
 
