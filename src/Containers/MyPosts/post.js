@@ -77,7 +77,7 @@ const ContentBox = styled.div`
 const BottomBox = styled.div`
     ${flexCenter};
     width: 100%;
-    justify-content: flex-start;
+    justify-content: space-between;
     background-color: ${variables.$grayBlue};
     border-bottom-left-radius: .3em;
     border-bottom-right-radius: .3em;
@@ -85,7 +85,7 @@ const BottomBox = styled.div`
 `
 const IconBox = styled.div`
     ${flexCenter};
-    margin-right: 1em;
+    /* margin-right: 1em; */
     padding: .3em;
 `
 const IconCaption = styled.span`
@@ -124,39 +124,32 @@ class Post extends Component  {
             isCommentBoxActive: !prevState.isCommentBoxActive
         }))
     }
+
+    // type ===> "+" or "-"
+    modifyLikesValue(ref, postKey, type) {
+        if(type == "+") {
+            return ref.child(postKey).child('likes').set(this.state.tempLikes + 1)
+        } else {
+            return ref.child(postKey).child('likes').set(this.state.tempLikes - 1)
+        }
+    }
     handleLike = (postKey) => {
         const postsRef = app.getRootRef("posts");
-        const likesRef = app.getRootRef("likes");
         const userID = app.getUserID();
-        const likeObject = {
-            likeFrom: userID,
-            likedPost: postKey
-        }
 
-        likesRef.child(postKey).push(likeObject);
-        likesRef.on('value', snapshot => {
-            const currentPost = snapshot.val();
-            // const postToArray = Helpers.snapshotToArray(currentPost)
-            // if(currentPost[postKey] === postKey) {
-                const amountOfLikes = Helpers.getAmountOfObjectProperties(snapshot.child(postKey).val());
-                // const amountOfLikes = Helpers.getAmountOfObjectProperties(postToArray[0]);
-                console.log(amountOfLikes)
-                // }
+        postsRef.once('value', snapshot => { 
+            const currentLikesValue = snapshot.val()[postKey].likes;
+            this.setState({
+                tempLikes: currentLikesValue
+            }, ()=> {
+                if(true) {
+                    this.modifyLikesValue(postsRef, postKey, "+");
+                } else {
+                    this.modifyLikesValue(postsRef, postKey, "-");
+                }
                 
-
-
-
-            // postsRef.on('value', snapshot1 => { 
-            //     for(let postID in snapshot1.val()) {
-            //         if(snapshot1.val()[postID].postKey === postKey) {
-            //             postsRef.child(postID).update({
-            //                 likes: amountOfLikes
-            //             })
-            //         }
-            //     }
-            // });
-        })
-        
+            })
+        });
     }
 
 
@@ -185,14 +178,15 @@ class Post extends Component  {
                     </IconBox>
                 </BottomBox>
                 {this.state.isCommentBoxActive ? 
-                <CommentBox>
-                    <Image style={{
-                        backgroundImage: `url(${url})`, 
-                        width: "2.5em",
-                        height: "2.5em"}}>
-                    </Image>
-                    <Input placeholder="Skomentuj..."></Input>
-                </CommentBox> : null}
+                    <CommentBox>
+                        <Image style={{
+                            backgroundImage: `url(${url})`, 
+                            width: "2.5em",
+                            height: "2.5em"}}>
+                        </Image>
+                        <Input placeholder="Skomentuj..."></Input>
+                    </CommentBox> : null
+                }
                 
             </Container>
         )   

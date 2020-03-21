@@ -22,10 +22,8 @@ const TextArea = styled.textarea`
     border-radius: .3em;
     border: none;
     background-color: white;
-    color: black;
     padding: .5em;
     font-size: 1.2em;
-    font-weight:bold;
     resize:none;
     margin-bottom: .5em;
     &::placeholder {
@@ -98,10 +96,37 @@ class ShareBox extends Component {
         textarea.value = "";
     }
 
+    writeNewPost(e) {
+        e.preventDefault();
+        const { textarea } = e.target.elements;
+        const { url, nick } = this.state;
+      
+        // Get a key for a new Post.
+        const newPostKey = app.getRealTimeDatabase().ref().child('posts').push().key;
+
+        // A post entry.
+        const postData = {
+            userID: app.getUserID(),
+            postKey: newPostKey,
+            content: textarea.value,
+            url: url,
+            nick: nick,
+            date: Helpers.getFullDate(),
+            likes: 0,
+            comments: 0
+        };
+      
+        // Write the new post's data simultaneously in the posts list and the user's post list.
+        const updates = {};
+        updates['/posts/' + newPostKey] = postData;
+        updates['/user-posts/' + postData.userID + '/' + newPostKey] = postData;
+      
+        return app.getRealTimeDatabase().ref().update(updates);
+      }
     
     render() {
         return (
-            <Container onSubmit={(e) => {this.addPostToDatabase(e)}}>
+            <Container onSubmit={(e) => {this.writeNewPost(e)}}>
                 <TextArea name="textarea" placeholder="Napisz coś..."></TextArea>
                 <AddArea>
                     <label>
