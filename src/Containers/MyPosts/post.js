@@ -3,7 +3,7 @@ import styled from "styled-components";
 import * as styleHelpers  from '../../Components/styleHelpers'
 import Helpers from "../../Components/helpers.js";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faComment, faThumbsUp } from '@fortawesome/free-solid-svg-icons'
+import { faComment, faHeart, faTimes } from '@fortawesome/free-solid-svg-icons'
 import app from "../../Components/base";
 const flexCenter = styleHelpers.flexCenter;
 const variables = styleHelpers.variables;
@@ -17,7 +17,6 @@ const Container = styled.div`
     background-color: rgb(0, 111, 175);
     flex-direction: column;
     width: 100%;
-    /* padding: .5em; */
     margin: 1em 0;
     border-radius: .3em;
 `
@@ -28,6 +27,7 @@ const Container = styled.div`
 const TopBox = styled.div`
     ${flexCenter};
     justify-content: flex-start;
+    position: relative;
     width: 100%;
     border-top-left-radius: .3em;
     border-top-right-radius: .3em;
@@ -58,8 +58,12 @@ const Date = styled.span`
     color: white;
     font-size: .8em;   
 `
-
-
+const CrossIcon = styled.span`
+    position: absolute;
+    top:.4em;
+    right: .6em;
+    color: white;
+`
 
 
 const ContentBox = styled.div`
@@ -81,21 +85,23 @@ const BottomBox = styled.div`
     background-color: ${variables.$grayBlue};
     border-bottom-left-radius: .3em;
     border-bottom-right-radius: .3em;
-    /* border-bottom: .1em solid ${variables.$grayBlue}; */
 `
 const IconBox = styled.div`
     ${flexCenter};
-    /* margin-right: 1em; */
     padding: .3em;
+    font-size: 1.1em;
+    line-height:.8;
 `
 const IconCaption = styled.span`
-    color: white;
     font-size: 1.3em;
     font-weight: bold;
 `
 
+
+
 const CommentBox = styled.div`
     ${flexCenter}
+    justify-content: flex-start;
     width: 100%;
     padding: .5em;
 `
@@ -116,11 +122,15 @@ class Post extends Component  {
         this.state = {
             tempLikes: 0,
             isCommentBoxActive: false,
-            isPossibleAddLike: true,
-            isLockedLiking: false
-
+            isLockedLiking: false,
+            didUserLike: true
         }
     }
+
+    componentDidMount() {
+        // this.setDefaultLikes();
+    }
+
 
     commentBoxHideHandler = () => {
         this.setState(prevState => ({
@@ -128,18 +138,47 @@ class Post extends Component  {
         }))
     }
 
-   
 
-    testFunc(postsRef, postKey, isRepeated) {
+    modifyLikeColor() {
+        this.setState(prevState => ({
+            didUserLike: !prevState.didUserLike 
+        }))
+    }
+
+
+    setDefaultLikes() {
+        const likesRef = app.getRootRef("likes");
+        const userID = app.getUserID();
+                   
+        likesRef.orderByKey().once('value', snapshot =>{
+            const singlePost = snapshot.val();
+            
+            if(this.isRepeatedValue(singlePost, userID)) {
+                this.setState({
+                    didUserLike: true
+                })
+                console.log("polajkowanie")
+            } 
+        });
+    }
+
+
+    setLikesInPost(postsRef, postKey, isRepeated) {
         postsRef.once('value', snapshot => { 
             const currentLikesValue = snapshot.val()[postKey].likes;
             if(!isRepeated) {
                 postsRef.child(postKey).child('likes').set(currentLikesValue + 1)
             } else {
-                postsRef.child(postKey).child('likes').set(currentLikesValue - 1)
+                // protection by negative likes-counter value
+                if(currentLikesValue === 0) {
+                    postsRef.child(postKey).child('likes').set(0)
+                } else {
+                    postsRef.child(postKey).child('likes').set(currentLikesValue - 1)
+                }
             }
         })
     }
+
 
     isRepeatedValue(singlePost, userID) {
         let isRepeated = false;
@@ -160,29 +199,65 @@ class Post extends Component  {
         }
     }
    
+
     handleLike = (postKey) => {
         const postsRef = app.getRootRef("posts");
         const likesRef = app.getRootRef("likes");
         const userID = app.getUserID();
                    
         
+        if(this.state.isLockedLiking) {
+            return;
+        }
+
         likesRef.child(postKey).once('value', snapshot =>{
             let singlePost = snapshot.val();
 
+            this.setState({
+                isLockedLiking: true
+            })
+
             if(this.isRepeatedValue(singlePost, userID)) {
-                console.log("Usuwam lajka!", singlePost)
+                // console.log("Usuwam lajka!", singlePost)
                 this.removeLike(likesRef, singlePost, userID, postKey)
-                this.testFunc(postsRef, postKey, true)
+                this.setLikesInPost(postsRef, postKey, true)
+                this.modifyLikeColor();
             } else {
-                console.log("Dodaje lajka!", singlePost)
+                // console.log("Dodaje lajka!", singlePost)
                 likesRef.child(postKey).push(userID);
-                this.testFunc(postsRef, postKey, false)
+                this.setLikesInPost(postsRef, postKey, false)
+                this.modifyLikeColor();
             }
+            this.unlockLiking();
         })
     }
 
 
+    unlockLiking() {
+        setTimeout(()=> {
+            this.setState({
+                isLockedLiking: false
+            })
+        }, 500)
+    }
+
   
+    removePost = (postKey) => {
+        const postsRef = app.getRootRef("posts");
+        postsRef.child(postKey).remove();
+    }
+
+    isYourPost = (postKey) => {
+        const postsRef = app.getRootRef("posts");
+        const userID = app.getUserID();
+        let isYourPost;
+        postsRef.on('value', snapshot => {
+            const postMakerID = snapshot.val()[postKey].userID;
+            console.log(postMakerID == userID)
+            isYourPost = postMakerID == userID;
+        })
+        return isYourPost;
+    }
 
     render() {
         const { url, nick, content, date, likes, comments, postKey } = this.props
@@ -194,17 +269,24 @@ class Post extends Component  {
                         <Nick> { Helpers.capitalizeFirstLetter(nick) }</Nick>
                         <Date> {date} </Date>
                     </DescriptionWrapper>
+                    {
+                        this.isYourPost(postKey) ? 
+                        <CrossIcon onClick={() => this.removePost(postKey)}>
+                            <FontAwesomeIcon icon={faTimes} style={{fontSize: "1.5em"}}/>
+                        </CrossIcon> : null
+                    }
+                    
                 </TopBox>
                 <ContentBox>
                     { content }
                 </ContentBox>
                 <BottomBox>
-                    <IconBox onClick={() => this.handleLike(postKey)}>
-                        <FontAwesomeIcon icon={faThumbsUp} style={{fontSize: 20, margin: '.2em'}} color={"white"} />
+                    <IconBox style={this.state.didUserLike ? {color:"#FF8E00"} : {color:"white"}} onClick={() => this.handleLike(postKey)}>
+                        <FontAwesomeIcon icon={faHeart} style={{margin: '.2em', fontSize: "1.2em"}}/>
                         <IconCaption>{ likes }</IconCaption>
                     </IconBox>
-                    <IconBox onClick={this.commentBoxHideHandler}>
-                        <FontAwesomeIcon icon={faComment} style={{fontSize: 20, margin: '.2em'}} color={"white"} />
+                    <IconBox style={{color:"white"}} onClick={this.commentBoxHideHandler}>
+                        <FontAwesomeIcon icon={faComment} style={{margin: '.2em'}} />
                         <IconCaption>{ comments }</IconCaption>
                     </IconBox>
                 </BottomBox>
