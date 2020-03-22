@@ -116,88 +116,73 @@ class Post extends Component  {
         this.state = {
             tempLikes: 0,
             isCommentBoxActive: false,
-            isPossibleAddLike: true
+            isPossibleAddLike: true,
+            isLockedLiking: false
+
         }
     }
 
-    isCommentBoxActiveHandler = () => {
+    commentBoxHideHandler = () => {
         this.setState(prevState => ({
             isCommentBoxActive: !prevState.isCommentBoxActive
         }))
     }
 
-    // type ===> "+" or "-"
-    modifyLikesValue(ref, postKey, type) {
-        if(type == "+") {
-            return ref.child(postKey).child('likes').set(this.state.tempLikes + 1)
-        } else {
-            return ref.child(postKey).child('likes').set(this.state.tempLikes - 1)
-        }
-    }
+   
 
-    isRepeatedValue(singlePost, userID) {
-        let counter = 0;
-        for(let userLike in singlePost) {
-            if(userID === singlePost[userLike]) {
-                counter++;
+    testFunc(postsRef, postKey, isRepeated) {
+        postsRef.once('value', snapshot => { 
+            const currentLikesValue = snapshot.val()[postKey].likes;
+            if(!isRepeated) {
+                postsRef.child(postKey).child('likes').set(currentLikesValue + 1)
+            } else {
+                postsRef.child(postKey).child('likes').set(currentLikesValue - 1)
             }
-        }
-        
-        if(counter > 1) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    removeLike(likesRef, singlePost, userID, postKey) {
-        for(let userLike in singlePost) {
-            if(userID === singlePost[userLike]) {
-                likesRef.child(postKey).child(userLike).remove();
-            }
-        }
-        this.setState({
-            isPossibleAddLike: true
         })
     }
 
+    isRepeatedValue(singlePost, userID) {
+        let isRepeated = false;
+        for(let userLike in singlePost) {
+            if(userID === singlePost[userLike]) {
+                isRepeated = true;
+            }
+        }
+        return isRepeated;
+    }
+
+
+    removeLike(likesRef, singlePost, userID, postKey) {
+        for(let userLike in singlePost) { // iteration by single post - check all likes in current post
+            if(userID === singlePost[userLike]) { // if user click, it executes comparing their userID and property value
+                likesRef.child(postKey).child(userLike).remove();
+            }
+        }
+    }
+   
     handleLike = (postKey) => {
         const postsRef = app.getRootRef("posts");
         const likesRef = app.getRootRef("likes");
         const userID = app.getUserID();
+                   
         
-        if(this.state.isPossibleAddLike) {
-            likesRef.child(postKey).push(userID)
-        }
-
         likesRef.child(postKey).once('value', snapshot =>{
-            const singlePost = snapshot.val();
-            const amountOfLikes = Helpers.getAmountOfObjectProperties(snapshot.val())
-            // if it was like
+            let singlePost = snapshot.val();
+
             if(this.isRepeatedValue(singlePost, userID)) {
-                this.setState({
-                    isPossibleAddLike: false
-                })
+                console.log("Usuwam lajka!", singlePost)
                 this.removeLike(likesRef, singlePost, userID, postKey)
-                console.log("powtórzyło się!");
-            } 
-            // console.log(amountOfLikes)
-            postsRef.child(postKey).child('likes').set(amountOfLikes)
+                this.testFunc(postsRef, postKey, true)
+            } else {
+                console.log("Dodaje lajka!", singlePost)
+                likesRef.child(postKey).push(userID);
+                this.testFunc(postsRef, postKey, false)
+            }
         })
-       
-        
-        // postsRef.once('value', snapshot => { 
-            // const currentLikesValue = snapshot.val()[postKey].likes;
-            // this.setState({
-            //     tempLikes: currentLikesValue
-            // }, ()=> {
-               
-                
-            // })
-            
-        // });
     }
 
+
+  
 
     render() {
         const { url, nick, content, date, likes, comments, postKey } = this.props
@@ -218,7 +203,7 @@ class Post extends Component  {
                         <FontAwesomeIcon icon={faThumbsUp} style={{fontSize: 20, margin: '.2em'}} color={"white"} />
                         <IconCaption>{ likes }</IconCaption>
                     </IconBox>
-                    <IconBox onClick={this.isCommentBoxActiveHandler}>
+                    <IconBox onClick={this.commentBoxHideHandler}>
                         <FontAwesomeIcon icon={faComment} style={{fontSize: 20, margin: '.2em'}} color={"white"} />
                         <IconCaption>{ comments }</IconCaption>
                     </IconBox>

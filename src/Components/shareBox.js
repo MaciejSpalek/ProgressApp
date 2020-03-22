@@ -119,7 +119,7 @@ class ShareBox extends Component {
         // Write the new post's data simultaneously in the posts list and the user's post list.
         const updates = {};
         updates['/posts/' + newPostKey] = postData;
-        updates['/user-posts/' + postData.userID + '/' + newPostKey] = postData;
+        // updates['/user-posts/' + postData.userID + '/' + newPostKey] = postData;
       
         return app.getRealTimeDatabase().ref().update(updates);
       }
