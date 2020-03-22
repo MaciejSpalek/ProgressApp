@@ -251,16 +251,18 @@ class Post extends Component  {
         const postsRef = app.getRootRef("posts");
         const userID = app.getUserID();
         let isYourPost;
-        postsRef.on('value', snapshot => {
-            const postMakerID = snapshot.val()[postKey].userID;
-            console.log(postMakerID == userID)
-            isYourPost = postMakerID == userID;
+        postsRef.once('value', snapshot => {
+            if(snapshot.val()[postKey].hasOwnProperty("userID")) {
+                const postMakerID = snapshot.val()[postKey].userID;
+                console.log(postMakerID == userID)
+                isYourPost = postMakerID == userID;
+            }
         })
         return isYourPost;
     }
 
     render() {
-        const { url, nick, content, date, likes, comments, postKey } = this.props
+        const { url, nick, content, date, likes, comments, postKey } = this.props;
         return (
             <Container>
                 <TopBox>
