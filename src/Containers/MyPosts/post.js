@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import styled from "styled-components";
 import * as styleHelpers  from '../../Components/styleHelpers'
 import Helpers from "../../Components/helpers.js";
+import Comments from "./comments";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faComment, faHeart, faTimes } from '@fortawesome/free-solid-svg-icons'
 import app from "../../Components/base";
@@ -99,7 +100,7 @@ const IconCaption = styled.span`
 
 
 
-const CommentBox = styled.div`
+const CommentBox = styled.form`
     ${flexCenter}
     justify-content: flex-start;
     width: 100%;
@@ -117,24 +118,47 @@ const Input = styled.input`
 
 
 class Post extends Component  {
+    _isMounted = false;
     constructor(props) {
         super(props);
         this.state = {
             tempLikes: 0,
+            nick: "",
+            url: "",
             isCommentBoxActive: false,
             isLockedLiking: false,
-            didUserLike: false
+            didUserLike: false,
+            comments: []
         }
     }
-
+    
     componentDidMount() {
-        // this.setDefaultLikes();
+        this._isMounted = true;
+        this.setUserData();
+        this.setAllCommentsOnStart();
+        
     }
-    commentBoxHideHandler = () => {
-        this.setState(prevState => ({
-            isCommentBoxActive: !prevState.isCommentBoxActive
-        }))
+    componentWillUnmount() {
+        this._isMounted = false;
     }
+    setUserData() {
+        const rootRef = app.getRootRef("users");
+        const userID = app.getUserID();
+
+        // set basic data about user from realtime database
+        rootRef.child(userID).on('value', snapshot => {
+            if(this._isMounted) {
+                this.setState({
+                    nick: snapshot.val().nick,
+                    url: snapshot.val().url
+                })
+            }
+        })
+    }
+    
+    
+
+    // functions for handle likes
     modifyLikeColor() {
         this.setState(prevState => ({
             didUserLike: !prevState.didUserLike 
@@ -156,30 +180,6 @@ class Post extends Component  {
                 }
             }
         });
-    }
-    setLikesInPost(postsRef, postKey, isRepeated) {
-        postsRef.once('value', snapshot => { 
-            const currentLikesValue = snapshot.val()[postKey].likes;
-            if(!isRepeated) {
-                postsRef.child(postKey).child('likes').set(currentLikesValue + 1)
-            } else {
-                // protection by negative likes-counter value
-                if(currentLikesValue === 0) {
-                    postsRef.child(postKey).child('likes').set(0)
-                } else {
-                    postsRef.child(postKey).child('likes').set(currentLikesValue - 1)
-                }
-            }
-        })
-    }
-    isRepeatedValue(singlePost, userID) {
-        let isRepeated = false;
-        for(let userLike in singlePost) {
-            if(userID === singlePost[userLike]) {
-                isRepeated = true;
-            }
-        }
-        return isRepeated;
     }
     removeLike(likesRef, singlePost, userID, postKey) {
         for(let userLike in singlePost) { // iteration by single post - check all likes in current post
@@ -224,6 +224,34 @@ class Post extends Component  {
             })
         }, 500)
     }
+
+
+
+    // functions for handle posts
+    isRepeatedValue(singlePost, userID) {
+        let isRepeated = false;
+        for(let userLike in singlePost) {
+            if(userID === singlePost[userLike]) {
+                isRepeated = true;
+            }
+        }
+        return isRepeated;
+    }
+    setLikesInPost(postsRef, postKey, isRepeated) {
+        postsRef.once('value', snapshot => { 
+            const currentLikesValue = snapshot.val()[postKey].likes;
+            if(!isRepeated) {
+                postsRef.child(postKey).child('likes').set(currentLikesValue + 1)
+            } else {
+                // protection by negative likes-counter value
+                if(currentLikesValue === 0) {
+                    postsRef.child(postKey).child('likes').set(0)
+                } else {
+                    postsRef.child(postKey).child('likes').set(currentLikesValue - 1)
+                }
+            }
+        })
+    }
     removePost = (postKey) => {
         const postsRef = app.getRootRef("posts");
         postsRef.child(postKey).remove();
@@ -231,7 +259,7 @@ class Post extends Component  {
     isYourPost = (postKey) => {
         const postsRef = app.getRootRef("posts");
         const userID = app.getUserID();
-        let isYourPost;
+        let isYourPost = false;
         postsRef.once('value', snapshot => {
             if(snapshot.val()[postKey].hasOwnProperty("userID")) {
                 const postMakerID = snapshot.val()[postKey].userID;
@@ -241,9 +269,48 @@ class Post extends Component  {
         return isYourPost;
     }
 
+
+
+    // function for handle posts' comments
+    commentBoxHideHandler = () => {
+        this.setState(prevState => ({
+            isCommentBoxActive: !prevState.isCommentBoxActive
+        }))
+    }
+    setAllCommentsOnStart() {
+        const commentsRef = app.getRootRef("comments");
+        commentsRef.on("value", snapshot => {
+            const comments = Helpers.snapshotToArray(snapshot);
+            if (this._isMounted) {
+                this.setState({comments})
+            }
+        })
+    }
+
+    addComment(e, postKey) {
+        e.preventDefault();
+        const { input } = e.target.elements;
+        if(input.value !== "") {
+            const newPostKey = app.getRealTimeDatabase().ref().child('comments').push().key;
+            const updates = {};
+            const commentData = {
+                userID: app.getUserID(),
+                postKey: postKey,
+                commentText: input.value,
+                url: this.state.url,
+                nick: this.state.nick,
+                date: Helpers.getFullDate(),
+            };
+            input.value = "";
+            updates['/comments/' + newPostKey] = commentData;
+            return app.getRealTimeDatabase().ref().update(updates);
+        }
+
+      }
+
     render() {
         const { url, nick, content, date, likes, comments, postKey } = this.props;
-        console.log(postKey, this.state.didUserLike)
+        console.log(this.state.comments);
         return (
             <Container>
                 <TopBox>
@@ -252,17 +319,20 @@ class Post extends Component  {
                         <Nick> { Helpers.capitalizeFirstLetter(nick) }</Nick>
                         <Date> {date} </Date>
                     </DescriptionWrapper>
-                    {
-                        this.isYourPost(postKey) ? 
-                        <CrossIcon onClick={() => this.removePost(postKey)}>
-                            <FontAwesomeIcon icon={faTimes} style={{fontSize: "1.5em"}}/>
-                        </CrossIcon> : null
+                    {   
+                        app.getCurrentUser() ?
+                            this.isYourPost(postKey) ? 
+                            <CrossIcon onClick={() => this.removePost(postKey)}>
+                                <FontAwesomeIcon icon={faTimes} style={{fontSize: "1.5em"}}/>
+                            </CrossIcon> : null
+                        : null
                     }
-                    
                 </TopBox>
+
                 <ContentBox>
                     { content }
                 </ContentBox>
+
                 <BottomBox>
                     <IconBox onClick={() => this.handleLike(postKey)} style={this.state.didUserLike ? {color:"#FF8E00"} : {color:"white"}}>
                         <FontAwesomeIcon icon={faHeart} style={{margin: '.2em', fontSize: "1.2em"}}/>
@@ -273,20 +343,21 @@ class Post extends Component  {
                         <IconCaption>{ comments }</IconCaption>
                     </IconBox>
                 </BottomBox>
-                {this.state.isCommentBoxActive ? 
-                    <CommentBox>
-                        <Comments postKey={postKey}/>
-                        <>
-                        <Image style={{
-                            backgroundImage: `url(${url})`, 
-                            width: "2.5em",
-                            height: "2.5em"}}>
-                        </Image>
-                        <Input placeholder="Skomentuj..."></Input>
-                        </>
-                    </CommentBox> : null
+
+                {
+                this.state.isCommentBoxActive ? 
+                <CommentBox onSubmit={(e) => this.addComment(e, postKey)}>
+                    <Comments/>
+                    <>
+                    <Image style={{
+                        backgroundImage: `url(${this.state.url})`, 
+                        width: "2.5em",
+                        height: "2.5em"}}>
+                    </Image>
+                    <Input name="input" placeholder="Skomentuj..."></Input>
+                    </>
+                </CommentBox> : null
                 }
-                
             </Container>
         )   
     }

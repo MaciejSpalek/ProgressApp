@@ -52,16 +52,22 @@ class ShareBox extends Component {
             url: "",
             nick: ""
         }
-        this.addPostToDatabase = this.addPostToDatabase.bind(this);
     }
 
     componentDidMount() {
         this._isMounted = true;
+        this.setUserData();
+    }
 
+    componentWillUnmount() {
+        this._isMounted = false;
+    }
+
+    // set basic data about user from realtime database
+    setUserData() {
         const rootRef = app.getRootRef("users");
         const userID = app.getUserID();
 
-        // set basic data about user from realtime database
         rootRef.child(userID).on('value', snapshot => {
             if(this._isMounted) {
                 this.setState({
@@ -72,61 +78,34 @@ class ShareBox extends Component {
         })
     }
 
-    componentWillUnmount() {
-        this._isMounted = false;
-    }
-
-    addPostToDatabase = (e) => {
+    addPost(e) {
         e.preventDefault();
         const { textarea } = e.target.elements;
-        const { url, nick } = this.state;
-        const postsRef = app.getRootRef("posts");
+
         if(textarea.value !== "") {
-            postsRef.push({
+            const { url, nick } = this.state;
+            const updates = {};
+            const newPostKey = app.getRealTimeDatabase().ref().child('posts').push().key;
+            const postData = {
                 userID: app.getUserID(),
-                postKey: postsRef.push().key,
+                postKey: newPostKey,
                 content: textarea.value,
                 url: url,
                 nick: nick,
                 date: Helpers.getFullDate(),
                 likes: 0,
                 comments: 0
-            })
+            };
+            textarea.value = "";
+            // updates['/user-posts/' + postData.userID + '/' + newPostKey] = postData;
+            updates['/posts/' + newPostKey] = postData;
+            return app.getRealTimeDatabase().ref().update(updates);
         }
-        textarea.value = "";
-    }
-
-    writeNewPost(e) {
-        e.preventDefault();
-        const { textarea } = e.target.elements;
-        const { url, nick } = this.state;
-      
-        // Get a key for a new Post.
-        const newPostKey = app.getRealTimeDatabase().ref().child('posts').push().key;
-
-        // A post entry.
-        const postData = {
-            userID: app.getUserID(),
-            postKey: newPostKey,
-            content: textarea.value,
-            url: url,
-            nick: nick,
-            date: Helpers.getFullDate(),
-            likes: 0,
-            comments: 0
-        };
-      
-        // Write the new post's data simultaneously in the posts list and the user's post list.
-        const updates = {};
-        updates['/posts/' + newPostKey] = postData;
-        // updates['/user-posts/' + postData.userID + '/' + newPostKey] = postData;
-      
-        return app.getRealTimeDatabase().ref().update(updates);
       }
     
     render() {
         return (
-            <Container onSubmit={(e) => {this.writeNewPost(e)}}>
+            <Container onSubmit={(e) => {this.addPost(e)}}>
                 <TextArea name="textarea" placeholder="Napisz coś..."></TextArea>
                 <AddArea>
                     <label>
