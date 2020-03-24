@@ -1,10 +1,8 @@
-import React from "react"
-import Menu from "./menu"
-import app from '../../Components/base';
-
-import * as styleHelpers  from '../../Components/styleHelpers'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faChartLine, faBars, faTimes } from '@fortawesome/free-solid-svg-icons'
+import React from 'react';
+import Menu from './menu';
+import * as styleHelpers  from '../../Components/styleHelpers';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faChartLine, faBars, faTimes } from '@fortawesome/free-solid-svg-icons';
 import styled from 'styled-components';
 
 

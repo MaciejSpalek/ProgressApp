@@ -1,19 +1,19 @@
-import React from "react"
+import React, { Component } from "react"
 import styled from 'styled-components';
-import * as styleHelpers  from './styleHelpers'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faFileUpload } from '@fortawesome/free-solid-svg-icons'
+import app from "./base";
+import Helpers from "./helpers";
+import * as styleHelpers  from './styleHelpers';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faFileUpload } from '@fortawesome/free-solid-svg-icons';
 
 const flexCenter = styleHelpers.flexCenter;
 const variables = styleHelpers.variables;
 
-const Container = styled.div`
+const Container = styled.form`
     ${flexCenter}
     flex-direction: column;
-    width: 280px;
+    width: 100%;
     border-radius: .5em;
-    /* background-color: ${variables.$grayBlue}; */
-    padding: .5em ;
 `
 const TextArea = styled.textarea`
     ${flexCenter}
@@ -22,10 +22,8 @@ const TextArea = styled.textarea`
     border-radius: .3em;
     border: none;
     background-color: white;
-    color: black;
     padding: .5em;
     font-size: 1.2em;
-    font-weight:bold;
     resize:none;
     margin-bottom: .5em;
     &::placeholder {
@@ -38,19 +36,87 @@ const AddArea = styled.div`
     width: 100%;
 ` 
 
-const ShareBox = () => {
-    return (
-        <Container>
-            <TextArea placeholder="Napisz coś..."></TextArea>
-            <AddArea>
-                <label>
-                    <FontAwesomeIcon icon={faFileUpload} style={{fontSize: 35, margin: '.1em'}} color={variables.$orange} />
-                    <input type="file" style={{display: "none"}}/>
-                </label>
-                <styleHelpers.Button>Opublikuj</styleHelpers.Button>
-            </AddArea>
-        </Container>
-    )
+
+
+
+
+
+
+
+
+class ShareBox extends Component {
+    _isMounted = false;
+    constructor(props) {
+        super(props);
+        this.state = {
+            url: "",
+            nick: ""
+        }
+    }
+
+    componentDidMount() {
+        this._isMounted = true;
+        this.setUserData();
+    }
+
+    componentWillUnmount() {
+        this._isMounted = false;
+    }
+
+    // set basic data about user from realtime database
+    setUserData() {
+        const rootRef = app.getRootRef("users");
+        const userID = app.getUserID();
+
+        rootRef.child(userID).on('value', snapshot => {
+            if(this._isMounted) {
+                this.setState({
+                    nick: snapshot.val().nick,
+                    url: snapshot.val().url
+                })
+            }
+        })
+    }
+
+    addPost(e) {
+        e.preventDefault();
+        const { textarea } = e.target.elements;
+
+        if(textarea.value !== "") {
+            const { url, nick } = this.state;
+            const updates = {};
+            const newPostKey = app.getRealTimeDatabase().ref().child('posts').push().key;
+            const postData = {
+                userID: app.getUserID(),
+                postKey: newPostKey,
+                content: textarea.value,
+                url: url,
+                nick: nick,
+                date: Helpers.getFullDate(),
+                likes: 0,
+                comments: 0
+            };
+            textarea.value = "";
+            // updates['/user-posts/' + postData.userID + '/' + newPostKey] = postData;
+            updates['/posts/' + newPostKey] = postData;
+            return app.getRealTimeDatabase().ref().update(updates);
+        }
+      }
+    
+    render() {
+        return (
+            <Container onSubmit={(e) => {this.addPost(e)}}>
+                <TextArea name="textarea" placeholder="Napisz coś..."></TextArea>
+                <AddArea>
+                    <label>
+                        <FontAwesomeIcon icon={faFileUpload} style={{fontSize: 35, margin: '.1em'}} color={variables.$orange} />
+                        <input type="file" style={{display: "none"}}/>
+                    </label>
+                    <styleHelpers.Button>Opublikuj</styleHelpers.Button>
+                </AddArea>
+            </Container>
+        )
+    }
 }
                 
 export default ShareBox;

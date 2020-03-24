@@ -53,14 +53,10 @@ class FireBase {
   getUserID() {
     return this.getCurrentUser().uid;
   }
-  getRootRef() {
-    return this.getRealTimeDatabase().ref("users")
+  getRootRef(refName) {
+    return this.getRealTimeDatabase().ref(refName)
     
   }
-  // getCurrentRealTimeDatabaseUser() {
-    // return this.getRealTimeDatabase().ref
-  // }
-
 }
 
 export default new FireBase()

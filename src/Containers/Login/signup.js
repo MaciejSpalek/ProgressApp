@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUserPlus } from "@fortawesome/free-solid-svg-icons";
 import { variables } from "../../Components/styleHelpers";
-
+import userPhoto from "../../images/user.png";
 const SignUp = ({ history }) => {
   const handleSignUp = useCallback(
     async event => {
@@ -17,15 +17,23 @@ const SignUp = ({ history }) => {
           .getApp()
           .auth()
           .createUserWithEmailAndPassword(email.value, password.value)
-          
+          var photoFile = new File([""], userPhoto);
+               
+        await app.getStorage().ref(`users/${app.getUserID()}/profilePhoto`).put(photoFile);
         await app
-          .getRootRef()
+          .getRootRef("users")
           .child(app.getUserID())
           .set({
-            profileData: {
               nick: nick.value,
-              age: age.value
-            }
+              age: age.value,
+              url: userPhoto,
+              sex: "-",
+              weight: "-",
+              height: "-",
+              yourSport: "-",
+              trainingExperience: "-",
+              priority: "-",
+              aboutMe: "-"
           })
 
         await app
@@ -33,9 +41,8 @@ const SignUp = ({ history }) => {
           .collection("users")
           .doc(app.getUserID())
           .set({ 
-            measurement: [],
-            profileData: {} 
-        });
+            measurement: [] 
+          });
 
         history.push("/");
     },
