@@ -2,12 +2,7 @@ import React, { Component } from "react";
 import app from "../../Components/base";
 import styled from "styled-components";
 import Helpers from "../../Components/helpers.js";
-// import * as styleHelpers  from '../../Components/styleHelpers';
 import Post from './post';
-
-// const flexCenter = styleHelpers.flexCenter;
-// const variables = styleHelpers.variables;
-
 
 const Container = styled.div`
     width: 100%;

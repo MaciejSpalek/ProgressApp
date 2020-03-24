@@ -102,8 +102,7 @@ const IconCaption = styled.span`
 
 const CommentBox = styled.form`
     ${flexCenter}
-    justify-content: flex-start;
-    width: 100%;
+    flex-direction: column;
     padding: .5em;
 `
 const Input = styled.input`
@@ -113,6 +112,11 @@ const Input = styled.input`
     border-radius: .3em;
     font-size: 1.1em;
     padding: 0 .5em;
+`
+const AddBox = styled.div `
+    ${flexCenter}
+    width: 100%;
+    padding: .5em 0;
 `
 
 
@@ -286,31 +290,37 @@ class Post extends Component  {
             }
         })
     }
-
     addComment(e, postKey) {
         e.preventDefault();
         const { input } = e.target.elements;
         if(input.value !== "") {
-            const newPostKey = app.getRealTimeDatabase().ref().child('comments').push().key;
+            const commentKey = app.getRealTimeDatabase().ref().child('comments').push().key;
             const updates = {};
             const commentData = {
                 userID: app.getUserID(),
                 postKey: postKey,
-                commentText: input.value,
+                content: input.value,
                 url: this.state.url,
                 nick: this.state.nick,
                 date: Helpers.getFullDate(),
+                commentKey: commentKey
             };
             input.value = "";
-            updates['/comments/' + newPostKey] = commentData;
+            updates['/comments/' + commentKey] = commentData;
             return app.getRealTimeDatabase().ref().update(updates);
         }
-
-      }
+    }
+    filterComments = (postKey, comments) => {
+        return comments.filter(comment => comment.postKey === postKey)
+    }
+    countComments = (postKey, comments) => {
+        return comments.filter(comment => comment.postKey === postKey).length
+    }
 
     render() {
-        const { url, nick, content, date, likes, comments, postKey } = this.props;
-        console.log(this.state.comments);
+        const { url, nick, content, date, likes, postKey } = this.props;
+        const { comments } = this.state;
+
         return (
             <Container>
                 <TopBox>
@@ -340,22 +350,22 @@ class Post extends Component  {
                     </IconBox>
                     <IconBox style={{color:"white"}} onClick={this.commentBoxHideHandler}>
                         <FontAwesomeIcon icon={faComment} style={{margin: '.2em'}} />
-                        <IconCaption>{ comments }</IconCaption>
+                        <IconCaption>{ this.countComments(postKey, comments) }</IconCaption>
                     </IconBox>
                 </BottomBox>
 
                 {
                 this.state.isCommentBoxActive ? 
                 <CommentBox onSubmit={(e) => this.addComment(e, postKey)}>
-                    <Comments/>
-                    <>
-                    <Image style={{
-                        backgroundImage: `url(${this.state.url})`, 
-                        width: "2.5em",
-                        height: "2.5em"}}>
-                    </Image>
-                    <Input name="input" placeholder="Skomentuj..."></Input>
-                    </>
+                    <Comments comments={this.filterComments(postKey, comments)}/>
+                    <AddBox>
+                        <Image style={{
+                            backgroundImage: `url(${this.state.url})`, 
+                            width: "2.8em",
+                            height: "2.8em"}}>
+                        </Image>
+                        <Input name="input" placeholder="Skomentuj..."></Input>
+                    </AddBox>
                 </CommentBox> : null
                 }
             </Container>

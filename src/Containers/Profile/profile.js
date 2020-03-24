@@ -319,28 +319,43 @@ class Profile extends Component {
         const { image } = this.state;
         const userID = app.getUserID();
         const uploadTask = app.getStorage().ref(`users/${userID}/profilePhoto`).put(image);
-
+        const usersRef = app.getRootRef("users");
+        const postsRef = app.getRootRef("posts");
+        const commentsRef = app.getRootRef("comments");
+        
         uploadTask.on('state_changed', () => {
             app.getStorage().ref(`users/${userID}`).child(`profilePhoto`).getDownloadURL().then(URL => {
                 this.setState({
                     url: URL
                 })
 
-            app.getRootRef("users").child(app.getUserID()).update({
+            usersRef.child(app.getUserID()).update({
                 url: this.state.url
             });
 
-            const postsRef = app.getRootRef("posts");
+            // update photo in posts after its change
             postsRef.on('value', snapshot => {
-                for(let postID in snapshot.val()) {
-                    if(snapshot.val()[postID].userID === userID) {
-                        postsRef.child(postID).update({
+                const posts = snapshot.val();
+                for(let post in posts) {
+                    if(posts[post].userID === userID) {
+                        postsRef.child(post).update({
                             url: this.state.url
                         })
                     }
                 }
             });
-            console.log(`setPhotoURL() => ${this.state.url}`)
+
+            // update photo in comments after its change
+            commentsRef.on('value', snapshot => {
+                const comments = snapshot.val();
+                for(let comment in comments) {
+                    if(comments[comment].userID === userID) {
+                        commentsRef.child(comment).update({
+                            url: this.state.url
+                        })
+                    }
+                }
+            });
           }) 
       });
     }
