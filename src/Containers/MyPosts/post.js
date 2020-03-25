@@ -6,6 +6,7 @@ import Comments from "./comments";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faComment, faHeart, faTimes } from '@fortawesome/free-solid-svg-icons'
 import app from "../../Components/base";
+
 const flexCenter = styleHelpers.flexCenter;
 const variables = styleHelpers.variables;
 
