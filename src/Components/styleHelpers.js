@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 export const variables = {
-    $gray: "rgb(140, 140, 140)",
+    $gray: "rgb(200, 200, 200)",
     $grayBlue: "#005D95",
     $darkBlue: "rgb(0, 74, 121)",
     $blue: "#0080C8",

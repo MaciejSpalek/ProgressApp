@@ -25,8 +25,8 @@ const DescriptionWrapper = styled.div`
 `
 const Image = styled.div`
     border-radius: 50%;
-    width: 2em;
-    height: 2em;
+    width: 2.5em;
+    height: 2.5em;
     background-position: center;
     background-size: cover;
     background-color: ${variables.$blue};
