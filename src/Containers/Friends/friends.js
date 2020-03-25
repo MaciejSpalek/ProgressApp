@@ -1,20 +1,51 @@
 import React, { Component } from "react";
 import styled from "styled-components";
-import * as styleHelpers  from '../../Components/styleHelpers'
+import {flexCenter, variables }  from '../../Components/styleHelpers';
 import Helpers from "../../Components/helpers.js";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import {  } from '@fortawesome/free-solid-svg-icons'
-import app from "../../Components/base";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSearch } from "@fortawesome/free-solid-svg-icons";
 
-const flexCenter = styleHelpers.flexCenter;
-const variables = styleHelpers.variables;
+
+
+const Container = styled.div`
+    ${flexCenter}
+    flex-direction: column;
+    justify-content: flex-start;
+    position: fixed;
+    top: 64px;
+    left: 0;
+    width: 100%;
+    height: calc(100vh - 64px);
+    background-color: white;
+    padding: .5em;
+`
+const SearchBox = styled.form`
+    ${flexCenter};
+    width: 100%;
+    height:45px;
+    padding: .2em .5em;
+    border-radius: .5em;
+    border: .1em solid ${variables.$gray};
+`
+
+const Input = styled.input`
+    width: 100%;
+    height: 100%;
+    border: none;
+    outline: none;
+    margin-right: .5em;
+`
+
 
 class Friends extends Component {
     render() {
         return (
-            <div>
-
-            </div>
+            <Container>
+                <SearchBox>
+                    <Input placeholder="Szukaj znajomych..." />
+                    <FontAwesomeIcon icon={faSearch} color={variables.$gray} style={{fontSize: "1.5em"}}/>
+                </SearchBox>
+            </Container>
         )
     }
 }

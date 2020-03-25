@@ -19,7 +19,7 @@ const Nav = styled.div`
     height: 64px;
     font-size: 1em;
     z-index: 1;
-    box-shadow: 0 .05em .5em .1em black;
+    /* box-shadow: 0 .05em .5em .1em black; */
 `;
 const Logo = styled.div`
     ${flexCenter};
@@ -27,6 +27,7 @@ const Logo = styled.div`
 const Title = styled.span`
     font-size: 1.8em;
     font-weight: bold;
+    
 `;
 
 
