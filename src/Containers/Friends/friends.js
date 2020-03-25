@@ -4,7 +4,7 @@ import {flexCenter, variables }  from '../../Components/styleHelpers';
 import Helpers from "../../Components/helpers.js";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
-
+import app from "../../Components/base";
 
 
 const Container = styled.div`
@@ -35,16 +35,47 @@ const Input = styled.input`
     outline: none;
     margin-right: .5em;
 `
-
+const ProfileBox = styled.div`
+    width: 100%;
+    padding: .5em;
+`
 
 class Friends extends Component {
+    constructor() {
+        super();
+        this.state = {
+            usersNicks: []
+        }
+    }
+
+    componentDidMount() {
+        this.getNicks()
+    }
+    getNicks() {
+        const usersRef = app.getRealTimeDatabase().ref("users");
+        usersRef.on('value', snapshot => {
+            const users = snapshot.val();
+            const usersArray = [];
+            for(let user in users) {
+                const userNick = users[user].nick; 
+                usersArray.push(userNick);
+            }
+            this.setState({
+                usersNicks: usersArray
+            })
+        })
+    }
     render() {
+        console.log(this.state.usersNicks)
         return (
             <Container>
                 <SearchBox>
                     <Input placeholder="Szukaj znajomych..." />
                     <FontAwesomeIcon icon={faSearch} color={variables.$gray} style={{fontSize: "1.5em"}}/>
                 </SearchBox>
+                <ProfileBox>
+                    
+                </ProfileBox>
             </Container>
         )
     }
