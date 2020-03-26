@@ -1,16 +1,22 @@
-import React from "react";
+import React, { Component } from "react";
 import styled from "styled-components";
 import Helpers from "../../Components/helpers"
+import app from "../../Components/base"
 import { variables, flexCenter } from "../../Components/styleHelpers";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUserTimes, faUserPlus, faUserCheck } from "@fortawesome/free-solid-svg-icons";
+
 
 const Container = styled.div`
     ${flexCenter};
-    justify-content: flex-start;
+    justify-content:space-between;
     width: 100%;
     border-bottom: .1em solid ${variables.$gray};
     padding: .3em;
 `
-
+const DataWrapper = styled.div`
+    ${flexCenter};
+`
 const Image = styled.div`
     border-radius: 50%;
     width: 3.5em;
@@ -25,14 +31,62 @@ const Nick = styled.div`
     font-size: 1em;
     font-weight: bold;
 `
+  
 
-const UserProfile = ({ nick, url }) => {
-    return (
-        <Container>
-            <Image style={{backgroundImage: `url(${url})`}}></Image>
-            <Nick> { Helpers.capitalizeFirstLetter(nick) }</Nick>
-        </Container>
-    )
+class UserProfile extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            isYourUserFriend: false,
+            profileID: this.props.profileID
+        }
+    }
+
+    componentDidMount() {
+        this.getUserFriend();
+    }
+
+    addFriendToDatabase(profileID) {
+        const userFriends = app.getRealTimeDatabase().ref("friends")
+        const userID = app.getUserID();
+        userFriends.child(userID).push(profileID);
+    }
+
+    getUserFriend() {
+        const profileID = this.state.profileID;
+        const userID = app.getUserID();
+        const userFriends = app.getRealTimeDatabase().ref("friends").child(userID)
+       
+        userFriends.on('value', snapshot => {
+            const friends = snapshot.val();
+            for(let friend in friends) {
+                if(profileID === friends[friend]) {
+                    this.setState({
+                        isYourUserFriend: true
+                    })
+                }
+            }
+        })
+    }
+
+    render() {
+        const { nick, url, profileID } = this.props
+        const { isYourUserFriend } = this.state
+
+        const plusFriendIcon = <FontAwesomeIcon icon={faUserPlus} style={{color: variables.$darkBlue, fontSize: "1.5em"}} onClick={() => this.addFriendToDatabase(profileID)}/>
+        const checkedFriendIcon = <FontAwesomeIcon icon={faUserCheck} style={{color: variables.$darkBlue, fontSize: "1.5em"}}/>
+        const deleteFriendIcon = <FontAwesomeIcon icon={faUserTimes} style={{color: variables.$darkBlue, fontSize: "1.5em"}}/>
+       
+        return (
+            <Container>
+                <DataWrapper>
+                    <Image style={{backgroundImage: `url(${url})`}}></Image>
+                    <Nick> { Helpers.capitalizeFirstLetter(nick) }</Nick>
+                </DataWrapper>
+                {isYourUserFriend ? checkedFriendIcon : plusFriendIcon}
+            </Container>
+        )
+    }
 }
 
 export default UserProfile

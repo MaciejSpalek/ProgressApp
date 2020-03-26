@@ -179,7 +179,6 @@ class Post extends Component  {
                 const likes = posts[post];
                 for(let like in likes) {
                     if(userID === likes[like]) {
-                        console.log("Modyfikuje")
                         this.modifyLikeColor();
                     } 
                 }

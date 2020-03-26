@@ -55,7 +55,39 @@ class FireBase {
   }
   getRootRef(refName) {
     return this.getRealTimeDatabase().ref(refName)
+  }
+
+  // returns all users except you
+  getAllUsers = (setState) => {
+    const usersRef = this.getRealTimeDatabase().ref("users");
+    const tempArray = [];
     
+    usersRef.on('value', snapshot => {
+        const users = snapshot.val();
+        for(let user in users) {
+            if(users[user].userID !== this.getUserID()) {
+                tempArray.push(users[user]);
+            }
+        }
+        setState(tempArray);
+    })
+  }
+
+  // returns all your friends
+  getAllFriends = (setState) => {
+    const userID = this.getUserID();
+    const friendsRef = this.getRealTimeDatabase().ref("friends").child(userID);
+    const tempArray = [];
+
+    friendsRef.on('value', snapshot => {
+        const friends = snapshot.val();
+        for(let friend in friends) {
+            if(friends[friend].userID !== this.getUserID()) {
+              tempArray.push(friends[friend]);
+            }
+        }
+        setState(tempArray);
+    })
   }
 }
 
