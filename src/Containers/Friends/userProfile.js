@@ -38,29 +38,28 @@ class UserProfile extends Component {
         super(props);
         this.state = {
             isYourUserFriend: false,
-            profileID: this.props.profileID
+            user: this.props.user
         }
     }
 
     componentDidMount() {
-        this.getUserFriend();
+        this.setIcon();
     }
 
-    addFriendToDatabase(profileID) {
+    addFriendToDatabase(user) {
         const userFriends = app.getRealTimeDatabase().ref("friends")
         const userID = app.getUserID();
-        userFriends.child(userID).push(profileID);
+        userFriends.child(userID).push(user);
     }
 
-    getUserFriend() {
-        const profileID = this.state.profileID;
+    setIcon = () => {
         const userID = app.getUserID();
         const userFriends = app.getRealTimeDatabase().ref("friends").child(userID)
        
         userFriends.on('value', snapshot => {
             const friends = snapshot.val();
             for(let friend in friends) {
-                if(profileID === friends[friend]) {
+                if(this.props.user.userID === friends[friend].userID) {
                     this.setState({
                         isYourUserFriend: true
                     })
@@ -70,18 +69,18 @@ class UserProfile extends Component {
     }
 
     render() {
-        const { nick, url, profileID } = this.props
+        const { user } = this.props
         const { isYourUserFriend } = this.state
 
-        const plusFriendIcon = <FontAwesomeIcon icon={faUserPlus} style={{color: variables.$darkBlue, fontSize: "1.5em"}} onClick={() => this.addFriendToDatabase(profileID)}/>
+        const plusFriendIcon = <FontAwesomeIcon icon={faUserPlus} style={{color: variables.$darkBlue, fontSize: "1.5em"}} onClick={() => this.addFriendToDatabase(user)}/>
         const checkedFriendIcon = <FontAwesomeIcon icon={faUserCheck} style={{color: variables.$darkBlue, fontSize: "1.5em"}}/>
         const deleteFriendIcon = <FontAwesomeIcon icon={faUserTimes} style={{color: variables.$darkBlue, fontSize: "1.5em"}}/>
        
         return (
             <Container>
                 <DataWrapper>
-                    <Image style={{backgroundImage: `url(${url})`}}></Image>
-                    <Nick> { Helpers.capitalizeFirstLetter(nick) }</Nick>
+                    <Image style={{backgroundImage: `url(${user.url})`}}></Image>
+                    <Nick> { Helpers.capitalizeFirstLetter(user.nick) }</Nick>
                 </DataWrapper>
                 {isYourUserFriend ? checkedFriendIcon : plusFriendIcon}
             </Container>
