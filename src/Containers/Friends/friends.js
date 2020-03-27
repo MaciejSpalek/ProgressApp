@@ -75,6 +75,7 @@ const Caption = styled.p`
 class Friends extends Component {
     constructor() {
         super();
+        this.textInput = React.createRef();
         this.state = {
             constUsersArray: [],
             mutableUsersArray: [],
@@ -109,7 +110,6 @@ class Friends extends Component {
         return regex.test(nick)
     }
 
-
     // function invokes onChange event and set mutableNicksArray, which stores nicks beginning on letters pass by input
     filterNicks(e) {
         const inputValue = e.target.value;
@@ -120,9 +120,11 @@ class Friends extends Component {
                 tempUsersArray.push(user);
             }
         })
+
         if(inputValue !== "") {
             this.setState({
-                mutableUsersArray: tempUsersArray
+                mutableUsersArray: tempUsersArray,
+                isBottomBoxHide: true
             }) 
         } else {
             this.setState({
@@ -131,7 +133,6 @@ class Friends extends Component {
         }
           
     }
-
 
     renderProfiles() {
         return this.state.mutableUsersArray.map((user, index) => {
@@ -143,7 +144,6 @@ class Friends extends Component {
             )
         })
     }
-
 
     renderUserFriends() {
         return this.state.friends.map((friend, index) => {
@@ -160,15 +160,22 @@ class Friends extends Component {
         this.setState(prevstate => ({
             isBottomBoxHide: !prevstate.isBottomBoxHide
         }))
+
+        if(this.state.isBottomBoxHide && this.textInput.current.value !== "") {
+            this.textInput.current.value = "";
+            this.setState({
+                mutableUsersArray: []
+            })
+        }
     }
 
     render() {
-        console.log(this.state.isBottomBoxHide)
+        const { isBottomBoxHide, amountOfFriends } = this.state;
         return (
             <Container>
                 <TopBox>
                     <SearchBox>
-                        <Input placeholder="Szukaj znajomych..." onChange={(e)=> this.filterNicks(e)}/>
+                        <Input placeholder="Szukaj znajomych..."  ref={this.textInput} onChange={(e)=> this.filterNicks(e)} />
                         <FontAwesomeIcon icon={faSearch} color={variables.$gray} style={{fontSize: "1.5em"}}/>
                     </SearchBox>
                     <ProfileBox>
@@ -177,13 +184,13 @@ class Friends extends Component {
                 </TopBox>
                 <BottomBox>
                     <FriendBox>
-                        {!this.state.isBottomBoxHide ? this.renderUserFriends() : null}
+                        {!isBottomBoxHide ? this.renderUserFriends() : null}
                     </FriendBox>
                     <ToggleBox>
-                        <Caption>Znajomi ({this.state.amountOfFriends})</Caption>
+                        <Caption>Znajomi ({amountOfFriends})</Caption>
                         <ArrowButton 
-                            handleClick={() => this.handleArrowButton()}
-                            isHide={this.state.isBottomBoxHide}
+                            handleArrowButton={() => this.handleArrowButton()}
+                            isHide={isBottomBoxHide}
                         />
                     </ToggleBox>
                 </BottomBox>
