@@ -77,13 +77,17 @@ class FireBase {
   getAllFriends = (setState) => {
     const userID = this.getUserID();
     const friendsRef = this.getRealTimeDatabase().ref("friends").child(userID);
+    const usersRef = this.getRealTimeDatabase().ref("users");
 
     friendsRef.on('value', snapshot => {
         const friends = snapshot.val();
         const tempArray = [];
+
         for(let friend in friends) {
             if(friends[friend].userID !== this.getUserID()) {
-              tempArray.push(friends[friend]);
+              usersRef.child(friends[friend].userID).once('value', snapshot1 => {
+                tempArray.push(snapshot1.val());
+              })
             }
         }
         setState(tempArray);

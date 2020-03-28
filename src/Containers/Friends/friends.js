@@ -86,11 +86,13 @@ class Friends extends Component {
     }
 
     componentDidMount = () => {
+        console.log("ComponentDidMount")
         app.getAllUsers((tempArray) => {
             this.setState({
                 constUsersArray: tempArray
             })
         })
+       
         app.getAllFriends((tempArray) => {
             this.setState({
                 friends: tempArray
@@ -101,6 +103,16 @@ class Friends extends Component {
                 amountOfFriends: counter
             })
         })
+    }
+
+    componentDidUpdate() {
+        app.getRealTimeDatabase().ref("users").on('child_changed', snapshot => {
+            app.getAllFriends((tempArray) => {
+                this.setState({
+                    friends: tempArray
+                })
+            })
+        });
     }
     
     
@@ -199,5 +211,4 @@ class Friends extends Component {
     }
 }
 
-// rotationDegree, isHide, handleClick
 export default Friends;

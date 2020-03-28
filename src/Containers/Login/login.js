@@ -14,6 +14,7 @@ const Login = ({ history }) => {
       const { email, password } = event.target.elements;
       try {
         await app.getApp().auth().signInWithEmailAndPassword(email.value, password.value);
+        app.getRealTimeDatabase().ref("users").child(app.getUserID()).child("isLogged").set(true);
         history.push("/");
       } catch (error) {
         alert(error);

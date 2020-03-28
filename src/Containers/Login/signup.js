@@ -20,6 +20,7 @@ const SignUp = ({ history }) => {
         .createUserWithEmailAndPassword(email.value, password.value)
   
       await app.getStorage().ref(`users/${app.getUserID()}/profilePhoto`).put(photoFile);
+      
       await app
         .getRootRef("users")
         .child(app.getUserID())
@@ -28,6 +29,7 @@ const SignUp = ({ history }) => {
             userID: app.getUserID(),
             age: age.value,
             url: userPhoto,
+            isLogged: true,
             sex: "-",
             weight: "-",
             height: "-",

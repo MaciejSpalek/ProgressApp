@@ -14,6 +14,7 @@ const DataWrapper = styled.div`
     ${flexCenter};
 `
 const Image = styled.div`
+    position: relative;
     border-radius: 50%;
     width: 3.5em;
     height: 3.5em;
@@ -26,13 +27,23 @@ const Nick = styled.div`
     font-size: 1em;
     font-weight: bold;
 `
+
+const LogDot = styled.span`
+    width: .6em;
+    height: .6em;
+    background-color: red;
+    border-radius: 50%;
+
+`
 const FriendBoxItem = ({ user }) => {
+    console.log(`User: ${user.nick}, isLogged: ${user.isLogged}`)
     return (
         <Container>
             <DataWrapper>
                 <Image style={{backgroundImage: `url(${user.url})`}}></Image>
                 <Nick> { Helpers.capitalizeFirstLetter(user.nick) }</Nick>
             </DataWrapper>
+            <LogDot style={user.isLogged ? {backgroundColor: "green"} : {backgroundColor: "red"}}></LogDot>
         </Container>
     )
 }

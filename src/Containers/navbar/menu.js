@@ -48,7 +48,8 @@ const Icon = styled.div`
         width: 5em;
 `
 
-const logout = () => {
+const logout = async () => {
+    await app.getRealTimeDatabase().ref("users").child(app.getUserID()).child("isLogged").set(false)
     app.logout();
 }
 
