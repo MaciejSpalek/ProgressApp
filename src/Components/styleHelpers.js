@@ -78,3 +78,9 @@ export const Button = styled.button`
   padding: 0 .3em;
   cursor: pointer;
 `
+
+
+export const FlexWrapper = styled.div`
+  ${flexCenter};
+  height: 100%;
+`

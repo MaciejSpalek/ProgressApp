@@ -33,12 +33,11 @@ const LogDot = styled.span`
     height: .6em;
     background-color: red;
     border-radius: 50%;
-
 `
-const FriendBoxItem = ({ user }) => {
-    console.log(`User: ${user.nick}, isLogged: ${user.isLogged}`)
+const FriendBoxItem = ({ user, handleConversation }) => {
+    
     return (
-        <Container>
+        <Container onClick={() => handleConversation(user)}>
             <DataWrapper>
                 <Image style={{backgroundImage: `url(${user.url})`}}></Image>
                 <Nick> { Helpers.capitalizeFirstLetter(user.nick) }</Nick>

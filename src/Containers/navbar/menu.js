@@ -49,7 +49,7 @@ const Icon = styled.div`
 `
 
 const logout = async () => {
-    await app.getRealTimeDatabase().ref("users").child(app.getUserID()).child("isLogged").set(false)
+    app.getRealTimeDatabase().ref("users").child(app.getUserID()).child("isLogged").set(false)
     app.logout();
 }
 
