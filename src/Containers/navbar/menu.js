@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChartBar, faStar, faRuler, faListOl, faUsers, faSignOutAlt, faHome, faUser } from '@fortawesome/free-solid-svg-icons'
+// import { faFacebook } from "@fortawesome/free-brands-svg-icons"
 
 const flexCenter = styleHelpers.flexCenter;
 const variables = styleHelpers.variables;

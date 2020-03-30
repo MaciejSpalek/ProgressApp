@@ -7,7 +7,7 @@ const Container = styled.div`
     ${flexCenter};
     justify-content:space-between;
     width: 100%;
-    border-bottom: .1em solid ${variables.$gray};
+    /* border-bottom: .1em solid ${variables.$gray}; */
     padding: .3em;
 `
 const DataWrapper = styled.div`

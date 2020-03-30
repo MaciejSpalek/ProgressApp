@@ -19,26 +19,24 @@ const Container = styled.div`
     width: 100%;
     height: calc(100vh - 64px);
     background-color: white;
-    padding: .5em;
+    /* padding: .5em; */
 `
 
 const MainBox = styled.div`
     ${flexCenter};
-    justify-content: space-between;
+    justify-content: flex-end;
     flex-direction: column;
     width: 100%;
     height: 100%;
 `
-const TopBox = styled.div`
-    width: 100%;
-`
+
 const SearchBox = styled.div`
     ${flexCenter};
     width: 100%;
     height:45px;
     padding: .2em .5em;
-    border-radius: .5em;
-    border: .1em solid ${variables.$gray};
+    border-bottom: .05em solid ${variables.$gray};
+    background-color: ${variables.$blue};
 `
 const Input = styled.input`
     width: 100%;
@@ -47,30 +45,26 @@ const Input = styled.input`
     outline: none;
     font-size:1.3em;
     margin-right: .5em;
+    background-color: ${variables.$blue};
 `
 const ProfileBox = styled.div`
     width: 100%;
-    padding: .5em;
     overflow-y: scroll;
 `
 
 
 
-const BottomBox = styled.div`
-    ${flexCenter}
-    flex-direction: column;
-    width: 100%;
-    padding: .5em;
 
-`
 const ToggleBox = styled.div`
     ${flexCenter};
     justify-content: space-between;
     width: 100%;
-    padding-top: 1em;
+    background-color: ${variables.$blue};
+    padding: .5em;
 `
 const FriendBox = styled.div`
     width: 100%;
+    padding: .5em;
 `
 const Caption = styled.p`
     color: ${variables.$gray};
@@ -126,13 +120,14 @@ const crossStyled = {
 class Friends extends Component {
     constructor() {
         super();
-        this.textInput = React.createRef();
+        // this.textInput = React.createRef();
         this.state = {
             constUsersArray: [],
             mutableUsersArray: [],
             friends: [],
             amountOfFriends: 0,
-            isBottomBoxHide: true,
+            isBottomBoxHide: false,
+            inputText: "",
 
             isConversationOpen: false,
             isConversationUserLogged: false,
@@ -192,11 +187,12 @@ class Friends extends Component {
         if(inputValue !== "") {
             this.setState({
                 mutableUsersArray: tempUsersArray,
-                isBottomBoxHide: true
+                inputText: inputValue
             }) 
         } else {
             this.setState({
-                mutableUsersArray: []
+                mutableUsersArray: [],
+                inputText: inputValue
             }) 
         }
           
@@ -214,7 +210,7 @@ class Friends extends Component {
     }
 
 
-    renderUserFriends() {
+    renderFriends() {
         return this.state.friends.map((friend, index) => {
             return (
                 <FriendBoxItem
@@ -230,13 +226,6 @@ class Friends extends Component {
         this.setState(prevstate => ({
             isBottomBoxHide: !prevstate.isBottomBoxHide
         }))
-
-        if(this.state.isBottomBoxHide && this.textInput.current.value !== "") {
-            this.textInput.current.value = "";
-            this.setState({
-                mutableUsersArray: []
-            })
-        }
     }
 
     openConversation = (user) => {
@@ -257,6 +246,7 @@ class Friends extends Component {
 
     render() {
         const { 
+            inputText,
             isBottomBoxHide, 
             amountOfFriends, 
             isConversationOpen, 
@@ -265,31 +255,33 @@ class Friends extends Component {
             conversationUsersPhoto, 
             
         } = this.state;
+
+        const content = <>
+                            <FriendBox>
+                                {inputText == "" ? this.renderFriends(): null}
+                            </FriendBox>
+                            
+                            <ProfileBox>
+                                {this.renderProfiles()}
+                            </ProfileBox>
+                            
+                            <SearchBox>
+                                <Input placeholder="Szukaj znajomych..." onChange={(e)=> this.filterNicks(e)} />
+                                <FontAwesomeIcon icon={faSearch} color={variables.$gray} style={{fontSize: "1.5em"}}/>
+                            </SearchBox>
+                        </>
         return (
             <Container>
                 {!isConversationOpen ?
                 <MainBox>
-                    <TopBox>
-                        <SearchBox>
-                            <Input placeholder="Szukaj znajomych..."  ref={this.textInput} onChange={(e)=> this.filterNicks(e)} />
-                            <FontAwesomeIcon icon={faSearch} color={variables.$gray} style={{fontSize: "1.5em"}}/>
-                        </SearchBox>
-                        <ProfileBox>
-                            {this.renderProfiles()}
-                        </ProfileBox>
-                    </TopBox>
-                    <BottomBox>
-                        <FriendBox>
-                            {!isBottomBoxHide ? this.renderUserFriends() : null}
-                        </FriendBox>
-                        <ToggleBox>
-                            <Caption>Znajomi ({amountOfFriends})</Caption>
-                            <ArrowButton 
-                                handleArrowButton={() => this.handleArrowButton()}
-                                isHide={isBottomBoxHide}
-                            />
-                        </ToggleBox>
-                    </BottomBox>
+                    {!isBottomBoxHide ? content : null}
+                    <ToggleBox>
+                        <Caption> Znajomi ({amountOfFriends}) </Caption>
+                        <ArrowButton 
+                            handleArrowButton={() => this.handleArrowButton()}
+                            isHide={isBottomBoxHide}
+                        />
+                    </ToggleBox>
                 </MainBox> 
                 :
                 <MessageWindow>
