@@ -8,6 +8,7 @@ import UserProfile from "./userProfile";
 import FriendBoxItem from "./friendBoxItem";
 import ArrowButton from "../../Components/arrowButton";
 import Cross from "../../Components/cross";
+import Message from "./message";
 
 
 const Container = styled.div`
@@ -118,6 +119,9 @@ const LogDot = styled.span`
 `
 
 const MessageWindowContent = styled.div`
+    ${flexCenter}
+    justify-content: flex-start;
+    flex-direction: column;
     width: 100%;
     height: 100%;
     overflow-y: scroll;
@@ -186,6 +190,14 @@ class Messanger extends Component {
                     friends: tempArray
                 })
             })
+        });
+
+        app.getRealTimeDatabase().ref("messages").on('child_changed', snapshot => {
+            this.getCurrentConversation((tempArray) => {
+                this.setState({
+                    conversation: tempArray
+                });
+            });
         });
     }
     
@@ -266,21 +278,23 @@ class Messanger extends Component {
                 conversation: tempArray
             })
         })
-        // await this.getCurrentConversation();
     }
 
     hideConversation = () => {
         this.setState({
-            isConversationOpen: false
+            isConversationOpen: false,
+            conversation: []
         })
     }
 
     renderMessages() {
-        return this.state.conversation.map(message => {
+        return this.state.conversation.map((message, index) => {
            return (
-               <h3>
-                   { message.user }
-               </h3>
+                <Message
+                    key={index}
+                    text={message.text}
+                    userID={message.user}
+               />
            )
         })
     }
