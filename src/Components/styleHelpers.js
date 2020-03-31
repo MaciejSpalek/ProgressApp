@@ -5,7 +5,7 @@ export const variables = {
     $grayBlue: "#005D95",
     $darkBlue: "rgb(0, 74, 121)",
     // $blue: "#0080C8",
-    $blue: "rgb(226, 226, 226)",
+    $blue: "rgb(230, 230, 230)",
     $orange: "#FF8E00",
     
 }

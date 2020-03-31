@@ -267,7 +267,7 @@ class Post extends Component  {
         postsRef.once('value', snapshot => {
             if(snapshot.val()[postKey].hasOwnProperty("userID")) {
                 const postMakerID = snapshot.val()[postKey].userID;
-                isYourPost = postMakerID == userID;
+                isYourPost = postMakerID === userID;
             }
         })
         return isYourPost;

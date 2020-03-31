@@ -2,21 +2,18 @@ import React, { Component } from "react";
 import styled from "styled-components";
 import Helpers from "../../Components/helpers"
 import app from "../../Components/base"
-import { variables, flexCenter } from "../../Components/styleHelpers";
+import { variables, flexCenter, FlexWrapper } from "../../Components/styleHelpers";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUserTimes, faUserPlus, faUserCheck } from "@fortawesome/free-solid-svg-icons";
+import { faUserPlus, faUserCheck } from "@fortawesome/free-solid-svg-icons";
 
 
 const Container = styled.div`
     ${flexCenter};
     justify-content:space-between;
     width: 100%;
-    border-bottom: .1em solid ${variables.$gray};
-    padding: .3em;
+    padding: .8em;
 `
-const DataWrapper = styled.div`
-    ${flexCenter};
-`
+
 const Image = styled.div`
     border-radius: 50%;
     width: 3.5em;
@@ -74,14 +71,14 @@ class UserProfile extends Component {
 
         const plusFriendIcon = <FontAwesomeIcon icon={faUserPlus} style={{color: variables.$darkBlue, fontSize: "1.5em"}} onClick={() => this.addFriendToDatabase(user)}/>
         const checkedFriendIcon = <FontAwesomeIcon icon={faUserCheck} style={{color: variables.$darkBlue, fontSize: "1.5em"}}/>
-        const deleteFriendIcon = <FontAwesomeIcon icon={faUserTimes} style={{color: variables.$darkBlue, fontSize: "1.5em"}}/>
+        // const deleteFriendIcon = <FontAwesomeIcon icon={faUserTimes} style={{color: variables.$darkBlue, fontSize: "1.5em"}}/>
        
         return (
             <Container>
-                <DataWrapper>
+                <FlexWrapper>
                     <Image style={{backgroundImage: `url(${user.url})`}}></Image>
                     <Nick> { Helpers.capitalizeFirstLetter(user.nick) }</Nick>
-                </DataWrapper>
+                </FlexWrapper>
                 {isYourUserFriend ? checkedFriendIcon : plusFriendIcon}
             </Container>
         )

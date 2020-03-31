@@ -4,8 +4,8 @@ import app from '../../Components/base'
 import { Link } from 'react-router-dom';
 import styled from 'styled-components'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faChartBar, faStar, faRuler, faListOl, faUsers, faSignOutAlt, faHome, faUser } from '@fortawesome/free-solid-svg-icons'
-// import { faFacebook } from "@fortawesome/free-brands-svg-icons"
+import { faChartBar, faStar, faRuler, faListOl, faSignOutAlt, faHome, faUser } from '@fortawesome/free-solid-svg-icons'
+import { faFacebookMessenger } from "@fortawesome/free-brands-svg-icons"
 
 const flexCenter = styleHelpers.flexCenter;
 const variables = styleHelpers.variables;
@@ -78,10 +78,10 @@ const Menu = ({isMenuActive, handleHamburger}) => {
                     </ListItem>
                 </Link>
 
-                <Link style={{textDecoration: "none"}} onClick={handleHamburger}  to="/friends">
+                <Link style={{textDecoration: "none"}} onClick={handleHamburger}  to="/messanger">
                     <ListItem>
-                        <Icon><FontAwesomeIcon icon={faUsers} color="#FF8E00" style={{fontSize:50}} /></Icon>
-                        <Caption>Znajomi</Caption>
+                        <Icon><FontAwesomeIcon icon={faFacebookMessenger} color="#FF8E00" style={{fontSize:50}} /></Icon>
+                        <Caption>Messanger</Caption>
                     </ListItem>
                 </Link>
 
