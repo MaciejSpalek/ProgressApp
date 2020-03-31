@@ -149,11 +149,13 @@ class Messanger extends Component {
             isBottomBoxHide: false,
             inputText: "",
 
+            conversation: [],
             isConversationOpen: false,
             isConversationUserLogged: false,
             converserNick: "",
             converserPhotoURL: "",
             converserID: ""
+
             
         }
     }
@@ -174,6 +176,7 @@ class Messanger extends Component {
                 amountOfFriends: counter
             })
         })
+        
     }
 
     componentDidUpdate() {
@@ -249,15 +252,21 @@ class Messanger extends Component {
         }))
     }
 
-    openConversation = (user) => {
-        this.setState({
-            isConversationOpen: true,
-            converserNick: user.nick,
+    openConversation = async (user) => {
+        await this.setState({
             isConversationUserLogged: user.isLogged,
             converserPhotoURL: user.url,
-            converserID: user.userID
+            converserNick: user.nick,
+            converserID: user.userID,
+            isConversationOpen: true,
         })
-        
+
+        await this.getCurrentConversation((tempArray) => {
+            this.setState({
+                conversation: tempArray
+            })
+        })
+        // await this.getCurrentConversation();
     }
 
     hideConversation = () => {
@@ -267,7 +276,13 @@ class Messanger extends Component {
     }
 
     renderMessages() {
-
+        return this.state.conversation.map(message => {
+           return (
+               <h3>
+                   { message.user }
+               </h3>
+           )
+        })
     }
 
     isConversationExist(conversations, firstUserID, secondUserID) {
@@ -283,12 +298,36 @@ class Messanger extends Component {
         return isConversationExist;
     }
     
+    getCurrentConversation = (setState) => {
+        const userID = app.getUserID(); 
+        const converserID = this.state.converserID; // your friends' ID from state
+        const messagesRef = app.getRealTimeDatabase().ref("messages");
+
+        messagesRef.once('value', snapshot=> {
+            const conversations = snapshot.val();
+            let tempConversation = [];
+            if(this.isConversationExist(conversations, userID, converserID)) {
+                for(let conversation in conversations) {
+                    const contributors = conversation.split("-")
+                    if(contributors[0] === userID && contributors[1] === converserID ||
+                        contributors[0] === converserID && contributors[1] === userID) {
+                        for(let messageID in conversations[conversation]) {
+                            const message = conversations[conversation][messageID]
+                            tempConversation.push(message)
+                        }
+                    } 
+                }
+            }
+            setState(tempConversation);
+        })
+    }
+
+
     sendMessage = (e) => {
         e.preventDefault();
         const { input } = e.target.elements;
         const userID = app.getUserID(); 
-        const converserID = this.state.converserID; // your friends' ID from state
-        
+        const converserID = this.state.converserID;
         const messagesRef = app.getRealTimeDatabase().ref("messages");
         const yourMessage = {
             user: userID,
@@ -297,27 +336,17 @@ class Messanger extends Component {
 
         messagesRef.once('value', snapshot=> {
             const conversations = snapshot.val();
-            console.log("Konwersacje: ", conversations)
-            console.log(userID, converserID)
             if(this.isConversationExist(conversations, userID, converserID)) {
-                console.log(`Konwersacja istnieje między: ${userID}, a ${converserID}`)
                 for(let conversation in conversations) {
                     const contributors = conversation.split("-")
 
-                    // if you created conversation
                     if(contributors[0] === userID && contributors[1] === converserID) {
                         messagesRef.child(`${userID}-${converserID}`).push(yourMessage);
-                        console.log("to ja stworzyłem konwe")
-                    } 
-
-                    // if you friend created conversation
-                    else if(contributors[0] === converserID && contributors[1] === userID) { 
+                    } else if(contributors[0] === converserID && contributors[1] === userID) { 
                         messagesRef.child(`${converserID}-${userID}`).push(yourMessage);
-                        console.log("to on stworzył konwe")
                     } 
                 }
             } else {
-                console.log("Konwersacja nie istnieje, tworzę ją!")
                 messagesRef.child(`${userID}-${converserID}`).push(yourMessage);
             }
         })
@@ -336,6 +365,7 @@ class Messanger extends Component {
             
         } = this.state;
 
+        console.log(this.state.conversation)
         const content = <>
                             <FriendBox>
                                 {inputText === "" ? this.renderFriends(): null}
@@ -378,11 +408,9 @@ class Messanger extends Component {
                             fontSize={{fontSize: "2em"}}
                         />
                     </MessageWindowHeader>
-
                     <MessageWindowContent>
                         {this.renderMessages()}
                     </MessageWindowContent>
-
                     <FormBox style={{ border: "none", padding: "1em .5em"}} onSubmit = {(e) => this.sendMessage(e)}>
                         <Input name="input" style={{ margin: 0 }} placeholder="Napisz..."></Input>
                         <FontAwesomeIcon icon={faPaperPlane} color={variables.$grayBlue} style={{fontSize: "1.5em"}}/>

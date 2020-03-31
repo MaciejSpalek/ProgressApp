@@ -326,7 +326,7 @@ class Post extends Component  {
                 <TopBox>
                     <Image style={{backgroundImage: `url(${url})`}}></Image>
                     <DescriptionWrapper>
-                        <Nick> { Helpers.capitalizeFirstLetter(nick) }</Nick>
+                        <Nick> { Helpers.capitalizeFirstLetter(nick)}</Nick>
                         <Date> {date} </Date>
                     </DescriptionWrapper>
                     {   
