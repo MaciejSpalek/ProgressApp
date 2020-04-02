@@ -1,4 +1,5 @@
 import React from "react";
+
 const Input = ({name, placeholder, value, onChange}) => {
     return (
         <label className="form__label">

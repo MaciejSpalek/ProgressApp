@@ -1,11 +1,13 @@
 import styled from "styled-components";
 
 export const variables = {
-    $gray: "rgb(14, 14, 14)",
+    $gray: "rgb(160, 160, 160)",
     $grayBlue: "#005D95",
     $darkBlue: "rgb(0, 74, 121)",
-    $blue: "#0080C8",
-    $orange: "#FF8E00"
+    // $blue: "#0080C8",
+    $blue: "rgb(230, 230, 230)",
+    $orange: "#FF8E00",
+    
 }
 
 export const flexCenter = {
@@ -76,4 +78,10 @@ export const Button = styled.button`
   font-weight: bold;
   padding: 0 .3em;
   cursor: pointer;
+`
+
+
+export const FlexWrapper = styled.div`
+  ${flexCenter};
+  height: 100%;
 `

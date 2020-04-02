@@ -12,37 +12,40 @@ const SignUp = ({ history }) => {
     async event => {
       event.preventDefault();
       const { email, password, nick, age} = event.target.elements;
-      
-        await app
-          .getApp()
-          .auth()
-          .createUserWithEmailAndPassword(email.value, password.value)
-          var photoFile = new File([""], userPhoto);
-               
-        await app.getStorage().ref(`users/${app.getUserID()}/profilePhoto`).put(photoFile);
-        await app
-          .getRootRef("users")
-          .child(app.getUserID())
-          .set({
-              nick: nick.value,
-              age: age.value,
-              url: userPhoto,
-              sex: "-",
-              weight: "-",
-              height: "-",
-              yourSport: "-",
-              trainingExperience: "-",
-              priority: "-",
-              aboutMe: "-"
-          })
+      const photoFile = new File([""], userPhoto);
 
-        await app
-          .getDatabase()
-          .collection("users")
-          .doc(app.getUserID())
-          .set({ 
-            measurement: [] 
-          });
+      await app
+        .getApp()
+        .auth()
+        .createUserWithEmailAndPassword(email.value, password.value)
+  
+      await app.getStorage().ref(`users/${app.getUserID()}/profilePhoto`).put(photoFile);
+      
+      await app
+        .getRootRef("users")
+        .child(app.getUserID())
+        .set({
+            nick: nick.value,
+            userID: app.getUserID(),
+            age: age.value,
+            url: userPhoto,
+            isLogged: true,
+            sex: "-",
+            weight: "-",
+            height: "-",
+            yourSport: "-",
+            trainingExperience: "-",
+            priority: "-",
+            aboutMe: "-"
+        })
+
+      await app
+        .getDatabase()
+        .collection("users")
+        .doc(app.getUserID())
+        .set({ 
+          measurement: [] 
+        });
 
         history.push("/");
     },

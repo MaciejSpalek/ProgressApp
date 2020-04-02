@@ -6,6 +6,7 @@ import Comments from "./comments";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faComment, faHeart, faTimes } from '@fortawesome/free-solid-svg-icons'
 import app from "../../Components/base";
+
 const flexCenter = styleHelpers.flexCenter;
 const variables = styleHelpers.variables;
 
@@ -178,7 +179,6 @@ class Post extends Component  {
                 const likes = posts[post];
                 for(let like in likes) {
                     if(userID === likes[like]) {
-                        console.log("Modyfikuje")
                         this.modifyLikeColor();
                     } 
                 }
@@ -267,7 +267,7 @@ class Post extends Component  {
         postsRef.once('value', snapshot => {
             if(snapshot.val()[postKey].hasOwnProperty("userID")) {
                 const postMakerID = snapshot.val()[postKey].userID;
-                isYourPost = postMakerID == userID;
+                isYourPost = postMakerID === userID;
             }
         })
         return isYourPost;
@@ -326,7 +326,7 @@ class Post extends Component  {
                 <TopBox>
                     <Image style={{backgroundImage: `url(${url})`}}></Image>
                     <DescriptionWrapper>
-                        <Nick> { Helpers.capitalizeFirstLetter(nick) }</Nick>
+                        <Nick> { Helpers.capitalizeFirstLetter(nick)}</Nick>
                         <Date> {date} </Date>
                     </DescriptionWrapper>
                     {   

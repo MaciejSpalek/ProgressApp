@@ -55,9 +55,64 @@ class FireBase {
   }
   getRootRef(refName) {
     return this.getRealTimeDatabase().ref(refName)
+  }
+
+  // returns all users except you
+  getAllUsers = (setState) => {
+    const usersRef = this.getRealTimeDatabase().ref("users");
+    const tempArray = [];
     
+    usersRef.on('value', snapshot => {
+        const users = snapshot.val();
+        for(let user in users) {
+            if(users[user].userID !== this.getUserID()) {
+                tempArray.push(users[user]);
+            }
+        }
+        setState(tempArray);
+    })
+  }
+
+  // returns all your friends
+  getAllFriends = (setState) => {
+    const userID = this.getUserID();
+    const friendsRef = this.getRealTimeDatabase().ref("friends").child(userID);
+    const usersRef = this.getRealTimeDatabase().ref("users");
+
+    friendsRef.on('value', snapshot => {
+        const friends = snapshot.val();
+        const tempArray = [];
+
+        for(let friend in friends) {
+            if(friends[friend].userID !== this.getUserID()) {
+              usersRef.child(friends[friend].userID).once('value', snapshot1 => {
+                tempArray.push(snapshot1.val());
+              })
+            }
+        }
+        setState(tempArray);
+    })
+  }
+
+  // returns amount of friends
+  countFriends(setState) {
+    const userID = this.getUserID();
+    const friendsRef = this.getRealTimeDatabase().ref("friends").child(userID);
+
+    friendsRef.on('value', snapshot => {
+        const friends = snapshot.val();
+        let counter = 0;
+        for(let friend in friends) {
+            if(friends[friend].userID !== this.getUserID()) {
+              counter++;
+            }
+        }
+        setState(counter);
+    })
   }
 }
+
+  
 
 export default new FireBase()
 

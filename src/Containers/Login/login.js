@@ -1,12 +1,14 @@
 import React, { useCallback, useContext } from "react";
+import app from "../../Components/base"
 import { withRouter, Redirect } from "react-router";
 import { Link } from "react-router-dom";
 import { Logo, Container, Form, Input, Button } from "../../Components/styleHelpers"
-import app from "../../Components/base"
 import { AuthContext } from "../../Auth"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faUser } from '@fortawesome/free-solid-svg-icons'
 import { variables } from "../../Components/styleHelpers";
+
+
 const Login = ({ history }) => {
   const handleLogin = useCallback(
     async event => {
@@ -14,6 +16,7 @@ const Login = ({ history }) => {
       const { email, password } = event.target.elements;
       try {
         await app.getApp().auth().signInWithEmailAndPassword(email.value, password.value);
+        app.getRealTimeDatabase().ref("users").child(app.getUserID()).child("isLogged").set(true);
         history.push("/");
       } catch (error) {
         alert(error);

@@ -3,7 +3,7 @@ import app from "../../Components/base";
 import styled from "styled-components";
 import ShareBox from "../../Components/shareBox";
 import PostBoard from "../MyPosts/postBoard";
-
+import scroll, { Link } from "react-scroll";
 import * as styleHelpers  from '../../Components/styleHelpers';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {  
@@ -12,7 +12,6 @@ import {
     faCameraRetro, 
     faExternalLinkSquareAlt
 } from '@fortawesome/free-solid-svg-icons';
-
 
 
 const flexCenter = styleHelpers.flexCenter;
@@ -36,7 +35,7 @@ const Container = styled.section`
     width: 100%;
     background-color: ${variables.$blue};
     padding: .5em;
-    overflow-x: scroll;
+    overflow-y: scroll;
 `
 
 const ProfileCard = styled.div`
@@ -216,6 +215,9 @@ class Profile extends Component {
             aboutMe: "-",
         }
     }
+
+
+
 
 
     componentDidMount() {
