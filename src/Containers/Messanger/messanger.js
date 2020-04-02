@@ -177,7 +177,7 @@ class Messanger extends Component {
   
     componentDidMount = () => {
         this._isMounted = true;
-        // if(this._isMounted) {
+        if(this._isMounted) {
             app.getAllUsers((tempArray) => {
                 this.setState({
                     constUsersArray: tempArray
@@ -193,15 +193,15 @@ class Messanger extends Component {
                     amountOfFriends: counter
                 })
             })
-        // }
+        }
     }
     componentWillUnmount() {
         this._isMounted = false;
     }
     componentDidUpdate() {
         this._isMounted = true;
-        // if(this._isMounted) {
-            app.getRealTimeDatabase().ref("users").on('child_changed', snapshot => {
+        if(this._isMounted) {
+            app.getRealTimeDatabase().ref("users").once('child_changed', snapshot => {
                 app.getAllFriends((tempArray) => {
                     this.setState({
                         friends: tempArray
@@ -209,7 +209,7 @@ class Messanger extends Component {
                 })
             });
 
-            app.getRealTimeDatabase().ref("messages").on('child_changed', snapshot => {
+            app.getRealTimeDatabase().ref("messages").once('child_changed', snapshot => {
                 this.getCurrentConversation((tempArray) => {
                         this.setState({
                             conversation: tempArray
@@ -217,9 +217,8 @@ class Messanger extends Component {
                             this.scrollToBottom();
                         });
                 });
-                
             });
-        // }
+        }
     }
     
     
@@ -363,6 +362,7 @@ class Messanger extends Component {
     }
 
 
+
     sendMessage = (e) => {
         e.preventDefault();
         const { input } = e.target.elements;
@@ -374,25 +374,25 @@ class Messanger extends Component {
             text: input.value,
             date: helpers.getFullDate("/")
         }
-
-        messagesRef.once('value', snapshot=> {
-            const conversations = snapshot.val();
-            if(this.isConversationExist(conversations, userID, converserID)) {
-                for(let conversation in conversations) {
-                    const contributors = conversation.split("-")
-
-                    if(contributors[0] === userID && contributors[1] === converserID) {
-                        messagesRef.child(`${userID}-${converserID}`).push(yourMessage);
-                    } else if(contributors[0] === converserID && contributors[1] === userID) { 
-                        messagesRef.child(`${converserID}-${userID}`).push(yourMessage);
-                    } 
+        if(!helpers.isInputEmpty(input)) {
+            messagesRef.once('value', snapshot=> {
+                const conversations = snapshot.val();
+                if(this.isConversationExist(conversations, userID, converserID)) {
+                    for(let conversation in conversations) {
+                        const contributors = conversation.split("-")
+    
+                        if(contributors[0] === userID && contributors[1] === converserID) {
+                            messagesRef.child(`${userID}-${converserID}`).push(yourMessage);
+                        } else if(contributors[0] === converserID && contributors[1] === userID) { 
+                            messagesRef.child(`${converserID}-${userID}`).push(yourMessage);
+                        } 
+                    }
+                } else {
+                    messagesRef.child(`${userID}-${converserID}`).push(yourMessage);
                 }
-            } else {
-                messagesRef.child(`${userID}-${converserID}`).push(yourMessage);
-            }
-        })
-
-        input.value = "";
+            })
+            helpers.clearInput(input);
+        }
     }
     render() {
         const { 

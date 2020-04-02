@@ -5,27 +5,33 @@ import app from '../../Components/base';
 
 const Container = styled.div`
     ${flexCenter}
+    flex-shrink:1;
     flex-direction: column;
     align-self: flex-start;
 `
 
 const Date = styled.p`
-    margin-right: .3em;
     align-self: flex-start;
     color: ${variables.$gray};
-    background-color: ${variables.$blue};
     border-radius: .5em;
     font-size: .8em;
-    padding: .5em;
+    padding: 0 .5em;
 `
 
 
 const ContentWrapper = styled.div`
-    ${flexCenter}
-    width: auto;
     padding: .5em;
     margin: .3em 0;
     border-radius: .5em;
+    text-align: left;
+
+    -ms-word-break: break-all;
+    word-break: break-all;
+    word-break: break-word;
+    -webkit-hyphens: auto;
+    -moz-hyphens: auto;
+    -ms-hyphens: auto;
+    hyphens: auto;
 `
 
 const converserStyle = {
@@ -36,12 +42,13 @@ const converserStyle = {
 
 const userStyle = {
     "alignSelf": "flex-end",
+    "textAlign": "right",
     "color": "white",
     "backgroundColor": variables.$grayBlue
 }
 
 const containerStyle = {
-    "alignSelf": "flex-end"
+    "alignSelf": "flex-end",
 }
 
 const dateStyle = {
