@@ -142,9 +142,18 @@ const crossStyled = {
     color: `${variables.$gray}`
 }
 
+
+
+
+
+  
+
+
 class Messanger extends Component {
+    
     constructor() {
         super();
+        this.messageWindow = React.createRef();
         this.state = {
             constUsersArray: [],
             mutableUsersArray: [],
@@ -159,11 +168,13 @@ class Messanger extends Component {
             converserNick: "",
             converserPhotoURL: "",
             converserID: ""
-
-            
         }
     }
 
+    scrollToBottom = () => {
+        this.messageWindow.current.scrollIntoView();
+    };
+  
     componentDidMount = () => {
         app.getAllUsers((tempArray) => {
             this.setState({
@@ -180,7 +191,6 @@ class Messanger extends Component {
                 amountOfFriends: counter
             })
         })
-        
     }
 
     componentDidUpdate() {
@@ -196,8 +206,11 @@ class Messanger extends Component {
             this.getCurrentConversation((tempArray) => {
                 this.setState({
                     conversation: tempArray
+                }, ()=> {
+                    this.scrollToBottom();
                 });
             });
+            
         });
     }
     
@@ -258,6 +271,20 @@ class Messanger extends Component {
         })
     }
 
+    
+    renderMessages() {
+        return this.state.conversation.map((message, index) => {
+            return (
+                <Message
+                    key={index}
+                    text={message.text}
+                    userID={message.user}
+                />
+            )
+        })
+    }
+
+
     handleArrowButton = () => {
         this.setState(prevstate => ({
             isBottomBoxHide: !prevstate.isBottomBoxHide
@@ -277,25 +304,15 @@ class Messanger extends Component {
             this.setState({
                 conversation: tempArray
             })
-        })
+        })   
+        
+        this.scrollToBottom();
     }
 
     hideConversation = () => {
         this.setState({
             isConversationOpen: false,
             conversation: []
-        })
-    }
-
-    renderMessages() {
-        return this.state.conversation.map((message, index) => {
-           return (
-                <Message
-                    key={index}
-                    text={message.text}
-                    userID={message.user}
-               />
-           )
         })
     }
 
@@ -379,7 +396,6 @@ class Messanger extends Component {
             
         } = this.state;
 
-        console.log(this.state.conversation)
         const content = <>
                             <FriendBox>
                                 {inputText === "" ? this.renderFriends(): null}
@@ -422,8 +438,9 @@ class Messanger extends Component {
                             fontSize={{fontSize: "2em"}}
                         />
                     </MessageWindowHeader>
-                    <MessageWindowContent>
+                    <MessageWindowContent >
                         {this.renderMessages()}
+                        <div ref={this.messageWindow} />
                     </MessageWindowContent>
                     <FormBox style={{ border: "none", padding: "1em .5em"}} onSubmit = {(e) => this.sendMessage(e)}>
                         <Input name="input" style={{ margin: 0 }} placeholder="Napisz..."></Input>
