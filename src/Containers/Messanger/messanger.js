@@ -9,7 +9,7 @@ import FriendBoxItem from "./friendBoxItem";
 import ArrowButton from "../../Components/arrowButton";
 import Cross from "../../Components/cross";
 import Message from "./message";
-
+import helpers from "../../Components/helpers";
 
 const Container = styled.div`
     ${flexCenter}
@@ -150,7 +150,7 @@ const crossStyled = {
 
 
 class Messanger extends Component {
-    
+    _isMounted = false;
     constructor() {
         super();
         this.messageWindow = React.createRef();
@@ -176,42 +176,50 @@ class Messanger extends Component {
     };
   
     componentDidMount = () => {
-        app.getAllUsers((tempArray) => {
-            this.setState({
-                constUsersArray: tempArray
+        this._isMounted = true;
+        // if(this._isMounted) {
+            app.getAllUsers((tempArray) => {
+                this.setState({
+                    constUsersArray: tempArray
+                })
             })
-        })
-        app.getAllFriends((tempArray) => {
-            this.setState({
-                friends: tempArray
-            })
-        })
-        app.countFriends((counter) => {
-            this.setState({
-                amountOfFriends: counter
-            })
-        })
-    }
-
-    componentDidUpdate() {
-        app.getRealTimeDatabase().ref("users").on('child_changed', snapshot => {
             app.getAllFriends((tempArray) => {
                 this.setState({
                     friends: tempArray
                 })
             })
-        });
-
-        app.getRealTimeDatabase().ref("messages").on('child_changed', snapshot => {
-            this.getCurrentConversation((tempArray) => {
+            app.countFriends((counter) => {
                 this.setState({
-                    conversation: tempArray
-                }, ()=> {
-                    this.scrollToBottom();
-                });
+                    amountOfFriends: counter
+                })
+            })
+        // }
+    }
+    componentWillUnmount() {
+        this._isMounted = false;
+    }
+    componentDidUpdate() {
+        this._isMounted = true;
+        // if(this._isMounted) {
+            app.getRealTimeDatabase().ref("users").on('child_changed', snapshot => {
+                app.getAllFriends((tempArray) => {
+                    this.setState({
+                        friends: tempArray
+                    })
+                })
             });
-            
-        });
+
+            app.getRealTimeDatabase().ref("messages").on('child_changed', snapshot => {
+                this.getCurrentConversation((tempArray) => {
+                        this.setState({
+                            conversation: tempArray
+                        }, ()=> {
+                            this.scrollToBottom();
+                        });
+                });
+                
+            });
+        // }
     }
     
     
@@ -279,6 +287,7 @@ class Messanger extends Component {
                     key={index}
                     text={message.text}
                     userID={message.user}
+                    date={message.date}
                 />
             )
         })
@@ -300,12 +309,12 @@ class Messanger extends Component {
             isConversationOpen: true,
         })
 
-        await this.getCurrentConversation((tempArray) => {
+        this.getCurrentConversation((tempArray) => {
             this.setState({
                 conversation: tempArray
             })
         })   
-        
+
         this.scrollToBottom();
     }
 
@@ -362,7 +371,8 @@ class Messanger extends Component {
         const messagesRef = app.getRealTimeDatabase().ref("messages");
         const yourMessage = {
             user: userID,
-            text: input.value
+            text: input.value,
+            date: helpers.getFullDate("/")
         }
 
         messagesRef.once('value', snapshot=> {
