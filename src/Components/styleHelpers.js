@@ -1,13 +1,12 @@
 import styled from "styled-components";
 
 export const variables = {
+    $lightGray: "rgb(220, 220, 220)",
     $gray: "rgb(160, 160, 160)",
     $grayBlue: "#005D95",
     $darkBlue: "rgb(0, 74, 121)",
-    // $blue: "#0080C8",
-    $blue: "rgb(230, 230, 230)",
+    $blue: "rgb(255, 255, 255)",
     $orange: "#FF8E00",
-    
 }
 
 export const flexCenter = {
