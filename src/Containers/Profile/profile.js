@@ -32,7 +32,7 @@ const Container = styled.section`
     left: 0;
     height: calc(100vh - 64px);
     width: 100%;
-    background-color: ${variables.$blue};
+    background-color: ${variables.$lightGray};
     padding: .5em;
     overflow-y: scroll;
 `
@@ -40,9 +40,9 @@ const Container = styled.section`
 const ProfileCard = styled.div`
     ${flexCenter};
     position: relative;
-    width: 280px;
+    width: 100%;
     height: 500px;
-    margin: 2em 0;
+    margin-bottom: .5em;
 `
 
 const Frontside = styled.div`
@@ -55,7 +55,6 @@ const Frontside = styled.div`
     transform-origin: center;
     z-index: 1;
     backface-visibility: hidden;
-    /* box-shadow: 0 0 .5em .1em black; */
 `
 const Backside = styled.div`
     ${flexCenter};
@@ -64,35 +63,35 @@ const Backside = styled.div`
     position: absolute;
     width: 100%;
     height: 100%;
-    border-radius: .5em;
     transition: .3s linear;
     transform-origin: center;
     transform:  rotateY(180deg);
-    /* box-shadow: 0 0 .5em .1em black; */
     background-color: ${variables.$blue};
     padding-bottom: .5em;
     z-index: -1;
 `
 const PhotoBox = styled.section`
     ${flexCenter}
+    flex-direction: column;
     position: relative;
     width: 100%;
     flex: 1;
-    border-top-right-radius: .5em;
-    border-top-left-radius: .5em;
     transition: .5s linear;
     background-color: ${variables.$blue};
     overflow: hidden;
-   
+`
+
+const Photo = styled.img`
+    width: 12em;
+    height: 12em;
+    border-radius: 50%;
+    margin-bottom: 1em;
 `
 
 const Nick = styled.span`
-    position:absolute;
-    bottom: .5em;
-    left: .5em;
     font-size: 1.5em;
     font-weight: bold;
-    color: white;
+    color: ${variables.$grayBlue};
     line-height:1;
 `
 const ButtonBox = styled.div`
@@ -100,8 +99,6 @@ const ButtonBox = styled.div`
     justify-content: flex-end;
     width: 100%;
     background-color: ${variables.$darkBlue};
-    border-bottom-right-radius: .5em;
-    border-bottom-left-radius: .5em;
 `
 
 
@@ -112,8 +109,6 @@ const AddBox = styled.form`
     grid-template-rows: repeat(15,1fr);
     grid-gap: .5em;
     width: 100%;
-    border-bottom-right-radius: .5em;
-    border-bottom-left-radius: .5em;
     padding: .5em;
     overflow-y: scroll;
 `
@@ -169,25 +164,6 @@ const ProfileBox = styled.div`
     padding: .5em;
     overflow-y: scroll;
 `
-const Photo = styled.img`
-    width: auto;
-    height: 100%;
-`
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -214,10 +190,6 @@ class Profile extends Component {
             aboutMe: "-",
         }
     }
-
-
-
-
 
     componentDidMount() {
         this._isMounted = true;
@@ -407,7 +379,7 @@ class Profile extends Component {
                         </ButtonBox>
                     </Frontside>
                     <Backside style={isRotateCard ? frontActive : null}>
-                        <ButtonBox style={{borderBottomLeftRadius: 0, borderBottomRightRadius: 0, borderTopLeftRadius: ".5em", borderTopRightRadius: ".5em"}}>
+                        <ButtonBox>
                             <FontAwesomeIcon icon={faPenSquare} style={{fontSize: 35, margin: '.1em'}} color={variables.$orange} onClick={this.editButtonHandler.bind(this)}/>
                             <FontAwesomeIcon icon={faExternalLinkSquareAlt} style={{fontSize: 35 , margin: '.1em'}} color={variables.$orange}  onClick={this.rotateCardHandler.bind(this)}/>
                         </ButtonBox>

@@ -110,6 +110,20 @@ class FireBase {
         setState(counter);
     })
   }
+
+
+
+  getUserCollection = ()=> {
+    return this.getDatabase().collection(`users`).doc(this.getUserID());
+  }
+
+  // setDataFromDocument = (setState)=> {
+  //     const document = this.getDocument();
+  //     document.get().then(doc => {
+  //       const array = doc.data().users;
+  //       setState();
+  //     })
+  // }
 }
 
   

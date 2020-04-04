@@ -6,7 +6,7 @@ import Home from './Containers/Home/home';
 import Measurements from './Containers/Measurements/measurements';
 import Profile from './Containers/Profile/profile'
 import Messanger from './Containers/Messanger/messanger';
-import Plan from './Containers/Plan/plan';
+import PlanBoard from './Containers/TrainingPlans/planBoard';
 import PrivateRoute from "./PrivateRoute";
 import { AuthProvider } from "./Auth";
 import app from "./Components/base";
@@ -44,7 +44,7 @@ import './App.scss';
               <Switch>
                   <PrivateRoute exact path="/" component={Home} />
                   <PrivateRoute exact path="/profile" component={Profile}/>
-                  <PrivateRoute exact path="/plan" component={Plan}/>
+                  <PrivateRoute exact path="/planBoard" component={PlanBoard}/>
                   <PrivateRoute exact path="/measurements" component={Measurements}/>
                   <PrivateRoute exact path="/messanger" component={Messanger}/>
                   <Route  path="/signup" component={SignUp} />

@@ -44,7 +44,8 @@ const SignUp = ({ history }) => {
         .collection("users")
         .doc(app.getUserID())
         .set({ 
-          measurement: [] 
+          // measurement: [] ,
+          plans: []
         });
 
         history.push("/");

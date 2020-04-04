@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 export const variables = {
-    $lightGray: "rgb(220, 220, 220)",
+    $lightGray: "rgb(230, 230, 230)",
     $gray: "rgb(160, 160, 160)",
     $grayBlue: "#005D95",
     $darkBlue: "rgb(0, 74, 121)",
@@ -23,7 +23,7 @@ export const Container = styled.section`
   left: 0;
   width: 100%;
   height: calc(100vh - 64px);
-  background-color: ${variables.$blue};
+  background-color: ${variables.$lightGray};
 `
 export const Form = styled.form`
   ${flexCenter};
@@ -83,4 +83,11 @@ export const Button = styled.button`
 export const FlexWrapper = styled.div`
   ${flexCenter};
   height: 100%;
+`
+
+export const SpaceBetweenWrapper = styled.div`
+  ${flexCenter};
+  justify-content: space-between;
+  width: 100%;
+  padding: .5em;
 `

@@ -71,7 +71,7 @@ const Menu = ({isMenuActive, handleHamburger}) => {
                     </ListItem>
                 </Link>
 
-                <Link style={{textDecoration: "none"}} onClick={handleHamburger}  to="/plan">
+                <Link style={{textDecoration: "none"}} onClick={handleHamburger}  to="/planBoard">
                     <ListItem>
                         <Icon><FontAwesomeIcon icon={faListOl} color="#FF8E00" style={{fontSize:50}} /></Icon>
                         <Caption>Plan</Caption>
