@@ -29,23 +29,22 @@ const Image = styled.div`
     height: 2.5em;
     background-position: center;
     background-size: cover;
-    background-color: ${variables.$blue};
     margin-right: .5em;
 `
 const Nick = styled.div`
-    color: white;
+    color: ${variables.$gray};
     font-size: 1em;
     font-weight: bold;
 `
 const Date = styled.span`
-    color: white;
+    color: ${variables.$gray};
     font-size: .8em;   
 `
 const ContentBox = styled.div`
     width: 100%;
-    color: white;
+    color: ${variables.$gray};
     text-align: left;
-    border-bottom: .1em solid ${variables.$grayBlue};
+    border-bottom: .05em solid ${variables.$lightGray};
     padding: .5em;
 `
 

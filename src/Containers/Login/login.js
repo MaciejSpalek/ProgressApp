@@ -36,13 +36,13 @@ const Login = ({ history }) => {
       <Input type="email" name="email" placeholder="email"></Input>
       <Input type="password" name="password" placeholder="hasło"></Input>
       <Button> Zaloguj </Button>
-      <Link to="/signup">
+      <Link style={{color: "white", fontWeight: "bold"}} to="/signup">
         Stwórz konto
       </Link>
       <Logo>
       <FontAwesomeIcon
         icon={faUser}
-        color={variables.$grayBlue}
+        color={variables.$gray}
         style={{ fontSize: 60 }}
       />
     </Logo>

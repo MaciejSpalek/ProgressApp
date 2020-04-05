@@ -16,11 +16,11 @@ const variables = styleHelpers.variables;
 
 const Container = styled.div`
     ${flexCenter}
-    background-color: rgb(0, 111, 175);
+    background-color: ${variables.$blue};
     flex-direction: column;
     width: 100%;
     margin: 1em 0;
-    border-radius: .3em;
+    /* border-radius: .3em; */
 `
 
 
@@ -31,10 +31,8 @@ const TopBox = styled.div`
     justify-content: flex-start;
     position: relative;
     width: 100%;
-    border-top-left-radius: .3em;
-    border-top-right-radius: .3em;
-    background-color: rgb(0, 111, 175);
-    border-bottom: .1em solid ${variables.$grayBlue};
+    background-color:  ${variables.$blue};
+    border-bottom: .05em solid ${variables.$lightGray};
     padding: .3em;
 `
 const DescriptionWrapper = styled.div`
@@ -48,23 +46,22 @@ const Image = styled.div`
     height: 3.5em;
     background-position: center;
     background-size: cover;
-    background-color: ${variables.$blue};
     margin-right: .5em;
 `
 const Nick = styled.div`
-    color: white;
+    color:  ${variables.$gray};
     font-size: 1em;
     font-weight: bold;
 `
 const Date = styled.span`
-    color: white;
+    color:  ${variables.$gray};
     font-size: .8em;   
 `
 const CrossIcon = styled.span`
     position: absolute;
     top:.4em;
     right: .6em;
-    color: white;
+    color: ${variables.$gray};
 `
 
 
@@ -72,7 +69,7 @@ const ContentBox = styled.div`
     ${flexCenter};
     justify-content: flex-start;
     width: 100%;
-    color: white;
+    color:  ${variables.$gray};
     text-align: left;
     padding: .5em;
 `
@@ -84,9 +81,8 @@ const BottomBox = styled.div`
     ${flexCenter};
     width: 100%;
     justify-content: space-between;
-    background-color: ${variables.$grayBlue};
-    border-bottom-left-radius: .3em;
-    border-bottom-right-radius: .3em;
+    border-top: .05em solid  ${variables.$lightGray};
+    background-color: ${variables.$blue};
 `
 const IconBox = styled.div`
     ${flexCenter};
@@ -104,7 +100,7 @@ const IconCaption = styled.span`
 const CommentBox = styled.form`
     ${flexCenter}
     flex-direction: column;
-    padding: .5em;
+    /* padding: .5em; */
 `
 const Input = styled.input`
     width: 80%;
@@ -117,6 +113,7 @@ const Input = styled.input`
 const AddBox = styled.div `
     ${flexCenter}
     width: 100%;
+    background-color: ${variables.$gray};
     padding: .5em 0;
 `
 
@@ -344,11 +341,11 @@ class Post extends Component  {
                 </ContentBox>
 
                 <BottomBox>
-                    <IconBox onClick={() => this.handleLike(postKey)} style={this.state.didUserLike ? {color:"#FF8E00"} : {color:"white"}}>
+                    <IconBox onClick={() => this.handleLike(postKey)} style={this.state.didUserLike ? {color:variables.$orange} : {color:variables.$grayBlue}}>
                         <FontAwesomeIcon icon={faHeart} style={{margin: '.2em', fontSize: "1.2em"}}/>
                         <IconCaption>{ likes }</IconCaption>
                     </IconBox>
-                    <IconBox style={{color:"white"}} onClick={this.commentBoxHideHandler}>
+                    <IconBox style={{color:variables.$grayBlue}} onClick={this.commentBoxHideHandler}>
                         <FontAwesomeIcon icon={faComment} style={{margin: '.2em'}} />
                         <IconCaption>{ this.countComments(postKey, comments) }</IconCaption>
                     </IconBox>

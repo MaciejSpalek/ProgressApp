@@ -32,7 +32,7 @@ export const Form = styled.form`
   flex-direction: column;
   width: 250px;
   height: 300px;
-  background-color: ${variables.$grayBlue};
+  background-color: ${variables.$gray};
   border-radius: .5em;
   padding: 4em 1em 1em 1em;
 `
@@ -46,28 +46,27 @@ export const Logo = styled.div`
   width: 100px;
   height: 100px;
   border-radius: 50%;
-  border: 0.2em solid ${variables.$grayBlue};
-  background-color: ${variables.$blue};
+  border: 0.2em solid ${variables.$gray};
+  background-color: ${variables.$lightGray};
 `
 
 export const Input = styled.input`
   background-color: white;
-  color: ${variables.$grayBlue};
+  color: ${variables.$gray};
   width: 100%;
   height: 35px;
   font-size: 1em;
-  font-weight: bold;
   border-radius: .2em;
   border: none;
   padding: 0 .3em;
   &::placeholder {
-    color: ${variables.$blue};
+    color: ${variables.$gray};
     font-weight: 100;
   }
 `
 
 export const Button = styled.button`
-  background-color: ${variables.$orange};
+  background-color: ${variables.$grayBlue};
   color: white;
   border: none;
   height: 35px;

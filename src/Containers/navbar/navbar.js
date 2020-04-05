@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {Component} from 'react';
 import Menu from './menu';
 import * as styleHelpers  from '../../Components/styleHelpers';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -14,12 +14,11 @@ const Nav = styled.div`
     justify-content: space-between;
     padding: .2em .5em;
     color: white;
-    background-color: ${variables.$darkBlue};
+    background-color: ${variables.$grayBlue};
     width: 100%;
     height: 64px;
     font-size: 1em;
     z-index: 1;
-    /* box-shadow: 0 .05em .5em .1em black; */
 `;
 const Logo = styled.div`
     ${flexCenter};
@@ -32,7 +31,7 @@ const Title = styled.span`
 
 
 
-class Navbar extends React.Component {
+class Navbar extends Component {
     constructor(props) {
         super(props);
         this.handleHamburger = this.handleHamburger.bind(this)
