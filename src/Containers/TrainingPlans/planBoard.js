@@ -16,7 +16,8 @@ const AddPlanWrapper = styled.div`
     ${flexCenter}
     justify-content: space-between;
     width: 100%;
-    background-color: ${variables.$grayBlue};
+    background-color:white;
+    border-bottom: .1em solid ${variables.$gray};
     padding: .5em;
 `
 const PlanWrapper = styled.div`
@@ -28,7 +29,7 @@ const PlanWrapper = styled.div`
     
 `
 const Text = styled.h2`
-    color: white;
+    color: ${variables.$gray};
 `
 const CaseText = styled.h2`
     color: ${variables.$grayBlue};
@@ -39,44 +40,6 @@ const Placeholder = styled.div`
     flex-direction: column;
 `
 
-
-const PlanForm = styled.form`
-    ${flexCenter};
-    flex-direction: column;
-    justify-content: flex-end;
-    height: 100%;
-    width: 100%;
-    background-color: ${variables.$lightGray};
-`
-const AddTaskForm = styled.form`
-    ${flexCenter};
-    align-items: flex-start;
-    flex-direction: column;
-    width: 100%;
-`
-const Input = styled.input`
-    width: 100%;
-    border: none;
-    font-size: 1.2em;
-    padding: .5em; 
-`
-const Button = styled.button`
-    width: 100%;
-    background-color: ${variables.$grayBlue};
-    color: white;
-    font-weight: bold;
-    font-size: 1.2em;
-    padding: .5em; 
-    border: none;
-`
-const Label = styled.label`
-    font-size: 1.2em;
-    padding: .25em .5em;
-`
-const Radio = styled.input`
-    width: 1.2em;
-    height: 1.2em;
-`
 
 class PlanBoard extends Component {
     constructor() {
@@ -140,7 +103,7 @@ class PlanBoard extends Component {
             <Container style={containerStyled}>
                 <AddPlanWrapper onClick={()=> this.createPlan()}>
                     <Text> Nowy plan</Text>
-                    <FontAwesomeIcon icon={faPlusSquare} style={{fontSize: 40, color: variables.$orange}}/>
+                    <FontAwesomeIcon icon={faPlusSquare} style={{fontSize: 40, color: variables.$grayBlue}}/>
                 </AddPlanWrapper>
                 <PlanWrapper style={plans.length ? {"justifyContent": "flex-start"} : {}}>
                     { plans.length ? this.renderPlans() : placeholder }
