@@ -95,6 +95,7 @@ class PlanBoard extends Component {
             return (
                 <Plan
                     key={index}
+                    planIndex={index}
                     planKey={plan.planKey}
                     date={plan.date}
                 />
@@ -109,7 +110,6 @@ class PlanBoard extends Component {
                                 <CaseText>Brak planów</CaseText>
                             </Placeholder>
 
-        console.log(plans)
         return (
             <Container style={containerStyled}>
                 <AddPlanWrapper onClick={()=> this.addPlan()}>

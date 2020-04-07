@@ -117,14 +117,12 @@ class FireBase {
     return this.getDatabase().collection(`users`).doc(this.getUserID());
   }
 
-  // setDataFromDocument = (setState)=> {
-  //     const document = this.getDocument();
-  //     document.get().then(doc => {
-  //       const array = doc.data().users;
-  //       setState();
-  //     })
-  // }
+ 
+  sortByDate(array) {
+    return array.sort((a,b) =>  new Date(b.date).getTime() - new Date(a.date).getTime());
 }
+}
+
 
   
 

@@ -97,7 +97,6 @@ class ShareBox extends Component {
                 comments: 0
             };
             textarea.value = "";
-            // updates['/user-posts/' + postData.userID + '/' + newPostKey] = postData;
             updates['/posts/' + newPostKey] = postData;
             return app.getRealTimeDatabase().ref().update(updates);
         }

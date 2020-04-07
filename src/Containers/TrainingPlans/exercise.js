@@ -4,15 +4,46 @@ import { variables, flexCenter, SpaceBetweenWrapper, FlexWrapper } from '../../C
 import ArrowButton from '../../Components/arrowButton'
 
 const Container = styled.div`
+    ${flexCenter}
+    justify-content: flex-start;
+    flex-direction: column;
     width: 100%;
-
+    border: .05em solid ${variables.$lightGray};
 `
+const Text = styled.p`
+    color: ${variables.$gray};
+    font-weight: bold;
+    font-size: 1.2em;
+`
+
 class exercise extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            isHidden: true
+        }
+    }
+    handleArrowButton() {
+        this.setState( prevState => ({
+            isHidden: !prevState.isHidden
+        }))
+    }
+
     render() {
-        const { name, type } = this.props
+        const { name } = this.props;
+        const { isHidden } = this.state;
         return (
             <Container>
-                
+                <SpaceBetweenWrapper style={{backgroundColor: "white"}}>
+                    <Text> {name } </Text>
+                    <ArrowButton
+                        backgroundColor={variables.$grayBlue}
+                        fontColor={variables.$orange}
+                        isHide={isHidden}
+                        handleArrowButton={()=> this.handleArrowButton()}
+                    />
+                </SpaceBetweenWrapper>
+                {/* {!isHidden ? planContent : null} */}
             </Container>
         )
     }

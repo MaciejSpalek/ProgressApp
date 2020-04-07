@@ -410,11 +410,9 @@ class Messanger extends Component {
                             <FriendBox>
                                 {inputText === "" ? this.renderFriends(): null}
                             </FriendBox>
-                            
                             <ProfileBox>
                                 {this.renderProfiles()}
                             </ProfileBox>
-                            
                             <SearchBox>
                                 <Input placeholder="Szukaj znajomych..." onChange={(e)=> this.filterNicks(e)} />
                                 <FontAwesomeIcon icon={faSearch} color={variables.$gray} style={{fontSize: "1.5em"}}/>
@@ -428,6 +426,8 @@ class Messanger extends Component {
                     <ToggleBox>
                         <Caption> Znajomi ({amountOfFriends}) </Caption>
                         <ArrowButton 
+                            color={"white"}
+                            backgroundColor={variables.$grayBlue}
                             handleArrowButton={() => this.handleArrowButton()}
                             isHide={isBottomBoxHide}
                         />

@@ -9,23 +9,22 @@ const Button = styled.button`
   font-weight: bold;
   font-size: 1em;
   color: white;
-  background-color: ${variables.$grayBlue};
   border: none;
   width:35px;
   height: 35px;
   border-radius: .2em;
 `;
 
-const ArrowButton = ({ isHide, handleArrowButton }) => {
+const ArrowButton = ({ isHide, handleArrowButton, fontColor, backgroundColor }) => {
     const arrowDown = { rotate: 0 };
     const arrowUp = { rotate: 180 };
 
     return (
-        <Button onClick={() => handleArrowButton()}>
+        <Button style={{backgroundColor: backgroundColor}} onClick={() => handleArrowButton()}>
             <FontAwesomeIcon 
                 icon={faAngleDown} 
                 transform={isHide ? arrowDown: arrowUp} 
-                color="white" 
+                color={fontColor} 
                 style={{fontSize:30}}
             />
         </Button>

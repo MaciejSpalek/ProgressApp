@@ -4,6 +4,7 @@ import { variables, flexCenter, SpaceBetweenWrapper, FlexWrapper } from '../../C
 import ArrowButton from '../../Components/arrowButton';
 import Exercise from './exercise';
 import app from '../../Components/base';
+import helpers from '../../Components/helpers';
 
 const Container = styled.div`
     ${flexCenter}
@@ -26,7 +27,6 @@ const PlanContent = styled.div`
     width: 100%;
     min-height: 70vh;
 `
-
 
 
 const AddExerciseForm = styled.form`
@@ -58,7 +58,14 @@ const Radio = styled.input`
     height: 1.2em;
 `
 
+const Caption = styled.h2`
+    font-size: 1.5em;
+    color: ${variables.$gray};
+    padding: .5em;
+`
+
 class Plan extends Component {
+    _isMounted = false;
     constructor(props) {
         super(props);
         this.state = {
@@ -69,9 +76,13 @@ class Plan extends Component {
     }
 
     componentDidMount() {
-        // this.assignExercisesToState();
+        this._isMounted = true;
+        this.assignExercisesToState();
     }
 
+    componentWillUnmount() {
+        this._isMounted = false;
+    }
     handleArrowButton() {
         this.setState( prevState => ({
             isHidden: !prevState.isHidden
@@ -87,13 +98,29 @@ class Plan extends Component {
 
 
     assignExercisesToState() {
+        const planKey = this.props.planKey;
         const userID = app.getUserID();
         const usersPlansRef = app.getRealTimeDatabase().ref('users-plans').child(userID);
+
         usersPlansRef.on("value", snapshot => {
-            // const plans = helpers.snapshotToArray(snapshot);
-            // if (this._isMounted) {
-            //     this.setState({plans})
-            // }
+            const tempArray = [];
+            const plans = snapshot.val()
+            for(let planID in plans) {
+                if(planKey === planID) {
+                    const properties = plans[planID];
+                    for(let prop in properties) {
+                        const exercise = properties[prop];
+                        if(typeof properties[prop] === "object") {
+                            tempArray.push(exercise);
+                        }
+                    }
+                }
+            }
+            if( this._isMounted) {
+                this.setState({
+                    exercises: tempArray
+                })
+            }
         })
     }
 
@@ -103,18 +130,20 @@ class Plan extends Component {
         const radioValue = this.state.radio;
         const { name } = e.target.elements;
         
-        const userID = app.getUserID();
-        const currentPlanRef = app.getRealTimeDatabase().ref('users-plans').child(userID).child(planKey);
-        const exerciseKey = currentPlanRef.push().key;
-        const updates = {};
-        const data = {
-            exerciseKey: exerciseKey,
-            name: name.value,
-            type: radioValue
+        if(!helpers.isInputEmpty(name)) {
+            const userID = app.getUserID();
+            const currentPlanRef = app.getRealTimeDatabase().ref('users-plans').child(userID).child(planKey);
+            const exerciseKey = currentPlanRef.push().key;
+            const updates = {};
+            const data = {
+                exerciseKey: exerciseKey,
+                name: helpers.capitalizeFirstLetter(name.value),
+                type: radioValue
+            }
+            updates[`users-plans/${userID}/${planKey}/${exerciseKey}`] = data;
+            helpers.clearInput(name);
+            return app.getRealTimeDatabase().ref().update(updates);
         }
-
-        updates[`users-plans/${userID}/${planKey}/${exerciseKey}`] = data;
-        return app.getRealTimeDatabase().ref().update(updates);
     }
 
     
@@ -132,8 +161,11 @@ class Plan extends Component {
         })
     }
 
+    isExercisesExist() {
+        return this.state.exercises.length;
+    }
     render() {
-        const { date, planKey } = this.props;
+        const { date, planKey, planIndex } = this.props;
         const { isHidden, exercises, radio } = this.state;
 
         const AddingBox =   <AddExerciseForm onSubmit={(e)=> this.addExercise(e, planKey)}>
@@ -145,16 +177,25 @@ class Plan extends Component {
                                 <Button>Dodaj</Button>
                             </AddExerciseForm>
 
-        const planContent = <PlanContent style={ exercises.length ? {"justifyContent": "space-between"} : {"justifyContent": "flex-end"}}>
-                                {this.renderExercise()}
+        const planContent = <PlanContent style={ this.isExercisesExist() ? {"justifyContent": "space-between"} : {"justifyContent": "flex-end"}}>
+                                <FlexWrapper style={{
+                                    flexDirection: "column",
+                                    justifyContent: "flex-start", 
+                                    overflow: 'scroll'
+                                }}>
+                                    <Caption> { this.isExercisesExist() ? "Lista ćwiczeń" : "Brak dodanych ćwiczeń"}</Caption>
+                                    {this.renderExercise()}
+                                </FlexWrapper>
                                 {AddingBox}
                             </PlanContent>
         
         return (
             <Container>
                 <SpaceBetweenWrapper style={{backgroundColor: "white"}}>
-                    <Date> {date} </Date>
+                    <Date>Plan {planIndex+1},  {date} </Date>
                     <ArrowButton
+                        color={"white"}
+                        backgroundColor={variables.$grayBlue}
                         isHide={isHidden}
                         handleArrowButton={()=> this.handleArrowButton()}
                     />

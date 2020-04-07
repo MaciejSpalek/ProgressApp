@@ -3,6 +3,7 @@ import styled from "styled-components";
 export const variables = {
     $lightGray: "rgb(230, 230, 230)",
     $gray: "rgb(160, 160, 160)",
+    $lightBlue: "rgb(0, 157, 255)",
     $grayBlue: "#005D95",
     $darkBlue: "rgb(0, 74, 121)",
     $blue: "rgb(255, 255, 255)",
@@ -81,6 +82,7 @@ export const Button = styled.button`
 
 export const FlexWrapper = styled.div`
   ${flexCenter};
+  width: 100%;
   height: 100%;
 `
 
