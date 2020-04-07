@@ -9,7 +9,7 @@ const Container = styled.div`
 `
 class exercise extends Component {
     render() {
-        const { exerciseName, exerciseType } = this.props
+        const { name, type } = this.props
         return (
             <Container>
                 

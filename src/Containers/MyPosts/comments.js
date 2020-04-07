@@ -12,7 +12,7 @@ const Container = styled.div`
 class Comments extends Component {
 
     renderComments() {
-        return this.props.comments.map((comment, index) => {
+        return this.props.comments.map(comment => {
             return ( 
                 <Comment
                    data={comment}

@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 import { variables, flexCenter, SpaceBetweenWrapper, FlexWrapper } from '../../Components/styleHelpers';
 import ArrowButton from '../../Components/arrowButton';
+import Exercise from './exercise';
+import app from '../../Components/base';
 
 const Container = styled.div`
     ${flexCenter}
@@ -66,21 +68,14 @@ class Plan extends Component {
         }
     }
 
+    componentDidMount() {
+        // this.assignExercisesToState();
+    }
+
     handleArrowButton() {
         this.setState( prevState => ({
             isHidden: !prevState.isHidden
         }))
-    }
-
-    addExercise(e){
-        e.preventDefault()
-        const radioValue = this.state.radio;
-        const { exerciseName } = e.target.elements;
-        console.log(exerciseName.value);
-    }
-
-    renderExercise() {
-
     }
 
     handleRadioButton(e) {
@@ -88,22 +83,72 @@ class Plan extends Component {
             [e.target.name]: e.target.value
         })
     }
+
+
+
+    assignExercisesToState() {
+        const userID = app.getUserID();
+        const usersPlansRef = app.getRealTimeDatabase().ref('users-plans').child(userID);
+        usersPlansRef.on("value", snapshot => {
+            // const plans = helpers.snapshotToArray(snapshot);
+            // if (this._isMounted) {
+            //     this.setState({plans})
+            // }
+        })
+    }
+
+
+    addExercise(e, planKey){
+        e.preventDefault()
+        const radioValue = this.state.radio;
+        const { name } = e.target.elements;
+        
+        const userID = app.getUserID();
+        const currentPlanRef = app.getRealTimeDatabase().ref('users-plans').child(userID).child(planKey);
+        const exerciseKey = currentPlanRef.push().key;
+        const updates = {};
+        const data = {
+            exerciseKey: exerciseKey,
+            name: name.value,
+            type: radioValue
+        }
+
+        updates[`users-plans/${userID}/${planKey}/${exerciseKey}`] = data;
+        return app.getRealTimeDatabase().ref().update(updates);
+    }
+
+    
+  
+    renderExercise() {
+        return this.state.exercises.map((exercise, index) => {
+            return (
+                <Exercise
+                    key={index}
+                    exerciseKey={exercise.exerciseKey}
+                    name={exercise.name}
+                    type={exercise.type}
+                />
+            )
+        })
+    }
+
     render() {
-        const { date } = this.props;
+        const { date, planKey } = this.props;
         const { isHidden, exercises, radio } = this.state;
-        const AddingBox =   <AddExerciseForm onSubmit={(e)=> this.addExercise(e)}>
-                                <Input type="text" name="exerciseName" placeholder="Nazwa ćwiczenia"></Input>
+
+        const AddingBox =   <AddExerciseForm onSubmit={(e)=> this.addExercise(e, planKey)}>
+                                <Input type="text" name="name" placeholder="Nazwa ćwiczenia"></Input>
                                 <FlexWrapper style={{ padding: '.5em 0' }}>
                                     <Label><Radio type="radio" name="radio" value="reps" checked={radio === "reps"} onChange={(e) => this.handleRadioButton(e)}></Radio> na powótrzenia </Label>
                                     <Label><Radio type="radio" name="radio" value="time" checked={radio === "time"} onChange={(e) => this.handleRadioButton(e)}></Radio> na czas </Label>
                                 </FlexWrapper>
                                 <Button>Dodaj</Button>
                             </AddExerciseForm>
+
         const planContent = <PlanContent style={ exercises.length ? {"justifyContent": "space-between"} : {"justifyContent": "flex-end"}}>
                                 {this.renderExercise()}
                                 {AddingBox}
                             </PlanContent>
-        
         
         return (
             <Container>

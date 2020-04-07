@@ -42,6 +42,7 @@ const Placeholder = styled.div`
 
 
 class PlanBoard extends Component {
+    _isMounted = false;
     constructor() {
         super();
         this.state = {
@@ -51,40 +52,50 @@ class PlanBoard extends Component {
     }
 
     componentDidMount() {
-        this.setDataFromDocument();
+        this._isMounted = true;
+        this.assignPlansToState();
     }
-    
-    setDataFromDocument = ()=> {
-        const document = app.getUserCollection();
-        document.get().then(doc => {
-            this.setState({
-                plans: doc.data().plans
-            })
+
+    componentWillUnmount() {
+        this._isMounted = false;
+    }
+
+
+    assignPlansToState() {
+        const userID = app.getUserID();
+        const usersPlansRef = app.getRealTimeDatabase().ref('users-plans').child(userID);
+        usersPlansRef.on("value", snapshot => {
+            const plans = helpers.snapshotToArray(snapshot);
+            if (this._isMounted) {
+                this.setState({plans})
+            }
         })
     }
 
-    updatePlans = ()=> {
-        app.getUserCollection().update({
-            "plans": this.state.plans
-        })
-    }
 
-    createPlan = ()=> {
+
+    addPlan() {
+        const userID = app.getUserID();
+        const usersPlansRef = app.getRealTimeDatabase().ref('users-plans').child(userID);
+        const planKey = usersPlansRef.push().key;
+        const updates = {};
         const plan = {
-            date: helpers.getCurrentDate("/"),
+            planKey: planKey,
+            date: helpers.getCurrentDate("/")
         }
-        this.setState({
-            plans: [...this.state.plans, plan]
-        }, ()=> {
-            this.updatePlans();
-        })   
-    }
 
-    renderPlans = ()=> {
+        updates[`users-plans/${userID}/${planKey}`] = plan;
+        return app.getRealTimeDatabase().ref().update(updates);
+    }
+   
+
+
+    renderPlans() {
         return this.state.plans.map((plan, index) => {
             return (
                 <Plan
                     key={index}
+                    planKey={plan.planKey}
                     date={plan.date}
                 />
             )
@@ -98,10 +109,10 @@ class PlanBoard extends Component {
                                 <CaseText>Brak planów</CaseText>
                             </Placeholder>
 
-        
+        console.log(plans)
         return (
             <Container style={containerStyled}>
-                <AddPlanWrapper onClick={()=> this.createPlan()}>
+                <AddPlanWrapper onClick={()=> this.addPlan()}>
                     <Text> Nowy plan</Text>
                     <FontAwesomeIcon icon={faPlusSquare} style={{fontSize: 40, color: variables.$grayBlue}}/>
                 </AddPlanWrapper>

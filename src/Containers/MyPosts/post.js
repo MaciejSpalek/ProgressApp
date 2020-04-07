@@ -317,7 +317,6 @@ class Post extends Component  {
     render() {
         const { url, nick, content, date, likes, postKey } = this.props;
         const { comments } = this.state;
-
         return (
             <Container>
                 <TopBox>
