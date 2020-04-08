@@ -39,7 +39,7 @@ class PostBoard extends Component {
 
     renderPosts() {
         const sortedArray = app.sortByDate(this.state.posts);
-        return sortArray.map((post, index) => {
+        return sortedArray.map((post, index) => {
             return ( 
                 <Post 
                     userID={post.userID}

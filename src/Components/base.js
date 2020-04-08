@@ -58,7 +58,7 @@ class FireBase {
   }
 
   // returns all users except you
-  getAllUsers = (setState) => {
+  getAllUsers(setState) {
     const usersRef = this.getRealTimeDatabase().ref("users");
     const tempArray = [];
     
@@ -74,7 +74,7 @@ class FireBase {
   }
 
   // returns all your friends
-  getAllFriends = (setState) => {
+  getAllFriends(setState) {
     const userID = this.getUserID();
     const friendsRef = this.getRealTimeDatabase().ref("friends").child(userID);
     const usersRef = this.getRealTimeDatabase().ref("users");
@@ -113,14 +113,14 @@ class FireBase {
 
 
 
-  getUserCollection = ()=> {
+  getUserCollection() {
     return this.getDatabase().collection(`users`).doc(this.getUserID());
   }
 
  
   sortByDate(array) {
     return array.sort((a,b) =>  new Date(b.date).getTime() - new Date(a.date).getTime());
-}
+  }
 }
 
 

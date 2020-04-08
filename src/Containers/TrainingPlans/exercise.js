@@ -34,11 +34,11 @@ class exercise extends Component {
         const { isHidden } = this.state;
         return (
             <Container>
-                <SpaceBetweenWrapper style={{backgroundColor: "white"}}>
-                    <Text> {name } </Text>
+                <SpaceBetweenWrapper style={{backgroundColor: variables.$lightRed}}>
+                    <Text> { name } </Text>
                     <ArrowButton
                         backgroundColor={variables.$grayBlue}
-                        fontColor={variables.$orange}
+                        fontColor={"white"}
                         isHide={isHidden}
                         handleArrowButton={()=> this.handleArrowButton()}
                     />

@@ -1,20 +1,25 @@
 import styled from "styled-components";
 
 export const variables = {
-    $lightGray: "rgb(230, 230, 230)",
     $gray: "rgb(160, 160, 160)",
+    $lightGray: "rgb(230, 230, 230)",
+    
+    $blue: "rgb(255, 255, 255)",
     $lightBlue: "rgb(0, 157, 255)",
     $grayBlue: "#005D95",
     $darkBlue: "rgb(0, 74, 121)",
-    $blue: "rgb(255, 255, 255)",
+
+    $lightRed: "rgb(255, 227, 227)",
     $orange: "#FF8E00",
 }
+
 
 export const flexCenter = {
     "display": "flex",
     "justify-content": "center",
     "align-items": "center"
 }
+
 
 // styles for login.js & signup.js
 export const Container = styled.section`
@@ -80,6 +85,9 @@ export const Button = styled.button`
 `
 
 
+
+
+// flex containers
 export const FlexWrapper = styled.div`
   ${flexCenter};
   width: 100%;
@@ -91,4 +99,12 @@ export const SpaceBetweenWrapper = styled.div`
   justify-content: space-between;
   width: 100%;
   padding: .5em;
+`
+
+export const Paragraph = styled.p`
+  font-size: 1.3em;
+  font-weight: bold;
+  align-self: flex-start;
+  color: ${variables.$gray};
+  /* padding: 0 .5em; */
 `
