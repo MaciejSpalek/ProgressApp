@@ -74,6 +74,7 @@ class PlanBoard extends Component {
 
 
 
+    
     addPlan() {
         const userID = app.getUserID();
         const usersPlansRef = app.getRealTimeDatabase().ref('users-plans').child(userID);
@@ -81,7 +82,9 @@ class PlanBoard extends Component {
         const updates = {};
         const plan = {
             planKey: planKey,
-            date: helpers.getCurrentDate("/")
+            isHidden: true,
+            date: helpers.getCurrentDate("/"),
+            id: this.state.plans.length+1
         }
 
         updates[`users-plans/${userID}/${planKey}`] = plan;
@@ -89,21 +92,40 @@ class PlanBoard extends Component {
     }
    
 
+    filterPlans(array) {
+        let tempItem = null;
+        let isSomeHidden = false;
 
+        array.forEach(item => {
+            if(!item.isHidden) {
+                isSomeHidden = true;
+                tempItem = item;
+            }
+        })
+
+        if(isSomeHidden) {
+            array = [];
+            array.push(tempItem)
+        } 
+
+        return array;
+    }
     renderPlans() {
-        return this.state.plans.map((plan, index) => {
+        return this.filterPlans(this.state.plans).map((plan, index) => {
             return (
                 <Plan
                     key={index}
-                    planIndex={index}
                     planKey={plan.planKey}
                     date={plan.date}
+                    id={plan.id}
+                    isHidden={plan.isHidden}
                 />
             )
         })
     }
 
     render() {
+        console.log(this.filterPlans(this.state.plans))
         const { plans } = this.state;
         const placeholder = <Placeholder>
                                 <FontAwesomeIcon icon={faListOl} style={{fontSize: 120, color: variables.$grayBlue}}/>

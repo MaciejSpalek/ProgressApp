@@ -2,7 +2,6 @@ import React from "react"
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faAngleDown } from '@fortawesome/free-solid-svg-icons'
-import { variables } from "./styleHelpers"
 
 
 const Button = styled.button`
@@ -15,12 +14,11 @@ const Button = styled.button`
   border-radius: .2em;
 `;
 
-const ArrowButton = ({ isHide, handleArrowButton, fontColor, backgroundColor }) => {
+const ArrowButton = ({ isHide, handleFunctions, fontColor, backgroundColor }) => {
     const arrowDown = { rotate: 0 };
     const arrowUp = { rotate: 180 };
-
     return (
-        <Button style={{backgroundColor: backgroundColor}} onClick={() => handleArrowButton()}>
+        <Button style={{backgroundColor: backgroundColor}} onClick={() => handleFunctions()}>
             <FontAwesomeIcon 
                 icon={faAngleDown} 
                 transform={isHide ? arrowDown: arrowUp} 

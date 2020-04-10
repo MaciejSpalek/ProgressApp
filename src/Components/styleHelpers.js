@@ -85,6 +85,17 @@ export const Button = styled.button`
 `
 
 
+export const Caption = styled.p`
+    color: ${variables.$gray};
+    font-size: 1.3em;
+    font-weight: bold;
+`
+export const Paragraph = styled.p`
+  font-size: 1.3em;
+  font-weight: bold;
+  align-self: flex-start;
+  color: ${variables.$gray};
+`
 
 
 // flex containers
@@ -101,10 +112,8 @@ export const SpaceBetweenWrapper = styled.div`
   padding: .5em;
 `
 
-export const Paragraph = styled.p`
-  font-size: 1.3em;
-  font-weight: bold;
-  align-self: flex-start;
-  color: ${variables.$gray};
-  /* padding: 0 .5em; */
+export const FlexComponent = styled.div`
+  ${flexCenter};
+  width: 100%;
+  padding: .5em;
 `

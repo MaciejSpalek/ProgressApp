@@ -1,7 +1,12 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
-import { variables, flexCenter, SpaceBetweenWrapper, FlexWrapper } from '../../Components/styleHelpers'
-import ArrowButton from '../../Components/arrowButton'
+import { variables, flexCenter, FlexComponent } from '../../Components/styleHelpers'
+import TogglePanel from '../../Components/togglePanel';
+
+const toggleFlexStyles = {
+    "justifyContent": "space-between",
+    "backgroundColor": "white"
+}
 
 const Container = styled.div`
     ${flexCenter}
@@ -29,21 +34,22 @@ class exercise extends Component {
         }))
     }
 
+    handleFunctions() {
+        this.handleArrowButton()
+    }
     render() {
         const { name } = this.props;
         const { isHidden } = this.state;
         return (
             <Container>
-                <SpaceBetweenWrapper style={{backgroundColor: variables.$lightRed}}>
-                    <Text> { name } </Text>
-                    <ArrowButton
-                        backgroundColor={variables.$grayBlue}
-                        fontColor={"white"}
-                        isHide={isHidden}
-                        handleArrowButton={()=> this.handleArrowButton()}
-                    />
-                </SpaceBetweenWrapper>
-                {/* {!isHidden ? planContent : null} */}
+                <TogglePanel 
+                    handleFunctions={()=> this.handleFunctions()} 
+                    buttonBackgroundColor={variables.$grayBlue}
+                    flexStyles={toggleFlexStyles}
+                    arrowColor={"white"}
+                    isHidden={isHidden}
+                    text={name}   
+                />
             </Container>
         )
     }
