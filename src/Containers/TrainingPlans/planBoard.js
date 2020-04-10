@@ -92,20 +92,23 @@ class PlanBoard extends Component {
     }
    
 
+    // if exist some opened plan, return only this plan, otherwise return all plans
     filterPlans(array) {
-        let tempItem = null;
-        let isSomeHidden = false;
+        let tempPlan = null;
+        let isSomePlanOpened = false;
 
-        array.forEach(item => {
-            if(!item.isHidden) {
-                isSomeHidden = true;
-                tempItem = item;
+
+        array.forEach(plan => {
+            // if some item is opened (!hidden)
+            if(!plan.isHidden) {
+                isSomePlanOpened = true;
+                tempPlan = plan;
             }
         })
 
-        if(isSomeHidden) {
+        if(isSomePlanOpened) {
             array = [];
-            array.push(tempItem)
+            array.push(tempPlan)
         } 
 
         return array;
@@ -124,8 +127,16 @@ class PlanBoard extends Component {
         })
     }
 
+    isSomePlanOpened() {
+        let isSomePlanOpened = false;
+        this.state.plans.forEach(plan => {
+            if(!plan.isHidden) {
+                isSomePlanOpened = true;
+            }
+        })
+        return isSomePlanOpened;
+    }
     render() {
-        console.log(this.filterPlans(this.state.plans))
         const { plans } = this.state;
         const placeholder = <Placeholder>
                                 <FontAwesomeIcon icon={faListOl} style={{fontSize: 120, color: variables.$grayBlue}}/>
@@ -134,10 +145,12 @@ class PlanBoard extends Component {
 
         return (
             <Container style={containerStyled}>
+                {!this.isSomePlanOpened() ?
                 <AddPlanWrapper onClick={()=> this.addPlan()}>
                     <Text> Nowy plan</Text>
                     <FontAwesomeIcon icon={faPlusSquare} style={{fontSize: 40, color: variables.$grayBlue}}/>
                 </AddPlanWrapper>
+                : null}
                 <PlanWrapper style={plans.length ? {"justifyContent": "flex-start"} : {}}>
                     { plans.length ? this.renderPlans() : placeholder }
                 </PlanWrapper>

@@ -112,9 +112,8 @@ class Plan extends Component {
     componentWillUnmount() {
         this._isMounted = false;
     }
-
-    // handlers
     
+
     handleRadioButton(e) {
         this.setState({
             [e.target.name]: e.target.value
@@ -164,11 +163,9 @@ class Plan extends Component {
             return app.getRealTimeDatabase().ref().update(updates);
         }
     }
-
     filterExercises(array) {
         return array.filter(item => item.planKey === this.props.planKey);
     }
-
     renderExercise() {
         const filteredArray = this.filterExercises(this.state.exercises);
         return filteredArray.map((exercise, index) => {
@@ -204,29 +201,48 @@ class Plan extends Component {
         const { date, planKey, id, isHidden } = this.props;
         const { radio } = this.state;
 
-        const selectMenu =  <Select>
-                                <Option value="0">Niski</Option>
-                                <Option value="1">Średni</Option>
-                                <Option value="2">Wysoki</Option>
-                            </Select>
-
         const AddPanel =   <Form onSubmit={(e)=> this.addExercise(e, planKey)}>
                                 <Paragraph>Uzupełnij podstawowe dane</Paragraph>
-                                <Input type="text" name="name" placeholder="nazwa ćwiczenia"></Input>
-                                {/* <Input type="number" name="amountOfSeries" min="1" max="20" placeholder="ilość serii"></Input>
+                                <Input  type="text" 
+                                        name="name" 
+                                        placeholder="nazwa ćwiczenia">
+                                </Input>
+                                <Input  type="number" 
+                                        name="amountOfSeries"  
+                                        min="1" 
+                                        max="20" 
+                                        placeholder="ilość serii">
+                                </Input>
                                 <Paragraph>Priorytet ćwiczenia</Paragraph>
-                                {selectMenu}
+                                <Select>
+                                    <Option value="0">Niski</Option>
+                                    <Option value="1">Średni</Option>
+                                    <Option value="2">Wysoki</Option>
+                                </Select>
                                 <Paragraph>Jak chcesz mierzyć serie ?</Paragraph>
-                                <FlexWrapper style={{ padding: '.5em 0', flexDirection: "column", alignItems: "flex-start" }}>
+                                <FlexWrapper style={{ 
+                                    padding: '.5em 0', 
+                                    flexDirection: "column", 
+                                    alignItems: "flex-start" }}>
                                     <Label>
-                                        <Radio type="radio" name="radio" value="reps" checked={radio === "reps"} onChange={(e) => this.handleRadioButton(e)}></Radio> 
+                                        <Radio  type="radio" 
+                                                name="radio" 
+                                                value="reps" 
+                                                checked={radio === "reps"} 
+                                                onChange={(e) => this.handleRadioButton(e)}>
+                                        </Radio> 
                                         na powótrzenia 
                                     </Label>
                                     <Label>
-                                        <Radio type="radio" name="radio" value="time" checked={radio === "time"} onChange={(e) => this.handleRadioButton(e)}></Radio>
+                                        <Radio  type="radio" 
+                                                name="radio" 
+                                                value="time" 
+                                                checked={radio === "time"} 
+                                                onChange={(e) => this.handleRadioButton(e)}>
+                                        </Radio>
                                         na czas 
                                     </Label>
-                                </FlexWrapper> */}
+                                </FlexWrapper>
                                 <Button>Dodaj</Button>
                             </Form>
 
@@ -241,7 +257,6 @@ class Plan extends Component {
                                 {AddPanel}
                             </PlanContent>
         
-        console.log(id, this.state.exercises)
         return (
             <Container>
                 <TogglePanel 
