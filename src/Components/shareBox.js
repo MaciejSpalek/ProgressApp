@@ -1,7 +1,6 @@
 import React, { Component } from "react"
 import styled from 'styled-components';
 import app from "./base";
-import Helpers from "./helpers";
 import * as styleHelpers  from './styleHelpers';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFileUpload } from '@fortawesome/free-solid-svg-icons';

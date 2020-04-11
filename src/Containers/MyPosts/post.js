@@ -1,16 +1,23 @@
 import React, { Component } from "react";
 import styled from "styled-components";
-import * as styleHelpers  from '../../Components/styleHelpers'
+import * as styleHelpers  from '../../Components/styleHelpers';
 import Helpers from "../../Components/helpers.js";
 import Comments from "./comments";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faComment, faHeart, faTimes } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faComment, faHeart, faTimes } from '@fortawesome/free-solid-svg-icons';
 import app from "../../Components/base";
+
 import relativeTime from'dayjs/plugin/relativeTime';
 import dayjs from "dayjs";
+import 'dayjs/locale/pl';
+
+// then just use spanishDayjs lat
+
+
 
 const flexCenter = styleHelpers.flexCenter;
 const variables = styleHelpers.variables;
+
 
 
 
@@ -145,6 +152,9 @@ class Post extends Component  {
     componentWillUnmount() {
         this._isMounted = false;
     }
+
+ 
+
     setUserData() {
         const rootRef = app.getRootRef("users");
         const userID = app.getUserID();
@@ -316,7 +326,14 @@ class Post extends Component  {
         return comments.filter(comment => comment.postKey === postKey).length
     }
 
+
+
+
+ 
+   
+
     render() {
+        dayjs.locale("pl")
         dayjs.extend(relativeTime);
         const { url, nick, content, date, likes, postKey } = this.props;
         const { comments } = this.state;
@@ -326,7 +343,6 @@ class Post extends Component  {
                     <Image style={{backgroundImage: `url(${url})`}}></Image>
                     <DescriptionWrapper>
                         <Nick> { Helpers.capitalizeFirstLetter(nick)}</Nick>
-                        {/* <Date> {date} </Date> */}
                         <Date> {dayjs(date).fromNow()} </Date>
                     </DescriptionWrapper>
                     {   

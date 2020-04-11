@@ -1,6 +1,6 @@
+
 class Helpers {
     
-    // year
     getCurrentDate = (separator='') => {
         let newDate = new Date()
         let date = newDate.getDate();
@@ -16,18 +16,6 @@ class Helpers {
         let hour = newDate.getHours();
         let minutes = newDate.getMinutes();
         return `${date}${separator}${ month<10 ? `0${month}` : month }${separator}${ year } ${ hour }:${ minutes<10 ? `0${minutes}` : minutes }`;
-    }
-
-    getDate(separator="/") {
-
-        let newDate = new Date()
-        let date = newDate.getDate();
-        let month = newDate.getMonth() + 1;
-        let year = newDate.getFullYear();
-        let hour = newDate.getHours();
-        let minutes = newDate.getMinutes();
-        let seconds = newDate.getSeconds();
-        return `${date}${separator}${ month<10 ? `0${month}` : month }${separator}${ year } ${ hour }:${ minutes<10 ? `0${minutes}` : minutes }:${ seconds<10 ? `0${seconds}` : seconds }`;
     }
 
     cutTimeFromDate(date) {
