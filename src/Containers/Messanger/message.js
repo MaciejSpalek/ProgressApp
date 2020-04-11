@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import styled from "styled-components";
 import { flexCenter, variables }  from "../../Components/styleHelpers";
-import app from '../../Components/base';
+import app from '../../base';
 
 const Container = styled.div`
     ${flexCenter}

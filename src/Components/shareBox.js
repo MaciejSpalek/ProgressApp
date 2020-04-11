@@ -1,6 +1,6 @@
 import React, { Component } from "react"
 import styled from 'styled-components';
-import app from "./base";
+import app from "../base";
 import * as styleHelpers  from './styleHelpers';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFileUpload } from '@fortawesome/free-solid-svg-icons';
@@ -12,7 +12,7 @@ const Container = styled.form`
     ${flexCenter}
     flex-direction: column;
     width: 100%;
-    border-radius: .5em;
+    /* border-radius: .5em; */
 `
 const TextArea = styled.textarea`
     ${flexCenter}
@@ -107,7 +107,7 @@ class ShareBox extends Component {
                 <TextArea name="textarea" placeholder="Napisz coś..."></TextArea>
                 <AddArea>
                     <label>
-                        <FontAwesomeIcon icon={faFileUpload} style={{fontSize: 35, margin: '.1em'}} color={variables.$orange} />
+                        <FontAwesomeIcon icon={faFileUpload} style={{fontSize: 35, margin: '.1em'}} color={variables.$grayBlue} />
                         <input type="file" style={{display: "none"}}/>
                     </label>
                     <styleHelpers.Button>Opublikuj</styleHelpers.Button>

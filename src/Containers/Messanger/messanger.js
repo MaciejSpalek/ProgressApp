@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { flexCenter, variables, FlexWrapper }  from "../../Components/styleHelpers";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch, faPaperPlane } from "@fortawesome/free-solid-svg-icons";
-import app from "../../Components/base";
+import app from "../../base";
 import UserProfile from "./userProfile";
 import FriendBoxItem from "./friendBoxItem";
 import ArrowButton from "../../Components/arrowButton";

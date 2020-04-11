@@ -9,7 +9,7 @@ import Messanger from './Containers/Messanger/messanger';
 import PlanBoard from './Containers/TrainingPlans/planBoard';
 import PrivateRoute from "./PrivateRoute";
 import { AuthProvider } from "./Auth";
-import app from "./Components/base";
+import app from "./base";
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import './App.scss';
 
@@ -47,8 +47,8 @@ import './App.scss';
                   <PrivateRoute exact path="/planBoard" component={PlanBoard}/>
                   <PrivateRoute exact path="/measurements" component={Measurements}/>
                   <PrivateRoute exact path="/messanger" component={Messanger}/>
-                  <Route  path="/signup" component={SignUp} />
-                  <Route  path="/login" component={Login} />
+                  <Route path="/signup" component={SignUp} />
+                  <Route path="/login" component={Login} />
               </Switch>
             </Router> 
           </AuthProvider>

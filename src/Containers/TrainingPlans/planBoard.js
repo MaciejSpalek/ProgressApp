@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 
 import helpers from '../../Components/helpers';
-import app from '../../Components/base';
+import app from '../../base';
 import styled from 'styled-components';
 import Plan from './plan';
 

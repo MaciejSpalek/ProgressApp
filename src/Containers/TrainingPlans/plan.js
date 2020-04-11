@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 import Exercise from './exercise';
-import app from '../../Components/base';
+import app from '../../base';
 import helpers from '../../Components/helpers';
 import TogglePanel from '../../Components/togglePanel';
 import { 

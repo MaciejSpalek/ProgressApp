@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import app from "./Components/base";
+import app from "./base";
 
 export const AuthContext = React.createContext();
 

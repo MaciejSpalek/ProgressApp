@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import app from "../../Components/base";
+import app from "../../base";
 import styled from "styled-components";
 import Helpers from "../../Components/helpers.js";
 import Post from './post';

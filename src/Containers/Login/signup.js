@@ -1,5 +1,5 @@
 import React, { useCallback } from "react";
-import app from "../../Components/base";
+import app from "../../base";
 import { Logo, Container, Form, Input, Button } from "../../Components/styleHelpers"
 import { withRouter } from "react-router";
 import { Link } from "react-router-dom";

@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import styled from "styled-components";
 import Helpers from "../../Components/helpers"
-import app from "../../Components/base"
+import app from "../../base"
 import { variables, flexCenter, FlexWrapper } from "../../Components/styleHelpers";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUserPlus, faUserCheck } from "@fortawesome/free-solid-svg-icons";

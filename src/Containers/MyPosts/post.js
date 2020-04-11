@@ -5,14 +5,11 @@ import Helpers from "../../Components/helpers.js";
 import Comments from "./comments";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faComment, faHeart, faTimes } from '@fortawesome/free-solid-svg-icons';
-import app from "../../Components/base";
+import app from "../../base";
 
 import relativeTime from'dayjs/plugin/relativeTime';
 import dayjs from "dayjs";
 import 'dayjs/locale/pl';
-
-// then just use spanishDayjs lat
-
 
 
 const flexCenter = styleHelpers.flexCenter;
@@ -29,7 +26,7 @@ const Container = styled.div`
     flex-direction: column;
     width: 100%;
     margin: 1em 0;
-    /* border-radius: .3em; */
+    /* box-shadow: 0 0 .2em .01em gray; */
 `
 
 
@@ -58,12 +55,12 @@ const Image = styled.div`
     margin-right: .5em;
 `
 const Nick = styled.div`
-    color:  ${variables.$gray};
+    /* color:  ${variables.$gray}; */
     font-size: 1em;
     font-weight: bold;
 `
 const Date = styled.span`
-    color:  ${variables.$gray};
+    /* color:  ${variables.$gray}; */
     font-size: .8em;   
 `
 const CrossIcon = styled.span`
@@ -78,7 +75,7 @@ const ContentBox = styled.div`
     ${flexCenter};
     justify-content: flex-start;
     width: 100%;
-    color:  ${variables.$gray};
+    /* color:  ${variables.$gray}; */
     text-align: left;
     padding: .5em;
 `
@@ -360,11 +357,11 @@ class Post extends Component  {
                 </ContentBox>
 
                 <BottomBox>
-                    <IconBox onClick={() => this.handleLike(postKey)} style={this.state.didUserLike ? {color:variables.$orange} : {color:variables.$grayBlue}}>
+                    <IconBox onClick={() => this.handleLike(postKey)} style={this.state.didUserLike ? {color:variables.$grayBlue} : {color:variables.$gray}}>
                         <FontAwesomeIcon icon={faHeart} style={{margin: '.2em', fontSize: "1.2em"}}/>
                         <IconCaption>{ likes }</IconCaption>
                     </IconBox>
-                    <IconBox style={{color:variables.$grayBlue}} onClick={this.commentBoxHideHandler}>
+                    <IconBox style={{color:variables.$gray}} onClick={this.commentBoxHideHandler}>
                         <FontAwesomeIcon icon={faComment} style={{margin: '.2em'}} />
                         <IconCaption>{ this.countComments(postKey, comments) }</IconCaption>
                     </IconBox>

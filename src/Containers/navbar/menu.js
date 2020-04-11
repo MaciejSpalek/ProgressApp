@@ -1,6 +1,6 @@
 import React from "react"
 import * as styleHelpers  from '../../Components/styleHelpers'
-import app from '../../Components/base'
+import app from '../../base'
 import { Link } from 'react-router-dom';
 import styled from 'styled-components'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -20,7 +20,7 @@ const MenuComponent = styled.div`
         width: 100vw;
         height: calc(100vh - 64px);
         transform: translateX(100%);
-        background-color: ${variables.$grayBlue};
+        background-color: rgba(0, 3, 19, 0.969);
         transition: .3s cubic-bezier(0.785, 0.135, 0.15, 0.86);
         overflow-y: scroll;
 `
@@ -37,7 +37,7 @@ const ListItem = styled.li`
         text-decoration: none;
         padding: .5em;
         &:hover {
-            background-color: rgb(0, 65, 102);
+            background-color: rgba(16, 24, 70, 0.801);
         }
 `
 const Caption = styled.h2`
