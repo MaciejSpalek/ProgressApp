@@ -14,11 +14,11 @@ const Button = styled.button`
   border-radius: .2em;
 `;
 
-const ArrowButton = ({ isHide, handleFunctions, fontColor, backgroundColor }) => {
+const ArrowButton = ({ isHide, handleFunction, fontColor, backgroundColor }) => {
     const arrowDown = { rotate: 0 };
     const arrowUp = { rotate: 180 };
     return (
-        <Button style={{backgroundColor: backgroundColor}} onClick={() => handleFunctions()}>
+        <Button style={{backgroundColor: backgroundColor}} onClick={() => handleFunction()}>
             <FontAwesomeIcon 
                 icon={faAngleDown} 
                 transform={isHide ? arrowDown: arrowUp} 

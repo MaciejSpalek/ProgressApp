@@ -6,7 +6,7 @@ import ArrowButton from '../Components/arrowButton';
 const TogglePanel = ({ 
     flexStyles, 
     text, 
-    handleFunctions,
+    handleFunction,
     buttonBackgroundColor, 
     arrowColor, 
     isHidden
@@ -15,7 +15,7 @@ const TogglePanel = ({
         <FlexComponent style={flexStyles}>
             <Caption> {text} </Caption>
             <ArrowButton
-                handleFunctions={()=> handleFunctions()}
+                handleFunction={()=> handleFunction()}
                 backgroundColor={buttonBackgroundColor}
                 fontColor={arrowColor}
                 isHide={isHidden}

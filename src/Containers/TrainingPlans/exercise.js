@@ -34,16 +34,13 @@ class exercise extends Component {
         }))
     }
 
-    handleFunctions() {
-        this.handleArrowButton()
-    }
     render() {
         const { name } = this.props;
         const { isHidden } = this.state;
         return (
             <Container>
                 <TogglePanel 
-                    handleFunctions={()=> this.handleFunctions()} 
+                    handleFunction={()=> this.handleArrowButton()} 
                     buttonBackgroundColor={variables.$grayBlue}
                     flexStyles={toggleFlexStyles}
                     arrowColor={"white"}

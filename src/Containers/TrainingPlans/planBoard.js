@@ -1,16 +1,18 @@
 import React, {Component} from 'react';
-import app from '../../Components/base';
+
 import helpers from '../../Components/helpers';
-import { Container, variables, flexCenter, FlexWrapper } from '../../Components/styleHelpers';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPlusSquare, faListOl } from '@fortawesome/free-solid-svg-icons'
+import app from '../../Components/base';
 import styled from 'styled-components';
 import Plan from './plan';
 
-const containerStyled = {
-    "justifyContent": "flex-start",
-    "flexDirection": "column"
-}
+import { Container, variables, flexCenter } from '../../Components/styleHelpers';
+import { faPlusSquare, faListOl } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+
+
+const StyledContainer = styled(Container)`
+    flex-direction: column;
+`
 
 const AddPlanWrapper = styled.div`
     ${flexCenter}
@@ -143,18 +145,17 @@ class PlanBoard extends Component {
                                 <CaseText>Brak planów</CaseText>
                             </Placeholder>
 
+        const addPlanWrapper =  <AddPlanWrapper onClick={()=> this.addPlan()}>
+                                    <Text> Nowy plan</Text>
+                                    <FontAwesomeIcon icon={faPlusSquare} style={{fontSize: 40, color: variables.$grayBlue}}/>
+                                </AddPlanWrapper>
         return (
-            <Container style={containerStyled}>
-                {!this.isSomePlanOpened() ?
-                <AddPlanWrapper onClick={()=> this.addPlan()}>
-                    <Text> Nowy plan</Text>
-                    <FontAwesomeIcon icon={faPlusSquare} style={{fontSize: 40, color: variables.$grayBlue}}/>
-                </AddPlanWrapper>
-                : null}
+            <StyledContainer>
+                {!this.isSomePlanOpened() ? addPlanWrapper : null}
                 <PlanWrapper style={plans.length ? {"justifyContent": "flex-start"} : {}}>
                     { plans.length ? this.renderPlans() : placeholder }
                 </PlanWrapper>
-            </Container>
+            </StyledContainer>
         )
     }
 }

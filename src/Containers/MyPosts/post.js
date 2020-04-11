@@ -6,6 +6,8 @@ import Comments from "./comments";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faComment, faHeart, faTimes } from '@fortawesome/free-solid-svg-icons'
 import app from "../../Components/base";
+import relativeTime from'dayjs/plugin/relativeTime';
+import dayjs from "dayjs";
 
 const flexCenter = styleHelpers.flexCenter;
 const variables = styleHelpers.variables;
@@ -315,6 +317,7 @@ class Post extends Component  {
     }
 
     render() {
+        dayjs.extend(relativeTime);
         const { url, nick, content, date, likes, postKey } = this.props;
         const { comments } = this.state;
         return (
@@ -323,7 +326,8 @@ class Post extends Component  {
                     <Image style={{backgroundImage: `url(${url})`}}></Image>
                     <DescriptionWrapper>
                         <Nick> { Helpers.capitalizeFirstLetter(nick)}</Nick>
-                        <Date> {date} </Date>
+                        {/* <Date> {date} </Date> */}
+                        <Date> {dayjs(date).fromNow()} </Date>
                     </DescriptionWrapper>
                     {   
                         app.getCurrentUser() ?

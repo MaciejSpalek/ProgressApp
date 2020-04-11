@@ -92,7 +92,7 @@ class ShareBox extends Component {
                 content: textarea.value,
                 url: url,
                 nick: nick,
-                date: Helpers.getFullDate(),
+                date: new Date(),
                 likes: 0,
                 comments: 0
             };

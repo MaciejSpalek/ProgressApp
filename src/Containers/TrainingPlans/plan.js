@@ -8,7 +8,8 @@ import {
     variables, 
     flexCenter, 
     FlexWrapper,
-    Paragraph
+    Paragraph,
+    FlexComponent
 } from '../../Components/styleHelpers';
 
 
@@ -25,12 +26,18 @@ const Container = styled.div`
     border: .05em solid ${variables.$lightGray};
 `
 
+const StyledAddPanel = styled(FlexComponent)`
+    flex-direction: column;
+    padding: 0;
+`
+
 const PlanContent = styled.div`
     ${flexCenter};
     flex-direction: column;
     justify-content: space-between;
     width: 100%;
-    height: 70vh;
+    height: 100%;
+
     overflow: scroll;
 `
 
@@ -38,6 +45,7 @@ const PlanContent = styled.div`
 const Form = styled.form`
     ${flexCenter};
     flex-direction: column;
+    border: .2em solid white;
     width: 100%;
     padding: .5em;
 `
@@ -76,10 +84,6 @@ const Caption = styled.h2`
 `
 
 
-
-
-// select menu
-
 const Select = styled.select`
     width: 100%;
     border: none;
@@ -99,6 +103,7 @@ class Plan extends Component {
         super(props);
         this.state = {
             isHidden: true,
+            isAddPanelHidden: false,
             exercises: [],
             radio: "reps"
         }
@@ -119,6 +124,12 @@ class Plan extends Component {
             [e.target.name]: e.target.value
         })
     }
+    handleAddPanel() {
+        this.setState(prevState =>({
+            isAddPanelHidden: !prevState.isAddPanelHidden
+        }))
+    }
+
     assignExercisesToState() {
         const userID = app.getUserID();
         const usersPlansRef = app.getRealTimeDatabase().ref('users-plans').child(userID);
@@ -193,76 +204,89 @@ class Plan extends Component {
             .child(planKey)
             .update({isHidden: !isHidden})
     }
-    handleFunctions(...parameters) {
-        this.changeHiddenState(...parameters);
-    }
+  
 
     render() {
         const { date, planKey, id, isHidden } = this.props;
-        const { radio } = this.state;
+        const { radio, isAddPanelHidden } = this.state;
 
-        const AddPanel =   <Form onSubmit={(e)=> this.addExercise(e, planKey)}>
-                                <Paragraph>Uzupełnij podstawowe dane</Paragraph>
-                                <Input  type="text" 
-                                        name="name" 
-                                        placeholder="nazwa ćwiczenia">
-                                </Input>
-                                <Input  type="number" 
-                                        name="amountOfSeries"  
-                                        min="1" 
-                                        max="20" 
-                                        placeholder="ilość serii">
-                                </Input>
-                                <Paragraph>Priorytet ćwiczenia</Paragraph>
-                                <Select>
-                                    <Option value="0">Niski</Option>
-                                    <Option value="1">Średni</Option>
-                                    <Option value="2">Wysoki</Option>
-                                </Select>
-                                <Paragraph>Jak chcesz mierzyć serie ?</Paragraph>
-                                <FlexWrapper style={{ 
-                                    padding: '.5em 0', 
-                                    flexDirection: "column", 
-                                    alignItems: "flex-start" }}>
-                                    <Label>
-                                        <Radio  type="radio" 
-                                                name="radio" 
-                                                value="reps" 
-                                                checked={radio === "reps"} 
-                                                onChange={(e) => this.handleRadioButton(e)}>
-                                        </Radio> 
-                                        na powótrzenia 
-                                    </Label>
-                                    <Label>
-                                        <Radio  type="radio" 
-                                                name="radio" 
-                                                value="time" 
-                                                checked={radio === "time"} 
-                                                onChange={(e) => this.handleRadioButton(e)}>
-                                        </Radio>
-                                        na czas 
-                                    </Label>
-                                </FlexWrapper>
-                                <Button>Dodaj</Button>
-                            </Form>
+        const AddPanel =    <StyledAddPanel>
+                                {!isAddPanelHidden ?
+                                <Form onSubmit={(e)=> this.addExercise(e, planKey)}>
+                                    <Input  type="text" 
+                                            name="name" 
+                                            placeholder="nazwa ćwiczenia">
+                                    </Input>
+                                    <Input  type="number" 
+                                            name="amountOfSeries"  
+                                            min="1" 
+                                            max="20" 
+                                            placeholder="ilość serii">
+                                    </Input>
 
-        const planContent = <PlanContent style={ this.isExercisesExist() ? {"justifyContent": "space-between"} : {"justifyContent": "flex-end"}}>
-                                <FlexWrapper style={{
-                                    flexDirection: "column",
-                                    justifyContent: "flex-start", 
-                                    overflow: 'scroll'}}>
-                                    <Caption> { this.isExercisesExist() ? `Lista ćwiczeń (${this.getAmountOfExercises()})` : "Brak dodanych ćwiczeń"}</Caption>
-                                    {this.renderExercise()}
-                                </FlexWrapper>
+                                    <Paragraph>Priorytet ćwiczenia</Paragraph>
+                                    <Select>
+                                        <Option value="0">Niski</Option>
+                                        <Option value="1">Średni</Option>
+                                        <Option value="2">Wysoki</Option>
+                                    </Select>
+
+                                    <Paragraph>Jak chcesz mierzyć serie ?</Paragraph>
+                                    <FlexWrapper style={{ 
+                                        padding: '.5em 0', 
+                                        flexDirection: "column", 
+                                        alignItems: "flex-start" }}>
+                                        <Label>
+                                            <Radio  type="radio" 
+                                                    name="radio" 
+                                                    value="reps" 
+                                                    checked={radio === "reps"} 
+                                                    onChange={(e) => this.handleRadioButton(e)}>
+                                            </Radio> 
+                                            na powtórzenia 
+                                        </Label>
+                                        <Label>
+                                            <Radio  type="radio" 
+                                                    name="radio" 
+                                                    value="time" 
+                                                    checked={radio === "time"} 
+                                                    onChange={(e) => this.handleRadioButton(e)}>
+                                            </Radio>
+                                            na czas 
+                                        </Label>
+                                    </FlexWrapper>
+                                    <Button>Dodaj</Button>
+                                </Form>
+                                : null}
+                                <TogglePanel 
+                                    flexStyles={toggleFlexStyles}
+                                    text={`Dodaj ćwiczenie`}   
+                                    handleFunction={()=> this.handleAddPanel()} 
+                                    buttonBackgroundColor={variables.$grayBlue}
+                                    arrowColor={"white"}
+                                    isHidden={isHidden}
+                                />
+                            </StyledAddPanel>
+                            
+
+        const planContent = <PlanContent>
+                                {isAddPanelHidden ?
+                                    <FlexWrapper style={{
+                                        flexDirection: "column",
+                                        justifyContent: "space-between", 
+                                        overflow: 'scroll'}}>
+                                        <Caption> { this.isExercisesExist() ? `Lista ćwiczeń (${this.getAmountOfExercises()})` : "Brak dodanych ćwiczeń"}</Caption>
+                                        {this.renderExercise()}
+                                    </FlexWrapper> : null}
                                 {AddPanel}
                             </PlanContent>
         
         return (
-            <Container>
+            <Container style={!isHidden ? {height:"100%"} : {}}>
                 <TogglePanel 
                     flexStyles={toggleFlexStyles}
                     text={`Plan ${id},  ${date}`}   
-                    handleFunctions={()=> this.handleFunctions(planKey, isHidden)} 
+                    handleFunction={()=> this.changeHiddenState(planKey, isHidden)} 
                     buttonBackgroundColor={variables.$grayBlue}
                     arrowColor={"white"}
                     isHidden={isHidden}
