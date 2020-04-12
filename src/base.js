@@ -82,13 +82,12 @@ class FireBase {
     friendsRef.on('value', snapshot => {
         const friends = snapshot.val();
         const tempArray = [];
-
         for(let friend in friends) {
-            if(friends[friend].userID !== this.getUserID()) {
-              usersRef.child(friends[friend].userID).once('value', snapshot1 => {
-                tempArray.push(snapshot1.val());
-              })
-            }
+          if(friends[friend].userID !== userID) {
+            usersRef.child(friends[friend].userID).once('value', snapshot1 => {
+              tempArray.push(snapshot1.val());
+            })
+          }   
         }
         setState(tempArray);
     })
@@ -110,13 +109,6 @@ class FireBase {
         setState(counter);
     })
   }
-
-
-
-  getUserCollection() {
-    return this.getDatabase().collection(`users`).doc(this.getUserID());
-  }
-
  
   sortByDate(array) {
     return array.sort((a,b) =>  new Date(b.date).getTime() - new Date(a.date).getTime());

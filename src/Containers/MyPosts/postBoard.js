@@ -14,11 +14,15 @@ class PostBoard extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            posts: []
+            posts: [],
+            friends: [],
+            users:[]
         }
     }
+
     componentDidMount() {
         this._isMounted = true;
+        this.setFriends();
         this.setPosts();
     }
     componentWillUnmount() {
@@ -37,9 +41,67 @@ class PostBoard extends Component {
         })
     }
 
+    // assign data from realtime database to state "friend" && "users"
+    setFriends() {
+        app.getAllUsers((tempArray) => {
+            if (this._isMounted) {
+                this.setState({
+                    users: tempArray
+                })
+            }
+        })
+        app.getAllFriends((tempArray) => {
+            if (this._isMounted) {
+                this.setState({
+                    friends: tempArray
+                })
+            }
+        })
+    }
+
+    // return filtered array ( only your posts )
+    getUserPostsArray(array) {
+        const userID = app.getUserID();
+        return array.filter(item => item.userID === userID);
+    }
+
+    // return filtered array ( your posts and your friends' posts )
+    getFriendsPostsArray(array) {
+        const userID = app.getUserID();
+        const tempArray = [];
+        const friends = this.state.friends;
+
+        array.forEach(post => {
+            const postMakerID = post.userID;
+            if(postMakerID === userID) {
+                tempArray.push(post);
+            }
+            friends.forEach(friend => {
+                if(friend.userID === postMakerID) {
+                    tempArray.push(post);
+                } 
+            })
+    })
+    return tempArray;
+}
+
+   
+
     renderPosts() {
-        const sortedArray = app.sortByDate(this.state.posts);
-        return sortedArray.map((post, index) => {
+        let array = [];
+        let destination = this.props.destination;
+
+        const sortedArrayByDate = app.sortByDate(this.state.posts);
+        const userPostsArray = this.getUserPostsArray(sortedArrayByDate);
+        const friendsPostsArray = this.getFriendsPostsArray(sortedArrayByDate);
+
+        if(destination === "home") {
+            array = friendsPostsArray;
+        } else if(destination === "profile") {
+            array = userPostsArray;
+        }
+        
+        return array.map((post, index) => {
             return ( 
                 <Post 
                     userID={post.userID}

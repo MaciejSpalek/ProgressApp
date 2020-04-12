@@ -15,7 +15,7 @@ import './App.scss';
 
 
   class App extends Component {
-    _isMount = false;
+    _isMounted = false;
     constructor(props) {
       super(props);
       this.state = {
@@ -24,14 +24,21 @@ import './App.scss';
     }
 
     componentDidMount() {
+      this._isMounted = true;
       this.authListener();
+    }
+
+    componentWillUnmount() {
+        this._isMounted = false;
     }
 
     authListener() {
       app.getApp().auth().onAuthStateChanged(user => {
+        if(this._isMounted) {
           this.setState({
             user: user
           })  
+        }
       })
     }
 

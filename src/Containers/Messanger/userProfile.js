@@ -31,6 +31,7 @@ const Nick = styled.div`
   
 
 class UserProfile extends Component {
+    _isMounted = false;
     constructor(props) {
         super(props);
         this.state = {
@@ -40,7 +41,12 @@ class UserProfile extends Component {
     }
 
     componentDidMount() {
+        this._isMounted = true;
         this.setIcon();
+    }
+
+    componentWillUnmount() {
+        this._isMounted = false;
     }
 
     addFriendToDatabase(user) {
@@ -49,7 +55,7 @@ class UserProfile extends Component {
         userFriends.child(userID).push(user);
     }
 
-    setIcon = () => {
+    setIcon() {
         const userID = app.getUserID();
         const userFriends = app.getRealTimeDatabase().ref("friends").child(userID)
        
@@ -57,9 +63,11 @@ class UserProfile extends Component {
             const friends = snapshot.val();
             for(let friend in friends) {
                 if(this.props.user.userID === friends[friend].userID) {
-                    this.setState({
-                        isYourUserFriend: true
-                    })
+                    if(this._isMounted) {
+                        this.setState({
+                            isYourUserFriend: true
+                        })
+                    }
                 }
             }
         })

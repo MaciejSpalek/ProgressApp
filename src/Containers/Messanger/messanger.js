@@ -177,48 +177,54 @@ class Messanger extends Component {
   
     componentDidMount = () => {
         this._isMounted = true;
-        if(this._isMounted) {
-            app.getAllUsers((tempArray) => {
+        app.getAllUsers((tempArray) => {
+            if(this._isMounted) {
                 this.setState({
                     constUsersArray: tempArray
                 })
-            })
-            app.getAllFriends((tempArray) => {
+            }
+        })
+        app.getAllFriends((tempArray) => {
+            if(this._isMounted) {
                 this.setState({
                     friends: tempArray
                 })
-            })
-            app.countFriends((counter) => {
+            }
+        })
+        app.countFriends((counter) => {
+            if(this._isMounted) {
                 this.setState({
                     amountOfFriends: counter
                 })
-            })
-        }
+            }
+        })
     }
     componentWillUnmount() {
         this._isMounted = false;
     }
     componentDidUpdate() {
         this._isMounted = true;
-        if(this._isMounted) {
-            app.getRealTimeDatabase().ref("users").once('child_changed', snapshot => {
-                app.getAllFriends((tempArray) => {
+        app.getRealTimeDatabase().ref("users").once('child_changed', snapshot => {
+            app.getAllFriends((tempArray) => {
+                if(this._isMounted) {
                     this.setState({
                         friends: tempArray
                     })
-                })
-            });
+                }
+            })
+        });
 
-            app.getRealTimeDatabase().ref("messages").once('child_changed', snapshot => {
-                this.getCurrentConversation((tempArray) => {
-                        this.setState({
-                            conversation: tempArray
-                        }, ()=> {
-                            this.scrollToBottom();
-                        });
-                });
+        app.getRealTimeDatabase().ref("messages").once('child_changed', snapshot => {
+            this.getCurrentConversation((tempArray) => {
+                if(this._isMounted) {
+                    this.setState({
+                        conversation: tempArray
+                    }, ()=> {
+                        this.scrollToBottom();
+                    });
+                }
             });
-        }
+        });
     }
     
     

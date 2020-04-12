@@ -49,12 +49,12 @@ const Icon = styled.div`
         width: 5em;
 `
 
-const logout = async () => {
+const logout = () => {
     app.getRealTimeDatabase().ref("users").child(app.getUserID()).child("isLogged").set(false)
     app.logout();
 }
 
-const Menu = ({isMenuActive, handleHamburger}) => {
+const Menu = ({ isMenuActive, handleHamburger }) => {
     return (
         <MenuComponent style={isMenuActive ? transformMenu:null}>
             <MenuList>

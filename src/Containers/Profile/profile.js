@@ -338,18 +338,20 @@ class Profile extends Component {
         const rootRef = app.getRootRef("users");
         const userID = app.getUserID();
         rootRef.child(userID).orderByKey().on("value", snapshot => {
-            this.setState({
-                nick:  snapshot.val().nick,
-                age:  snapshot.val().age,
-                url:  snapshot.val().url,
-                sex:  snapshot.val().sex,
-                weight:  snapshot.val().weight,
-                height:  snapshot.val().height,
-                yourSport:  snapshot.val().yourSport,
-                trainingExperience:  snapshot.val().trainingExperience,
-                priority:  snapshot.val().priority,
-                aboutMe:  snapshot.val().aboutMe
-            })
+            if(this._isMounted) {
+                this.setState({
+                    nick:  snapshot.val().nick,
+                    age:  snapshot.val().age,
+                    url:  snapshot.val().url,
+                    sex:  snapshot.val().sex,
+                    weight:  snapshot.val().weight,
+                    height:  snapshot.val().height,
+                    yourSport:  snapshot.val().yourSport,
+                    trainingExperience:  snapshot.val().trainingExperience,
+                    priority:  snapshot.val().priority,
+                    aboutMe:  snapshot.val().aboutMe
+                })
+            }
         })
     }
 
@@ -395,7 +397,7 @@ class Profile extends Component {
                     </Backside>
                 </ProfileCard>
                 <ShareBox/>
-                <PostBoard/>
+                <PostBoard destination={"profile"}/>
             </Container>
         )
     }

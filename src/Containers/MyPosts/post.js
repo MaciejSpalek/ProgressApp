@@ -75,9 +75,14 @@ const ContentBox = styled.div`
     ${flexCenter};
     justify-content: flex-start;
     width: 100%;
-    /* color:  ${variables.$gray}; */
     text-align: left;
     padding: .5em;
+    -ms-word-break: break-all; 
+    word-break: break-all;
+    -webkit-hyphens: auto;
+    -moz-hyphens: auto;
+    -ms-hyphens: auto;
+    hyphens: auto;
 `
 
 
@@ -106,7 +111,6 @@ const IconCaption = styled.span`
 const CommentBox = styled.form`
     ${flexCenter}
     flex-direction: column;
-    /* padding: .5em; */
 `
 const Input = styled.input`
     width: 80%;
