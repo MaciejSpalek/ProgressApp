@@ -35,9 +35,7 @@ import './App.scss';
     authListener() {
       app.getApp().auth().onAuthStateChanged(user => {
         if(this._isMounted) {
-          this.setState({
-            user: user
-          })  
+          this.setState({user})  
         }
       })
     }
