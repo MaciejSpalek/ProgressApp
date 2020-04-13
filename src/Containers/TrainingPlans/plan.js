@@ -23,9 +23,15 @@ const Container = styled.div`
     justify-content: flex-start;
     flex-direction: column;
     width: 100%;
-    border: .05em solid ${variables.$lightGray};
+    height: ${props => props.isHidden ? "auto" : "100%"};
 `
 
+const StyledPlanList = styled(FlexComponent)`
+    flex-direction: column;
+    justify-content: flex-start;
+    overflow: scroll;
+    padding: 0;
+`
 const StyledAddPanel = styled(FlexComponent)`
     flex-direction: column;
     padding: 0;
@@ -34,10 +40,9 @@ const StyledAddPanel = styled(FlexComponent)`
 const PlanContent = styled.div`
     ${flexCenter};
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: ${props => props.isHidden ? "space-between" : "flex-end"};
     width: 100%;
     height: 100%;
-
     overflow: scroll;
 `
 
@@ -45,13 +50,13 @@ const PlanContent = styled.div`
 const Form = styled.form`
     ${flexCenter};
     flex-direction: column;
-    border: .2em solid white;
     width: 100%;
     padding: .5em;
 `
 const Input = styled.input`
     width: 100%;
     border: none;
+    border-radius: .3em;
     font-size: 1.2em;
     color: ${variables.$gray};
     margin: .5em 0;
@@ -109,7 +114,6 @@ class Plan extends Component {
         }
     }
 
-    // life cycle methods
     componentDidMount() {
         this._isMounted = true;
         this.assignExercisesToState();
@@ -117,8 +121,6 @@ class Plan extends Component {
     componentWillUnmount() {
         this._isMounted = false;
     }
-    
-
     handleRadioButton(e) {
         this.setState({
             [e.target.name]: e.target.value
@@ -129,7 +131,6 @@ class Plan extends Component {
             isAddPanelHidden: !prevState.isAddPanelHidden
         }))
     }
-
     assignExercisesToState() {
         const userID = app.getUserID();
         const usersPlansRef = app.getRealTimeDatabase().ref('users-plans').child(userID);
@@ -209,7 +210,6 @@ class Plan extends Component {
     render() {
         const { date, planKey, id, isHidden } = this.props;
         const { radio, isAddPanelHidden } = this.state;
-
         const AddPanel =    <StyledAddPanel>
                                 {!isAddPanelHidden ?
                                 <Form onSubmit={(e)=> this.addExercise(e, planKey)}>
@@ -267,22 +267,17 @@ class Plan extends Component {
                                     isHidden={isHidden}
                                 />
                             </StyledAddPanel>
-                            
-
-        const planContent = <PlanContent>
+        const planContent = <PlanContent isHidden={isAddPanelHidden}>
                                 {isAddPanelHidden ?
-                                    <FlexWrapper style={{
-                                        flexDirection: "column",
-                                        justifyContent: "space-between", 
-                                        overflow: 'scroll'}}>
+                                    <StyledPlanList>
                                         <Caption> { this.isExercisesExist() ? `Lista ćwiczeń (${this.getAmountOfExercises()})` : "Brak dodanych ćwiczeń"}</Caption>
                                         {this.renderExercise()}
-                                    </FlexWrapper> : null}
+                                    </StyledPlanList> : null}
                                 {AddPanel}
                             </PlanContent>
-        
+
         return (
-            <Container style={!isHidden ? {height:"100%"} : {}}>
+            <Container isHidden={isHidden}>
                 <TogglePanel 
                     flexStyles={toggleFlexStyles}
                     text={`Plan ${id},  ${date}`}   
