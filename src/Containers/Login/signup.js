@@ -6,7 +6,8 @@ import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUserPlus } from "@fortawesome/free-solid-svg-icons";
 import { variables } from "../../Components/styleHelpers";
-import userPhoto from "../../images/user.png";
+import userPhoto from "../../images/userPhoto.svg";
+
 const SignUp = ({ history }) => {
   const handleSignUp = useCallback(
     async event => {

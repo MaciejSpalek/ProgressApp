@@ -5,7 +5,6 @@ import app from '../../base';
 
 const Container = styled.div`
     ${flexCenter}
-    flex-shrink:1;
     flex-direction: column;
     align-self: flex-start;
 `
@@ -37,7 +36,7 @@ const ContentWrapper = styled.div`
 const converserStyle = {
     "alignSelf": "flex-start",
     "color": "black",
-    "backgroundColor": variables.$blue
+    "backgroundColor": variables.$lightGray
 }
 
 const userStyle = {

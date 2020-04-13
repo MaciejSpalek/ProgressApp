@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import styled from "styled-components";
 import Helpers from "../../Components/helpers"
 import app from "../../base"
-import { variables, flexCenter, FlexWrapper } from "../../Components/styleHelpers";
+import { variables, flexCenter, FlexComponent } from "../../Components/styleHelpers";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUserPlus, faUserCheck } from "@fortawesome/free-solid-svg-icons";
 
@@ -13,14 +13,17 @@ const Container = styled.div`
     width: 100%;
     padding: .8em;
 `
-
+const StyledWrapper = styled(FlexComponent)`
+    width: auto;
+    padding: 0;
+`
 const Image = styled.div`
     border-radius: 50%;
     width: 3.5em;
     height: 3.5em;
     background-position: center;
     background-size: cover;
-    background-color: ${variables.$blue};
+    background-image: url(${props => props.url});
     margin-right: .5em;
 `
 const Nick = styled.div`
@@ -35,7 +38,7 @@ class UserProfile extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            isYourUserFriend: false,
+            isYourFriend: false,
             user: this.props.user
         }
     }
@@ -65,7 +68,7 @@ class UserProfile extends Component {
                 if(this.props.user.userID === friends[friend].userID) {
                     if(this._isMounted) {
                         this.setState({
-                            isYourUserFriend: true
+                            isYourFriend: true
                         })
                     }
                 }
@@ -75,7 +78,7 @@ class UserProfile extends Component {
 
     render() {
         const { user } = this.props
-        const { isYourUserFriend } = this.state
+        const { isYourFriend } = this.state
 
         const plusFriendIcon = <FontAwesomeIcon icon={faUserPlus} style={{color: variables.$darkBlue, fontSize: "1.5em"}} onClick={() => this.addFriendToDatabase(user)}/>
         const checkedFriendIcon = <FontAwesomeIcon icon={faUserCheck} style={{color: variables.$darkBlue, fontSize: "1.5em"}}/>
@@ -83,11 +86,11 @@ class UserProfile extends Component {
        
         return (
             <Container>
-                <FlexWrapper>
-                    <Image style={{backgroundImage: `url(${user.url})`}}></Image>
+                <StyledWrapper>
+                    <Image url={user.url}/>
                     <Nick> { Helpers.capitalizeFirstLetter(user.nick) }</Nick>
-                </FlexWrapper>
-                {isYourUserFriend ? checkedFriendIcon : plusFriendIcon}
+                </StyledWrapper>
+                {isYourFriend ? checkedFriendIcon : plusFriendIcon}
             </Container>
         )
     }

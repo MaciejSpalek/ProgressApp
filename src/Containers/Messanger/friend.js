@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from "styled-components";
-import { flexCenter, FlexWrapper } from "../../Components/styleHelpers";
-import Helpers from "../../Components/helpers"
+import { flexCenter, FlexComponent } from "../../Components/styleHelpers";
 
 const Container = styled.div`
     ${flexCenter};
@@ -10,11 +9,16 @@ const Container = styled.div`
     padding: .3em;
 `
 
+const StyledWrapper = styled(FlexComponent)`
+    width: auto;
+    padding: 0;
+`
 const Image = styled.div`
     position: relative;
     border-radius: 50%;
     width: 3.5em;
     height: 3.5em;
+    background-image: url(${props => props.url});
     background-position: center;
     background-size: cover;
     margin-right: .5em;
@@ -28,18 +32,18 @@ const Nick = styled.div`
 const LogDot = styled.span`
     width: .6em;
     height: .6em;
-    background-color: red;
+    background-color: ${props => props.isLogged ? "green" : "red"};
     border-radius: 50%;
 `
+
 const FriendBoxItem = ({ user, handleConversation }) => {
-    
     return (
         <Container onClick={() => handleConversation(user)}>
-            <FlexWrapper>
-                <Image style={{backgroundImage: `url(${user.url})`}}></Image>
-                <Nick> { Helpers.capitalizeFirstLetter(user.nick) }</Nick>
-            </FlexWrapper>
-            <LogDot style={user.isLogged ? {backgroundColor: "green"} : {backgroundColor: "red"}}></LogDot>
+            <StyledWrapper>
+                <Image url={user.url}/>
+                <Nick> {user.nick} </Nick>
+            </StyledWrapper>
+            <LogDot isLogged={user.isLogged} />
         </Container>
     )
 }

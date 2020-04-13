@@ -1,11 +1,11 @@
 import React, { Component } from "react";
 import styled from "styled-components";
-import { flexCenter, variables, FlexWrapper }  from "../../Components/styleHelpers";
+import { flexCenter, variables, FlexComponent }  from "../../Components/styleHelpers";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch, faPaperPlane } from "@fortawesome/free-solid-svg-icons";
 import app from "../../base";
 import UserProfile from "./userProfile";
-import FriendBoxItem from "./friendBoxItem";
+import Friend from "./friend";
 import ArrowButton from "../../Components/arrowButton";
 import Cross from "../../Components/cross";
 import Message from "./message";
@@ -89,8 +89,11 @@ const MessageWindowHeader = styled.div`
     justify-content: space-between;
     width: 100%;
     padding: .5em;
-    border-bottom: .05em solid ${variables.$blue};
-    
+    border-bottom: .05em solid ${variables.$lightGray};   
+`
+const StyledWrapper = styled(FlexComponent)`
+    width: auto;
+    padding: 0;
 `
 const Nick = styled.p`
     color: ${variables.$grayBlue};
@@ -101,6 +104,7 @@ const Image = styled.div`
     position:relative;
     width:2.5em;
     height: 2.5em;
+    background-image: url(${props => props.url});
     background-position: center;
     background-size: cover;
     border-radius: 50%;
@@ -113,7 +117,7 @@ const LogDot = styled.span`
     right:.02em;
     width: .8em;
     height: .8em;
-    background-color: red;
+    background-color: ${props => props.isLogged ? "green" : "red"};
     border-radius: 50%;
     border: .15em solid white;
 `
@@ -275,7 +279,7 @@ class Messanger extends Component {
     renderFriends() {
         return this.state.friends.map((friend, index) => {
             return (
-                <FriendBoxItem
+                <Friend
                     user={friend}
                     key={index}
                     handleConversation={this.openConversation}
@@ -434,7 +438,7 @@ class Messanger extends Component {
                         <ArrowButton 
                             color={"white"}
                             backgroundColor={variables.$grayBlue}
-                            handleArrowButton={() => this.handleArrowButton()}
+                            handleFunction={() => this.handleArrowButton()}
                             isHide={isBottomBoxHide}
                         />
                     </ToggleBox>
@@ -442,12 +446,12 @@ class Messanger extends Component {
                 :
                 <MessageWindow>
                     <MessageWindowHeader>
-                        <FlexWrapper>
-                            <Image style={{backgroundImage: `url(${converserPhotoURL})`}}>
-                                <LogDot style={isConversationUserLogged ? {backgroundColor: "green"} : {backgroundColor: "red"}}></LogDot>
+                        <StyledWrapper>
+                            <Image url={converserPhotoURL}>
+                                <LogDot isLogged={isConversationUserLogged}/>
                             </Image>
                             <Nick> {converserNick} </Nick>
-                        </FlexWrapper>
+                        </StyledWrapper>
                         <Cross 
                             handleClick={this.hideConversation}
                             styled={crossStyled}
