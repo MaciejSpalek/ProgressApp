@@ -17,6 +17,7 @@ const Button = styled.button`
 const ArrowButton = ({ isHide, handleFunction, fontColor, backgroundColor }) => {
     const arrowDown = { rotate: 0 };
     const arrowUp = { rotate: 180 };
+
     return (
         <Button style={{backgroundColor: backgroundColor}} onClick={() => handleFunction()}>
             <FontAwesomeIcon 

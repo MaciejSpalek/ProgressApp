@@ -1,17 +1,18 @@
 import React, {Component} from 'react';
 
-import helpers from '../../Components/helpers';
-import app from '../../base';
+import helpers from '../../../Components/helpers';
+import app from '../../../base';
 import styled from 'styled-components';
 import Plan from './plan';
 
-import { Container, variables, flexCenter } from '../../Components/styleHelpers';
+import { Container, variables, flexCenter, RWD } from '../../../Components/styleHelpers';
 import { faPlusSquare, faListOl } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 
 const StyledContainer = styled(Container)`
     flex-direction: column;
+    background-color: ${variables.$lightGray};
 `
 
 const AddPlanWrapper = styled.div`
@@ -19,8 +20,11 @@ const AddPlanWrapper = styled.div`
     justify-content: space-between;
     width: 100%;
     background-color:white;
-    border-bottom: .1em solid ${variables.$gray};
+    margin-bottom: 1em;
     padding: .5em;
+    @media only screen and (min-width: ${RWD.$desktop}) {
+        width: 500px;
+    }
 `
 const PlanWrapper = styled.div`
     ${flexCenter}
@@ -28,6 +32,9 @@ const PlanWrapper = styled.div`
     width: 100%;
     height: 100%;
     overflow-y: scroll;
+    @media only screen and (min-width: ${RWD.$desktop}) {
+        width: 500px;
+    }
     
 `
 const Text = styled.h2`

@@ -1,16 +1,16 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
-import Exercise from './exercise';
-import app from '../../base';
-import helpers from '../../Components/helpers';
-import TogglePanel from '../../Components/togglePanel';
+import Exercise from '../Exercise/exercise';
+import app from '../../../base';
+import helpers from '../../../Components/helpers';
+import TogglePanel from '../../../Components/togglePanel';
 import { 
     variables, 
     flexCenter, 
     FlexWrapper,
     Paragraph,
     FlexComponent
-} from '../../Components/styleHelpers';
+} from '../../../Components/styleHelpers';
 
 
 const toggleFlexStyles = {
@@ -23,6 +23,7 @@ const Container = styled.div`
     justify-content: flex-start;
     flex-direction: column;
     width: 100%;
+    border: .1em solid ${variables.$lightGray};
     height: ${props => props.isHidden ? "auto" : "100%"};
 `
 
@@ -260,11 +261,11 @@ class Plan extends Component {
                                 : null}
                                 <TogglePanel 
                                     flexStyles={toggleFlexStyles}
-                                    text={`Dodaj ćwiczenie`}   
+                                    text={`Nowe ćwiczenie`}   
+                                    isHidden={isAddPanelHidden}
                                     handleFunction={()=> this.handleAddPanel()} 
                                     buttonBackgroundColor={variables.$grayBlue}
-                                    arrowColor={"white"}
-                                    isHidden={isHidden}
+                                    arrowColor={variables.$orange}
                                 />
                             </StyledAddPanel>
         const planContent = <PlanContent isHidden={isAddPanelHidden}>
@@ -276,6 +277,7 @@ class Plan extends Component {
                                 {AddPanel}
                             </PlanContent>
 
+
         return (
             <Container isHidden={isHidden}>
                 <TogglePanel 
@@ -283,7 +285,7 @@ class Plan extends Component {
                     text={`Plan ${id},  ${date}`}   
                     handleFunction={()=> this.changeHiddenState(planKey, isHidden)} 
                     buttonBackgroundColor={variables.$grayBlue}
-                    arrowColor={"white"}
+                    arrowColor={variables.$orange}
                     isHidden={isHidden}
                 />
                 {!isHidden ? planContent : null}

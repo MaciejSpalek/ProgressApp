@@ -12,7 +12,10 @@ const Container = styled.form`
     ${flexCenter}
     flex-direction: column;
     width: 100%;
-    /* border-radius: .5em; */
+    max-width: 500px;
+    /* @media only screen and (min-width: 1200px) {
+        width: 500px;
+    } */
 `
 const TextArea = styled.textarea`
     ${flexCenter}
@@ -26,7 +29,7 @@ const TextArea = styled.textarea`
     resize:none;
     margin-bottom: .5em;
     &::placeholder {
-        color: ${variables.$blue};
+        color: ${variables.$gray};
     }
 `
 const AddArea = styled.div`

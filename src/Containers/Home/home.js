@@ -3,7 +3,7 @@ import styled from "styled-components"
 import ShareBox from "../../Components/shareBox";
 import PostBoard from "../MyPosts/postBoard";
 import * as styleHelpers  from '../../Components/styleHelpers'
-
+import Messanger from '../Messanger/messanger';
 const flexCenter = styleHelpers.flexCenter;
 const variables = styleHelpers.variables;
 
@@ -19,6 +19,7 @@ const Container = styled.section`
     background-color: ${variables.$lightGray};
     padding: .5em;
     overflow-y: scroll;
+    
 `;
 
 
@@ -28,6 +29,7 @@ class Home extends Component {
             <Container>
                 <ShareBox/>
                 <PostBoard destination={"home"}/>
+                {/* <Messanger /> */}
             </Container>
         )
     }

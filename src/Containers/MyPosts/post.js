@@ -50,17 +50,16 @@ const Image = styled.div`
     border-radius: 50%;
     width: 3.5em;
     height: 3.5em;
+    background-image: url(${props => props.url});
     background-position: center;
     background-size: cover;
     margin-right: .5em;
 `
 const Nick = styled.div`
-    /* color:  ${variables.$gray}; */
     font-size: 1em;
     font-weight: bold;
 `
 const Date = styled.span`
-    /* color:  ${variables.$gray}; */
     font-size: .8em;   
 `
 const CrossIcon = styled.span`
@@ -341,7 +340,7 @@ class Post extends Component  {
         return (
             <Container>
                 <TopBox>
-                    <Image style={{backgroundImage: `url(${url})`}}></Image>
+                    <Image url={url}/>
                     <DescriptionWrapper>
                         <Nick> { Helpers.capitalizeFirstLetter(nick)}</Nick>
                         <Date> {dayjs(date).fromNow()} </Date>

@@ -3,6 +3,7 @@ import app from "../../base";
 import styled from "styled-components";
 import ShareBox from "../../Components/shareBox";
 import PostBoard from "../MyPosts/postBoard";
+import Messanger from '../Messanger/messanger';
 import * as styleHelpers  from '../../Components/styleHelpers';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {  
@@ -13,7 +14,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import helpers from "../../Components/helpers";
 
-
+const RWD = styleHelpers.RWD;
 const flexCenter = styleHelpers.flexCenter;
 const variables = styleHelpers.variables;
 const frontActive = {
@@ -23,6 +24,15 @@ const frontActive = {
 const backActive = {
     transform: "rotateY(180deg)"
 }
+
+
+const Wrapper = styled.div`
+    position: relative;
+    ${flexCenter};
+    flex-direction: column;
+    width: 100%;
+    max-width: 500px;
+`
 
 const Container = styled.section`
     ${flexCenter}
@@ -42,8 +52,16 @@ const ProfileCard = styled.div`
     ${flexCenter};
     position: relative;
     width: 100%;
+    max-width: 500px;
     height: 500px;
     margin-bottom: .5em;
+    @media only screen and (min-width: ${RWD.$desktop}) {
+        position: absolute;
+        width: 320px;
+        height: 522px;
+        top: .05em;
+        right: calc(100% + 1em);
+    }
 `
 
 const Frontside = styled.div`
@@ -64,6 +82,7 @@ const Backside = styled.div`
     position: absolute;
     width: 100%;
     height: 100%;
+    border-radius: .5em;
     transition: .3s linear;
     transform-origin: center;
     transform:  rotateY(180deg);
@@ -162,6 +181,8 @@ const ProfileBox = styled.div`
     position: relative;
     width: 100%;
     height: 100%;
+    border-radius: .5em;
+
     padding: .5em;
     overflow-y: scroll;
 `
@@ -213,7 +234,7 @@ class Profile extends Component {
     }
 
     // function invoke on button
-    updateProfileData = (e) => {
+    updateProfileData(e) {
         e.preventDefault();
         const { sex, weight, height, yourSport, priority, trainingExperience, aboutMe } = e.target.elements;
 
@@ -248,7 +269,7 @@ class Profile extends Component {
     getText = (caption, profileData, unit="") => {
         return `${caption}: ${profileData}${unit}`;
     }
-    renderProfileBox = () => {
+    renderProfileBox() {
         const { sex,
             weight,
             height,
@@ -277,15 +298,15 @@ class Profile extends Component {
         }
     }
   
-    choosePhoto = async (e) => {
+    async choosePhoto(e) {
         if (e.target.files[0]) {
             const image = e.target.files[0];
-                await this.setState({image});
-                this.setPhotoURL();
+            await this.setState({image});
+            this.setPhotoURL();
         }
     }
 
-    setPhotoURL = () => {
+    setPhotoURL() {
         const { image } = this.state;
         const userID = app.getUserID();
         const uploadTask = app.getStorage().ref(`users/${userID}/profilePhoto`).put(image);
@@ -297,35 +318,37 @@ class Profile extends Component {
             app.getStorage().ref(`users/${userID}`).child(`profilePhoto`).getDownloadURL().then(URL => {
                 this.setState({
                     url: URL
-                })
+                }, ()=>{
 
-            usersRef.child(app.getUserID()).update({
-                url: this.state.url
-            });
-
-            // update photo in posts after its change
-            postsRef.on('value', snapshot => {
-                const posts = snapshot.val();
-                for(let post in posts) {
-                    if(posts[post].userID === userID) {
-                        postsRef.child(post).update({
-                            url: this.state.url
-                        })
-                    }
-                }
-            });
-
-            // update photo in comments after its change
-            commentsRef.on('value', snapshot => {
-                const comments = snapshot.val();
-                for(let comment in comments) {
-                    if(comments[comment].userID === userID) {
-                        commentsRef.child(comment).update({
-                            url: this.state.url
-                        })
-                    }
-                }
-            });
+                    //  update photo in users after its change
+                    usersRef.child(app.getUserID()).update({
+                        url: this.state.url
+                    });
+        
+                    // update photo in posts after its change
+                    postsRef.on('value', snapshot => {
+                        const posts = snapshot.val();
+                        for(let post in posts) {
+                            if(posts[post].userID === userID) {
+                                postsRef.child(post).update({
+                                    url: this.state.url
+                                })
+                            }
+                        }
+                    });
+        
+                    // update photo in comments after its change
+                    commentsRef.on('value', snapshot => {
+                        const comments = snapshot.val();
+                        for(let comment in comments) {
+                            if(comments[comment].userID === userID) {
+                                commentsRef.child(comment).update({
+                                    url: this.state.url
+                                })
+                            }
+                        }
+                    });
+            })
           }) 
       });
     }
@@ -362,42 +385,45 @@ class Profile extends Component {
         const { isRotateCard, isEditButtonActive, nick, age, url } = this.state;
         return (
             <Container>
-                <ProfileCard>
-                    <Frontside style={isRotateCard ? backActive : null}>
-                        <PhotoBox>
-                            <Photo src={url}></Photo>
-                            <Nick> { app.getCurrentUser() ? `${helpers.capitalizeFirstLetter(nick)}, ${age}l` : null} </Nick>
-                        </PhotoBox>
-                        <ButtonBox>
-                            <FontAwesomeIcon icon={faCameraRetro} style={{fontSize: 35, margin: '.1em'}} color={variables.$grayBlue} />
-                            <label>
-                                <FontAwesomeIcon icon={faImages} style={{fontSize: 35, margin: '.1em'}} color={variables.$grayBlue} />
-                                <input type="file" style={{display: "none"}} onChange={this.choosePhoto}/>
-                            </label>
-                            <FontAwesomeIcon icon={faExternalLinkSquareAlt} style={{fontSize: 35, margin: '.1em'}} color={variables.$grayBlue}  onClick={this.rotateCardHandler.bind(this)}/>
-                        </ButtonBox>
-                    </Frontside>
-                    <Backside style={isRotateCard ? frontActive : null}>
-                        {isEditButtonActive ? 
-                            <AddBox onSubmit={(e) => {this.updateProfileData(e)}}>
-                                <Caption> Podstawowe dane: </Caption>
-                                <Input name="sex" placeholder="Płeć" required></Input>
-                                <Input name="trainingExperience" type="Number" placeholder="Staż tren." required></Input>
-                                <Input name="weight" type="number" placeholder="Waga" required></Input>
-                                <Input name="height" type="number" placeholder="Wzrost" required></Input>
-                                <Input name="priority" placeholder="Priorytet" required></Input>
-                                <Input name="yourSport" placeholder="Sport" required></Input>
-                                <About name="aboutMe" placeholder="O mnie"></About>
-                                <styleHelpers.Button>Zapisz</styleHelpers.Button>
-                            </AddBox> : this.renderProfileBox()}
+                <Wrapper>
+                    <ProfileCard>
+                        <Frontside style={isRotateCard ? backActive : null}>
+                            <PhotoBox>
+                                <Photo src={url}></Photo>
+                                <Nick> { app.getCurrentUser() ? `${helpers.capitalizeFirstLetter(nick)}, ${age}l` : null} </Nick>
+                            </PhotoBox>
                             <ButtonBox>
-                                <FontAwesomeIcon icon={faPenSquare} style={{fontSize: 35, margin: '.1em'}} color={variables.$grayBlue} onClick={this.editButtonHandler.bind(this)}/>
-                                <FontAwesomeIcon icon={faExternalLinkSquareAlt} style={{fontSize: 35 , margin: '.1em'}} color={variables.$grayBlue}  onClick={this.rotateCardHandler.bind(this)}/>
+                                <FontAwesomeIcon icon={faCameraRetro} style={{fontSize: 35, margin: '.1em'}} color={variables.$grayBlue} />
+                                <label>
+                                    <FontAwesomeIcon icon={faImages} style={{fontSize: 35, margin: '.1em'}} color={variables.$grayBlue} />
+                                    <input type="file" style={{display: "none"}} onChange={(e) => this.choosePhoto(e)}/>
+                                </label>
+                                <FontAwesomeIcon icon={faExternalLinkSquareAlt} style={{fontSize: 35, margin: '.1em'}} color={variables.$grayBlue}  onClick={this.rotateCardHandler.bind(this)}/>
                             </ButtonBox>
-                    </Backside>
-                </ProfileCard>
-                <ShareBox/>
-                <PostBoard destination={"profile"}/>
+                        </Frontside>
+                        <Backside style={isRotateCard ? frontActive : null}>
+                            {isEditButtonActive ? 
+                                <AddBox onSubmit={(e) => {this.updateProfileData(e)}}>
+                                    <Caption> Podstawowe dane: </Caption>
+                                    <Input name="sex" placeholder="Płeć" required></Input>
+                                    <Input name="trainingExperience" type="Number" placeholder="Staż tren." required></Input>
+                                    <Input name="weight" type="number" placeholder="Waga" required></Input>
+                                    <Input name="height" type="number" placeholder="Wzrost" required></Input>
+                                    <Input name="priority" placeholder="Priorytet" required></Input>
+                                    <Input name="yourSport" placeholder="Sport" required></Input>
+                                    <About name="aboutMe" placeholder="O mnie"></About>
+                                    <styleHelpers.Button>Zapisz</styleHelpers.Button>
+                                </AddBox> : this.renderProfileBox()}
+                                <ButtonBox>
+                                    <FontAwesomeIcon icon={faPenSquare} style={{fontSize: 35, margin: '.1em'}} color={variables.$grayBlue} onClick={this.editButtonHandler.bind(this)}/>
+                                    <FontAwesomeIcon icon={faExternalLinkSquareAlt} style={{fontSize: 35 , margin: '.1em'}} color={variables.$grayBlue}  onClick={this.rotateCardHandler.bind(this)}/>
+                                </ButtonBox>
+                        </Backside>
+                    </ProfileCard>
+                    <ShareBox/>
+                    <PostBoard destination={"profile"}/>
+                </Wrapper>
+                {/* <Messanger /> */}
             </Container>
         )
     }

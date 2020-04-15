@@ -2,10 +2,12 @@ import React, { Component } from "react";
 import app from "../../base";
 import styled from "styled-components";
 import Helpers from "../../Components/helpers.js";
+import { RWD } from '../../Components/styleHelpers';
 import Post from './post';
 
 const Container = styled.div`
     width: 100%;
+    max-width: 500px;
 `
 
 

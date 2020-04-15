@@ -1,5 +1,4 @@
 import React from 'react';
-import styled from 'styled-components';
 import { FlexComponent, Caption } from './styleHelpers';
 import ArrowButton from '../Components/arrowButton';
 

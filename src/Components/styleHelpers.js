@@ -1,16 +1,27 @@
 import styled from "styled-components";
 
+
+export const RWD = {
+  $tablet: "768px",
+  $desktop: "1200px"
+}
+
 export const variables = {
-    $gray: "rgb(160, 160, 160)",
+
     $lightGray: "rgb(230, 230, 230)",
-    
-    $blue: "rgb(255, 255, 255)",
     $lightBlue: "rgb(0, 157, 255)",
+    $lightRed: "rgb(255, 227, 227)",
+    $lightOrange: "rgb(255, 235, 217)",
+
+    $gray: "rgb(160, 160, 160)",
+    $orange: "#FF8E00",
+    $blue: "rgb(255, 255, 255)",
+    
     $grayBlue: "#005D95",
     $darkBlue: "rgb(0, 74, 121)",
 
-    $lightRed: "rgb(255, 227, 227)",
-    $orange: "#FF8E00",
+    
+    
 }
 
 
@@ -21,12 +32,13 @@ export const flexCenter = {
 }
 
 
+
 // styles for login.js & signup.js
 export const Container = styled.section`
   ${flexCenter};
   position: fixed;
   top: 64px;
-  left: 0;
+  left: 0%;
   width: 100%;
   height: calc(100vh - 64px);
   background-color: ${variables.$lightGray};

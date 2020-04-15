@@ -27,6 +27,7 @@ const Image = styled.div`
     border-radius: 50%;
     width: 2.5em;
     height: 2.5em;
+    background-image: url(${props => props.url});
     background-position: center;
     background-size: cover;
     margin-right: .5em;
@@ -52,7 +53,7 @@ const Comment = ({data}) => {
     return (
         <Container>
             <TopBox>
-                <Image style={{backgroundImage: `url(${data.url})`}}></Image>
+                <Image url={data.url}/>
                 <DescriptionWrapper>
                     <Nick> { Helpers.capitalizeFirstLetter(data.nick) }</Nick>
                     <Date> {data.date} </Date>

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import styled from "styled-components";
-import { flexCenter, variables, FlexComponent }  from "../../Components/styleHelpers";
+import { flexCenter, variables, FlexComponent, RWD }  from "../../Components/styleHelpers";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch, faPaperPlane } from "@fortawesome/free-solid-svg-icons";
 import app from "../../base";
@@ -19,7 +19,11 @@ const Container = styled.div`
     left: 0;
     width: 100%;
     height: calc(100vh - 64px);
-    background-color: white;
+    
+    @media only screen and (min-width: ${RWD.$desktop}) {
+        max-width: 370px;
+        left: calc(100% - 420px);
+    }
 `
 
 const MainBox = styled.div`
@@ -64,6 +68,7 @@ const ToggleBox = styled.div`
 `
 const FriendBox = styled.div`
     width: 100%;
+    background-color:white;
     padding: .5em;
 `
 const Caption = styled.p`
@@ -137,7 +142,7 @@ const FormBox = styled.form`
     width: 100%;
     height: 45px;
     padding: .2em .5em;
-    border-bottom: .05em solid ${variables.$gray};
+    border-top: .05em solid ${variables.$lightGray};
     background-color: ${variables.$blue};
 `
 
@@ -462,7 +467,7 @@ class Messanger extends Component {
                         {this.renderMessages()}
                         <div ref={this.messageWindow} />
                     </MessageWindowContent>
-                    <FormBox style={{ border: "none", padding: "1em .5em"}} onSubmit = {(e) => this.sendMessage(e)}>
+                    <FormBox style={{ padding: "1em .5em"}} onSubmit = {(e) => this.sendMessage(e)}>
                         <Input name="input" style={{ margin: 0 }} placeholder="Napisz..."></Input>
                         <FontAwesomeIcon icon={faPaperPlane} color={variables.$grayBlue} style={{fontSize: "1.5em"}}/>
                     </FormBox>
