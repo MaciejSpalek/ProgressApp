@@ -12,7 +12,6 @@ import {
     FlexComponent
 } from '../../../Components/styleHelpers';
 
-
 const toggleFlexStyles = {
     "justifyContent": "space-between",
     "backgroundColor": "white"
@@ -111,7 +110,7 @@ class Plan extends Component {
             isHidden: true,
             isAddPanelHidden: false,
             exercises: [],
-            radio: "reps"
+            radio: "repsWithWeight"
         }
     }
 
@@ -155,6 +154,8 @@ class Plan extends Component {
             }
         })
     }
+
+    
     addExercise(e, planKey){
         e.preventDefault()
         const radioValue = this.state.radio;
@@ -169,7 +170,7 @@ class Plan extends Component {
                 planKey: this.props.planKey,
                 exerciseKey: exerciseKey,
                 name: helpers.capitalizeFirstLetter(name.value),
-                type: radioValue
+                type: radioValue,
             }
             updates[`users-plans/${userID}/${planKey}/${exerciseKey}`] = data;
             helpers.clearInput(name);
@@ -240,11 +241,20 @@ class Plan extends Component {
                                         <Label>
                                             <Radio  type="radio" 
                                                     name="radio" 
-                                                    value="reps" 
-                                                    checked={radio === "reps"} 
+                                                    value="repsWithoutWeight" 
+                                                    checked={radio === "repsWithoutWeight"} 
                                                     onChange={(e) => this.handleRadioButton(e)}>
                                             </Radio> 
-                                            na powtórzenia 
+                                            na powt. bez ciężaru 
+                                        </Label>
+                                        <Label>
+                                            <Radio  type="radio" 
+                                                    name="radio" 
+                                                    value="repsWithWeight" 
+                                                    checked={radio === "repsWithWeight"} 
+                                                    onChange={(e) => this.handleRadioButton(e)}>
+                                            </Radio>
+                                            na powt. z ciężarem 
                                         </Label>
                                         <Label>
                                             <Radio  type="radio" 

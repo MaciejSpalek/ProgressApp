@@ -180,11 +180,11 @@ class Messanger extends Component {
         }
     }
 
-    scrollToBottom = () => {
+    scrollToBottom() {
         this.messageWindow.current.scrollIntoView();
     };
   
-    componentDidMount = () => {
+    componentDidMount() {
         this._isMounted = true;
         app.getAllUsers((tempArray) => {
             if(this._isMounted) {
@@ -287,7 +287,7 @@ class Messanger extends Component {
                 <Friend
                     user={friend}
                     key={index}
-                    handleConversation={this.openConversation}
+                    handleConversation={()=> this.openConversation(friend)}
                 />
             )
         })
@@ -308,13 +308,13 @@ class Messanger extends Component {
     }
 
 
-    handleArrowButton = () => {
+    handleArrowButton() {
         this.setState(prevstate => ({
             isBottomBoxHide: !prevstate.isBottomBoxHide
         }))
     }
 
-    openConversation = async (user) => {
+    async openConversation(user) {
         await this.setState({
             isConversationUserLogged: user.isLogged,
             converserPhotoURL: user.url,
@@ -420,7 +420,6 @@ class Messanger extends Component {
             converserPhotoURL, 
             
         } = this.state;
-
         const content = <>
                             <FriendBox>
                                 {inputText === "" ? this.renderFriends(): null}

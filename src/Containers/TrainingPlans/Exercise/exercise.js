@@ -3,6 +3,8 @@ import styled from 'styled-components'
 import { variables, flexCenter, FlexComponent } from '../../../Components/styleHelpers'
 import TogglePanel from '../../../Components/togglePanel';
 import Content from './content';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faHourglassStart, faDumbbell, faEllipsisV } from '@fortawesome/free-solid-svg-icons';
 
 
 const toggleStyles = {
@@ -17,14 +19,12 @@ const toggleStyles = {
 
 const modifyToggleStyles = {
     "justifyContent": "space-between",
-    // "backgroundColor": "white",
     "backgroundColor": `${variables.$lightOrange}`,
     "margin": ".25em .25em 0",
     "width": "calc(100% - .5em)",
     "borderRadius": ".3em",
     "borderBottomLeftRadius": "0",
     "borderBottomRightRadius": "0",
-    // "border": `.2em solid ${variables.$grayBlue}`,
     "borderBottom": "none"
 }
 
@@ -48,22 +48,38 @@ class exercise extends Component {
         }))
     }
 
+    setExerciseIcon(radioValue) {
+        if(radioValue === "repsWithWeight") {
+            console.log("ciężar")
+            return faDumbbell;
+        } else if(radioValue === "repsWithoutWeight") {
+            console.log("powtórzenia")
+            return faEllipsisV;
+        } else {
+            console.log("time")
+            return faHourglassStart;
+        }
+    }
+
     render() {
-        const { name } = this.props;
+        const { name, type } = this.props;
         const { isHidden } = this.state;
-        
-        
+        console.log(type)
         return (
             <Container isHidden={isHidden}>
                 <TogglePanel 
                     handleFunction={()=> this.handleArrowButton()} 
                     buttonBackgroundColor={variables.$grayBlue}
+                    buttonColor={"white"}
                     flexStyles={!isHidden ? modifyToggleStyles: toggleStyles}
-                    arrowColor={"white"}
                     isHidden={isHidden}
-                    text={name}   
+                    text={name}  
+                    textFontSize={"1.3em"}
+                    iconName={this.setExerciseIcon(type)} 
+                    iconColor={variables.$grayBlue}
+                    iconFontSize={25}
                 />
-                {!isHidden ? <Content /> : null}
+                {!isHidden ? <Content type={type} /> : null}
             </Container>
         )
     }

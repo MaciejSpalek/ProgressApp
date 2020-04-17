@@ -45,7 +45,7 @@ const SignUp = ({ history }) => {
         .collection("users")
         .doc(app.getUserID())
         .set({ 
-          // measurement: []
+          measurement: []
         });
 
         history.push("/");

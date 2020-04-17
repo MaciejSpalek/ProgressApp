@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import styled from 'styled-components'
 import { variables, flexCenter, FlexComponent } from '../../../Components/styleHelpers'
 import Input from '../../../Components/input';
+import Paragraph from '../../../Components/paragraph';
 import { faPlusSquare, faTimes } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
@@ -12,19 +13,31 @@ const inputStyles = {
     "height": "35px",
     "borderRadius": ".3em",
     "padding": ".5em"
-    
 }
+
+const modifyInputStyles = {
+    "border": `.1em solid ${variables.$lightGray}`,
+    "width": "100%",
+    "height": "35px",
+    "borderRadius": ".3em",
+    "padding": ".5em",
+    "marginRight": ".5em"
+}
+
+const StyledFormWrapper = styled(FlexComponent)`
+    flex-direction: column;
+    background-color: white;
+    width: calc(100% - .5em);
+    border-bottom-left-radius: .3em;
+    border-bottom-right-radius: .3em;
+`
 const Form = styled.form`
     ${flexCenter};
     justify-content: space-between;
-    border-bottom-left-radius: .3em;
-    border-bottom-right-radius: .3em;
     background-color: white;
-    width: calc(100% - .5em);
-    /* border: .2em solid ${variables.$grayBlue}; */
-
+    width: calc(100%);
     border-top: .1em solid ${variables.$lightGray};
-    padding: .5em;
+    padding: .5em 0;
 `
 
 class Content extends Component {
@@ -33,26 +46,54 @@ class Content extends Component {
     }
     
 
-    render() {
-
+    renderForm(type) {
         return (
-           <Form>
-               <Input 
-                    name={"reps"}  
-                    type={"number"}
-                    style={inputStyles}
-                    placeholder={"powt."}
-                />
-                <FontAwesomeIcon icon={faTimes} style={{fontSize: 20, color: variables.$gray}}/>
-                <Input 
+            <Form>
+                {type == "repsWithWeight" ?
+                <>
+                    <Input 
+                        name={"reps"}  
+                        type={"number"}
+                        style={inputStyles}
+                        placeholder={"powt."}
+                    />
+                    <FontAwesomeIcon icon={faTimes} style={{fontSize: 20, color: variables.$gray}}/>
+                    <Input 
                         name={"weight"}  
                         type={"number"}
                         style={inputStyles}
                         placeholder={"kg"}
+                    />
+                    <FontAwesomeIcon icon={faPlusSquare} style={{fontSize: 40, color: variables.$grayBlue}}/>
+                </> :
+                <>
+                    <Input 
+                        name={"reps"}  
+                        type={"number"}
+                        style={modifyInputStyles}
+                        placeholder={type === "repsWithoutWeight" ? "powtórzenia" : "czas"}
+                    />                
+                    <FontAwesomeIcon icon={faPlusSquare} style={{fontSize: 40, color: variables.$grayBlue}}/>
+                </>
+                }
+                
+            </Form>
+        )
+    }
+
+    render() {
+        const { type } = this.props;
+        return (
+            <StyledFormWrapper>
+                <Paragraph
+                    text={"Dodaj serie!"}
+                    fontSize={"1.3em"}
+                    align={"flex-start"}
+                    padding={".3em 0"}
+                    color={variables.$gray}
                 />
-                <FontAwesomeIcon icon={faPlusSquare} style={{fontSize: 40, color: variables.$grayBlue}}/>
-               {/* <Button> Dodaj </Button> */}
-           </Form>
+                {this.renderForm(type)}
+            </StyledFormWrapper>
         )
     }
 }

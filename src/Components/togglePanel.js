@@ -1,25 +1,68 @@
 import React from 'react';
-import { FlexComponent, Caption } from './styleHelpers';
+import { FlexComponent, flexCenter, variables } from './styleHelpers';
 import ArrowButton from '../Components/arrowButton';
+import styled from 'styled-components';
+import Paragraph from './paragraph';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
+
+const StyledContainer = styled(FlexComponent)`
+    ${props => props.styles};
+    justify-content: space-between;
+`
+
+const StyledWrapper = styled(FlexComponent)`
+    ${flexCenter}
+    justify-content: flex-start;
+    padding: 0;
+`
+
+const SquareWrapper = styled.div`
+    ${flexCenter}
+    background-color: ${variables.$lightGray};
+    width: 35px;
+    height: 35px;
+    border-radius: .3em;
+    margin-right: .5em;
+`
 
 const TogglePanel = ({ 
     flexStyles, 
-    text, 
-    handleFunction,
     buttonBackgroundColor, 
-    arrowColor, 
-    isHidden
+    buttonColor, 
+    isHidden,
+    handleFunction,
+
+    text, 
+    textFontSize,
+    textFontWeight,
+
+    iconName,
+    iconFontSize,
+    iconColor,
+    
 }) => {
     return (
-        <FlexComponent style={flexStyles}>
-            <Caption> {text} </Caption>
+        <StyledContainer style={flexStyles}>
+            <StyledWrapper>
+                {typeof iconName !== "undefined" ?
+                    <SquareWrapper>
+                        <FontAwesomeIcon icon={iconName} style={{fontSize: iconFontSize, color: iconColor}}/> 
+                    </SquareWrapper> : null
+                }
+                <Paragraph 
+                    text={text}  
+                    fontSize={textFontSize}
+                    fontWeight={textFontWeight}
+                /> 
+            </StyledWrapper>
             <ArrowButton
                 handleFunction={()=> handleFunction()}
                 backgroundColor={buttonBackgroundColor}
-                fontColor={arrowColor}
+                fontColor={buttonColor}
                 isHide={isHidden}
             />
-        </FlexComponent>
+        </StyledContainer>
     )
 }
 export default TogglePanel;
