@@ -50,21 +50,17 @@ class exercise extends Component {
 
     setExerciseIcon(radioValue) {
         if(radioValue === "repsWithWeight") {
-            console.log("ciężar")
             return faDumbbell;
         } else if(radioValue === "repsWithoutWeight") {
-            console.log("powtórzenia")
             return faEllipsisV;
         } else {
-            console.log("time")
             return faHourglassStart;
         }
     }
 
     render() {
-        const { name, type } = this.props;
+        const { name, type, exerciseKey, planKey, currentSeries, currentTraining } = this.props;
         const { isHidden } = this.state;
-        console.log(type)
         return (
             <Container isHidden={isHidden}>
                 <TogglePanel 
@@ -79,7 +75,13 @@ class exercise extends Component {
                     iconColor={variables.$grayBlue}
                     iconFontSize={25}
                 />
-                {!isHidden ? <Content type={type} /> : null}
+                {!isHidden ?    <Content 
+                                    type={type} 
+                                    planKey={planKey}
+                                    exerciseKey={exerciseKey}
+                                    currentSeries={currentSeries}
+                                    currentTraining={currentTraining}
+                                /> : null}
             </Container>
         )
     }

@@ -11,6 +11,8 @@ import {
     Paragraph,
     FlexComponent
 } from '../../../Components/styleHelpers';
+import { faTasks, faRunning } from '@fortawesome/free-solid-svg-icons';
+
 
 const toggleFlexStyles = {
     "justifyContent": "space-between",
@@ -158,7 +160,7 @@ class Plan extends Component {
     
     addExercise(e, planKey){
         e.preventDefault()
-        const radioValue = this.state.radio;
+        const { radio } = this.state;
         const { name } = e.target.elements;
 
         if(!helpers.isInputEmpty(name)) {
@@ -170,7 +172,9 @@ class Plan extends Component {
                 planKey: this.props.planKey,
                 exerciseKey: exerciseKey,
                 name: helpers.capitalizeFirstLetter(name.value),
-                type: radioValue,
+                type: radio,
+                currentTraining: 1,
+                currentSeries: 1
             }
             updates[`users-plans/${userID}/${planKey}/${exerciseKey}`] = data;
             helpers.clearInput(name);
@@ -187,6 +191,9 @@ class Plan extends Component {
                 <Exercise
                     key={index}
                     exerciseKey={exercise.exerciseKey}
+                    planKey={exercise.planKey}
+                    currentSeries={exercise.currentSeries}
+                    currentTraining={exercise.currentTraining}
                     name={exercise.name}
                     type={exercise.type}
                 />
@@ -275,7 +282,10 @@ class Plan extends Component {
                                     isHidden={isAddPanelHidden}
                                     handleFunction={()=> this.handleAddPanel()} 
                                     buttonBackgroundColor={variables.$grayBlue}
-                                    arrowColor={variables.$orange}
+                                    buttonColor={variables.$orange}
+                                    iconName={faRunning} 
+                                    iconColor={variables.$grayBlue}
+                                    iconFontSize={25}
                                 />
                             </StyledAddPanel>
         const planContent = <PlanContent isHidden={isAddPanelHidden}>
@@ -287,7 +297,7 @@ class Plan extends Component {
                                 {AddPanel}
                             </PlanContent>
 
-
+        console.log(this.state.exercises)
         return (
             <Container isHidden={isHidden}>
                 <TogglePanel 
@@ -295,8 +305,11 @@ class Plan extends Component {
                     text={`Plan ${id},  ${date}`}   
                     handleFunction={()=> this.changeHiddenState(planKey, isHidden)} 
                     buttonBackgroundColor={variables.$grayBlue}
-                    arrowColor={variables.$orange}
+                    buttonColor={variables.$orange}
                     isHidden={isHidden}
+                    iconName={faTasks} 
+                    iconColor={variables.$grayBlue}
+                    iconFontSize={30}
                 />
                 {!isHidden ? planContent : null}
             </Container>

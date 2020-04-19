@@ -1,10 +1,13 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
-import { variables, flexCenter, FlexComponent } from '../../../Components/styleHelpers'
 import Input from '../../../Components/input';
 import Paragraph from '../../../Components/paragraph';
+import helpers from '../../../Components/helpers';
+import app from '../../../base';
+import { variables, flexCenter, FlexComponent } from '../../../Components/styleHelpers'
 import { faPlusSquare, faTimes } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import PlusButton from '../../../Components/plusButton';
 
 
 const inputStyles = {
@@ -43,13 +46,71 @@ const Form = styled.form`
 class Content extends Component {
     constructor(props) {
         super(props);
+        this.state = {
+            trainingCounter: 1, 
+            seriesCounter: 1
+        }
     }
     
+    
 
-    renderForm(type) {
+    setSeriesCounter() {
+        const { planKey, 
+                exerciseKey, 
+                currentSeries, 
+                currentTraining 
+        } = this.props;
+
+        let tempCurrentSeries = currentSeries;
+        let tempCurrentTraining = currentTraining;
+
+        if(tempCurrentSeries >=3) {
+            tempCurrentSeries = 0;
+            tempCurrentTraining++;
+        }
+        app.getRealTimeDatabase()
+            .ref("users-plans")
+            .child(app.getUserID())
+            .child(planKey)
+            .child(exerciseKey)
+            .update({
+                currentSeries: tempCurrentSeries + 1,
+                currentTraining: tempCurrentTraining
+            })
+    }
+
+    addSeries(e){
+        e.preventDefault()
+         const { type,
+                 exerciseKey, 
+                 currentSeries, 
+                 currentTraining 
+        } = this.props;
+        
+        const { reps, time, weight } = e.target.elements;
+
+
+        // if(!helpers.isInputEmpty()) {
+            const currentTrainingRef = app.getRealTimeDatabase().ref(`training-days`).child(currentTraining);
+            const seriesKey = currentTrainingRef.push().key;
+            const updates = {};
+            const seriesData = {
+                id: currentSeries,
+                exerciseKey: exerciseKey,  
+                reps:  reps.value,
+                weight: weight.value
+            }
+            updates[`training-days/${currentTraining}${exerciseKey}/${seriesKey}`] = seriesData;
+            this.setSeriesCounter()
+            return app.getRealTimeDatabase().ref().update(updates);
+        // }
+    }
+
+    renderForm() {
+        const { type } = this.props;
         return (
-            <Form>
-                {type == "repsWithWeight" ?
+            <Form onSubmit={(e)=> this.addSeries(e)}>
+                {type === "repsWithWeight" ?
                 <>
                     <Input 
                         name={"reps"}  
@@ -64,25 +125,22 @@ class Content extends Component {
                         style={inputStyles}
                         placeholder={"kg"}
                     />
-                    <FontAwesomeIcon icon={faPlusSquare} style={{fontSize: 40, color: variables.$grayBlue}}/>
+                    <PlusButton />
                 </> :
                 <>
                     <Input 
-                        name={"reps"}  
+                        name={"time"}  
                         type={"number"}
                         style={modifyInputStyles}
                         placeholder={type === "repsWithoutWeight" ? "powtórzenia" : "czas"}
                     />                
                     <FontAwesomeIcon icon={faPlusSquare} style={{fontSize: 40, color: variables.$grayBlue}}/>
-                </>
-                }
-                
+                </>} 
             </Form>
         )
     }
 
     render() {
-        const { type } = this.props;
         return (
             <StyledFormWrapper>
                 <Paragraph
@@ -92,7 +150,7 @@ class Content extends Component {
                     padding={".3em 0"}
                     color={variables.$gray}
                 />
-                {this.renderForm(type)}
+                {this.renderForm()}
             </StyledFormWrapper>
         )
     }
