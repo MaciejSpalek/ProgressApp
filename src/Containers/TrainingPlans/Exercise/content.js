@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import styled from 'styled-components'
 import Input from '../../../Components/input';
 import Paragraph from '../../../Components/paragraph';
+import TrainingDay from './trainingDay';
 import helpers from '../../../Components/helpers';
 import app from '../../../base';
 import { variables, flexCenter, FlexComponent } from '../../../Components/styleHelpers'
@@ -46,15 +47,10 @@ const Form = styled.form`
 class Content extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-            trainingCounter: 1, 
-            seriesCounter: 1
-        }
     }
     
-    
 
-    setSeriesCounter() {
+    updateExerciseCounters() {
         const { planKey, 
                 exerciseKey, 
                 currentSeries, 
@@ -68,6 +64,7 @@ class Content extends Component {
             tempCurrentSeries = 0;
             tempCurrentTraining++;
         }
+
         app.getRealTimeDatabase()
             .ref("users-plans")
             .child(app.getUserID())
@@ -100,12 +97,23 @@ class Content extends Component {
                 reps:  reps.value,
                 weight: weight.value
             }
+            this.updateExerciseCounters();
             updates[`training-days/${currentTraining}${exerciseKey}/${seriesKey}`] = seriesData;
-            this.setSeriesCounter()
             return app.getRealTimeDatabase().ref().update(updates);
         // }
     }
 
+    renderTrainingDays() {
+        return this.props.trainingDays.map((day, index) => {
+            return (
+                <TrainingDay 
+                    id={index}
+                    key={index}
+                    day={day}
+                />
+            )
+        })
+    }
     renderForm() {
         const { type } = this.props;
         return (
@@ -151,6 +159,7 @@ class Content extends Component {
                     color={variables.$gray}
                 />
                 {this.renderForm()}
+                {this.renderTrainingDays()}
             </StyledFormWrapper>
         )
     }

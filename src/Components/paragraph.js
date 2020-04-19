@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Paragraph = ({ color, fontSize, fontWeight, text, align, padding }) => {
+const Paragraph = ({ color, fontSize, fontWeight, text, align,  padding }) => {
     return (
         <p style={{
             fontSize: fontSize, 

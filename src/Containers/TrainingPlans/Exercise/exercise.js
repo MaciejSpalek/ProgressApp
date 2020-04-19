@@ -1,9 +1,9 @@
-import React, { Component } from 'react'
-import styled from 'styled-components'
-import { variables, flexCenter, FlexComponent } from '../../../Components/styleHelpers'
+import React, { Component } from 'react';
+import styled from 'styled-components';
 import TogglePanel from '../../../Components/togglePanel';
 import Content from './content';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import app from '../../../base';
+import { variables, flexCenter } from '../../../Components/styleHelpers';
 import { faHourglassStart, faDumbbell, faEllipsisV } from '@fortawesome/free-solid-svg-icons';
 
 
@@ -19,7 +19,7 @@ const toggleStyles = {
 
 const modifyToggleStyles = {
     "justifyContent": "space-between",
-    "backgroundColor": `${variables.$lightOrange}`,
+    "backgroundColor": `${variables.$lightGreen}`,
     "margin": ".25em .25em 0",
     "width": "calc(100% - .5em)",
     "borderRadius": ".3em",
@@ -39,13 +39,26 @@ class exercise extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            isHidden: true
+            isHidden: true,
+            trainingDays: []
         }
     }
     handleArrowButton() {
         this.setState( prevState => ({
             isHidden: !prevState.isHidden
-        }))
+        }), ()=> {
+            if(this.state.isHidden) {
+                this.setState({
+                    trainingDays: []
+                })
+            } else {
+                app.getTrainingDays(this.props.exerciseKey, (tempArray)=> {
+                    this.setState({
+                        trainingDays: tempArray
+                    })
+                })
+            }
+        })
     }
 
     setExerciseIcon(radioValue) {
@@ -60,7 +73,8 @@ class exercise extends Component {
 
     render() {
         const { name, type, exerciseKey, planKey, currentSeries, currentTraining } = this.props;
-        const { isHidden } = this.state;
+        const { isHidden, trainingDays } = this.state;
+        
         return (
             <Container isHidden={isHidden}>
                 <TogglePanel 
@@ -79,6 +93,7 @@ class exercise extends Component {
                                     type={type} 
                                     planKey={planKey}
                                     exerciseKey={exerciseKey}
+                                    trainingDays={trainingDays}
                                     currentSeries={currentSeries}
                                     currentTraining={currentTraining}
                                 /> : null}

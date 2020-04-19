@@ -156,8 +156,6 @@ class Plan extends Component {
             }
         })
     }
-
-    
     addExercise(e, planKey){
         e.preventDefault()
         const { radio } = this.state;
@@ -297,7 +295,6 @@ class Plan extends Component {
                                 {AddPanel}
                             </PlanContent>
 
-        console.log(this.state.exercises)
         return (
             <Container isHidden={isHidden}>
                 <TogglePanel 
