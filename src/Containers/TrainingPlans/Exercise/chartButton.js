@@ -1,6 +1,6 @@
 import React from 'react'
 import { variables, flexCenter } from '../../../Components/styleHelpers'
-import { faChartBar } from '@fortawesome/free-solid-svg-icons'
+import { faChartBar, faChartArea } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import styled from 'styled-components'
 import Paragraph from '../../../Components/paragraph'
@@ -16,7 +16,7 @@ const Button = styled.button`
 const ChartButton = () => {
     return (
         <Button>
-            <FontAwesomeIcon icon={faChartBar} style={{color: variables.$orange, fontSize: 30, marginRight: ".2em"}} />
+            <FontAwesomeIcon icon={faChartArea} style={{color: variables.$orange, fontSize: 30, marginRight: ".2em"}} />
             <Paragraph 
                 text={"Wykres"}
                 fontSize={"1.3em"}

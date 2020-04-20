@@ -217,7 +217,7 @@ class Content extends Component {
             <StyledFormWrapper>
                 <StyledHeaderWrapper>
                     <Paragraph
-                        text={"Dodaj serie!"}
+                        text={"Nowa seria"}
                         fontSize={"1.3em"}
                         padding={".3em 0"}
                         color={variables.$gray}

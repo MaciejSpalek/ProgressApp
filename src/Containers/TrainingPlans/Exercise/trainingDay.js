@@ -9,7 +9,6 @@ const StyledContainer = styled(FlexComponent)`
 `
 
 const HeaderWrapper = styled(FlexComponent)`
-    border-bottom: .1em solid ${variables.$lightGray};
     flex-direction: column;
     padding: 0;
 `
@@ -18,6 +17,43 @@ const SeriesWrapper = styled(FlexComponent)`
     flex-direction: column;
     padding: 0;
 `
+
+
+// table
+const Table = styled.table`
+    border-collapse: collapse;
+    font-size: .9em;
+    width: 100%;
+    margin: 0 0 1.5em;
+`
+
+
+const Thead = styled.thead`
+    background-color: ${variables.$grayBlue};
+    color: white;
+`
+const Tbody = styled.tbody`
+    
+`
+
+const Th = styled.th`
+    padding: .5em;
+`
+const Tr = styled.tr`
+    border-bottom: 1px solid ${variables.$lightGray};
+    :nth-last-of-type(even) {
+        background-color: ${variables.$lightGray};
+    }
+    :last-of-type {
+        border-bottom: .1em solid ${variables.$grayBlue};
+    }
+`
+const Td = styled.td`
+    padding: .5em;
+`
+
+
+
 class TrainingDay extends Component {
     constructor(props) {
         super(props);
@@ -32,22 +68,35 @@ class TrainingDay extends Component {
         return tempArray;
     }
 
-    renderSeries() {
+    renderSeries = (series) =>      <Tr key={series.id}>
+                                        <Td> {series.id} </Td>
+                                        <Td> {series.reps} </Td>
+                                        <Td> {series.weight} </Td>
+                                        <Td> {series.weight * series.reps} </Td>
+                                    </Tr>
+   
+    renderTrainingDay() {
         const array = this.filterSeries();
-        return array.map(series => {
-            return (
-                <Paragraph 
-                    text={` ${series.id}) ${series.reps} x ${series.weight}kg `}
-                    color={variables.$gray}
-                    fontSize={"1.2em"}
-                    align={"flex-start"}
-                    key={series.id}
-                />
+        return (
+      
+                <Table style={{width: "100%"}}>
+                    <Thead>
+                        <Tr>
+                            <Th>seria</Th>
+                            <Th>powtórzenia</Th>
+                            <Th>ciężar</Th>
+                            <Th>objętość</Th>
+                        </Tr>
+                    </Thead>
+                    <Tbody>
+                        {array.map(this.renderSeries)}
+                    </Tbody>
+                </Table>
             )
-        })
     }
     getProgressInPercentage() {
         const array = this.filterSeries();
+        
     }
     getTreningVolume() {
         const array = this.filterSeries();
@@ -56,19 +105,21 @@ class TrainingDay extends Component {
     render() {
         const { id } = this.props;
         const trainingVolume = this.getTreningVolume();
-
+        
+ 
         return (
             <StyledContainer>
                 <HeaderWrapper>
                     <Paragraph 
                         text={`Dzień ${id+1}`}
-                        align={"flex-start"}
                         fontWeight={"bold"}
                         fontSize={"1.2em"}
+                        padding={".5em"}
+                        
                     />
                 </HeaderWrapper>
                 <SeriesWrapper>
-                    {this.renderSeries()}
+                    {this.renderTrainingDay()}
                     <Paragraph 
                         text={`Objętość: ${trainingVolume}`}
                         align={"flex-start"}
