@@ -9,9 +9,9 @@ const Button = styled.button`
     background-color: transparent;
     border: none;
 `
-const PlusButton = () => {
+const PlusButton = ({styles}) => {
     return (
-        <Button>
+        <Button style={styles}>
             <FontAwesomeIcon icon={faPlusSquare} style={{fontSize: 40, color: variables.$grayBlue}}/>
         </Button>
     )

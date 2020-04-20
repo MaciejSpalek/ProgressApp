@@ -21,9 +21,6 @@ const SeriesWrapper = styled(FlexComponent)`
 class TrainingDay extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-            series: []
-        }
     }
 
     filterSeries() {
@@ -49,9 +46,17 @@ class TrainingDay extends Component {
             )
         })
     }
-
+    getProgressInPercentage() {
+        const array = this.filterSeries();
+    }
+    getTreningVolume() {
+        const array = this.filterSeries();
+        return array.reduce((volume, series) => volume + series.weight*series.reps, 0)
+    }
     render() {
         const { id } = this.props;
+        const trainingVolume = this.getTreningVolume();
+
         return (
             <StyledContainer>
                 <HeaderWrapper>
@@ -64,6 +69,13 @@ class TrainingDay extends Component {
                 </HeaderWrapper>
                 <SeriesWrapper>
                     {this.renderSeries()}
+                    <Paragraph 
+                        text={`Objętość: ${trainingVolume}`}
+                        align={"flex-start"}
+                        fontWeight={"bold"}
+                        fontSize={"1.2em"}
+                        color={variables.$gray}
+                    />
                 </SeriesWrapper>
             </StyledContainer>
         )

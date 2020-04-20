@@ -17,7 +17,7 @@ const inputStyles = {
     "borderRadius": ".3em",
     "padding": ".5em",
     "height": "35px",
-    "width": "80px",
+    "width": "100%",
 }
 
 const modifyInputStyles = {
@@ -36,6 +36,12 @@ const StyledFormWrapper = styled(FlexComponent)`
     border-bottom-left-radius: .3em;
     border-bottom-right-radius: .3em;
 `
+
+const StyledHeaderWrapper = styled(FlexComponent)`
+    justify-content: space-between;
+    width: 100%;
+    padding: .5em 0;
+`
 const Form = styled.form`
     ${flexCenter};
     justify-content: space-between;
@@ -44,6 +50,11 @@ const Form = styled.form`
     border-top: .1em solid ${variables.$lightGray};
     padding: .5em 0;
 `
+
+
+
+
+
 
 class Content extends Component {
     constructor(props) {
@@ -141,7 +152,6 @@ class Content extends Component {
             return app.getRealTimeDatabase().ref().update(updates);
         }
     }
-
     renderTrainingDays() {
         const array = this.props.trainingDays;
         return array.map((day, index) => {
@@ -170,7 +180,8 @@ class Content extends Component {
                         icon={faTimes} 
                         style={{
                             fontSize: 20, 
-                            color: variables.$gray
+                            color: variables.$gray,
+                            margin: "0 .5em"
                         }}
                     />
                     <Input 
@@ -179,11 +190,13 @@ class Content extends Component {
                         style={inputStyles}
                         placeholder={"kg"}
                     />
-                    <PlusButton />
+                    <PlusButton styles={{
+                        marginLeft: ".5em"
+                    }}/>
                 </> :
                 <>
                     <Input 
-                        name={"time"}  
+                        name={type === "repsWithoutWeight" ? "reps" : "time"}  
                         type={"number"}
                         style={modifyInputStyles}
                         placeholder={type === "repsWithoutWeight" ? "powtórzenia" : "czas"}
@@ -202,16 +215,16 @@ class Content extends Component {
     render() {
         return (
             <StyledFormWrapper>
-                <Paragraph
-                    text={"Dodaj serie!"}
-                    fontSize={"1.3em"}
-                    align={"flex-start"}
-                    padding={".3em 0"}
-                    color={variables.$gray}
-                />
-
+                <StyledHeaderWrapper>
+                    <Paragraph
+                        text={"Dodaj serie!"}
+                        fontSize={"1.3em"}
+                        padding={".3em 0"}
+                        color={variables.$gray}
+                    />
+                    <ChartButton />
+                </StyledHeaderWrapper>
                 {this.renderForm()}
-                <ChartButton />
                 {this.renderTrainingDays()}
             </StyledFormWrapper>
         )

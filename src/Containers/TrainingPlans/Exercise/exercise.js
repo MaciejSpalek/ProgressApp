@@ -18,7 +18,7 @@ const toggleStyles = {
 }
 
 const modifyToggleStyles = {
-    "backgroundColor": `${variables.$lightGreen}`,
+    "backgroundColor": `${variables.$gray}`,
     "justifyContent": "space-between",
     "borderBottomRightRadius": "0",
     "borderBottomLeftRadius": "0",
