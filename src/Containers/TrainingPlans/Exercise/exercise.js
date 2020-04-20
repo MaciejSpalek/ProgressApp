@@ -9,22 +9,22 @@ import { faHourglassStart, faDumbbell, faEllipsisV } from '@fortawesome/free-sol
 
 const toggleStyles = {
     "justifyContent": "space-between",
+    "borderBottomRightRadius": ".3em",
+    "borderBottomLeftRadius": ".3em",
+    "width": "calc(100% - .5em)",
     "backgroundColor": "white",
     "margin": ".25em .25em 0",
-    "width": "calc(100% - .5em)",
     "borderRadius": ".3em",
-    "borderBottomLeftRadius": ".3em",
-    "borderBottomRightRadius": ".3em",
 }
 
 const modifyToggleStyles = {
-    "justifyContent": "space-between",
     "backgroundColor": `${variables.$lightGreen}`,
-    "margin": ".25em .25em 0",
-    "width": "calc(100% - .5em)",
-    "borderRadius": ".3em",
-    "borderBottomLeftRadius": "0",
+    "justifyContent": "space-between",
     "borderBottomRightRadius": "0",
+    "borderBottomLeftRadius": "0",
+    "width": "calc(100% - .5em)",
+    "margin": ".25em .25em 0",
+    "borderRadius": ".3em",
     "borderBottom": "none"
 }
 
@@ -72,30 +72,49 @@ class exercise extends Component {
     }
 
     render() {
-        const { name, type, exerciseKey, planKey, currentSeries, currentTraining } = this.props;
-        const { isHidden, trainingDays } = this.state;
+        const { 
+            currentTraining,
+            amountOfSeries,
+            currentSeries, 
+            exerciseKey, 
+            priority,
+            planKey, 
+            name, 
+            type, 
+        } = this.props;
+
+        const { 
+            trainingDays, 
+            isHidden, 
+        } = this.state;
         
         return (
             <Container isHidden={isHidden}>
                 <TogglePanel 
-                    handleFunction={()=> this.handleArrowButton()} 
-                    buttonBackgroundColor={variables.$grayBlue}
-                    buttonColor={"white"}
-                    flexStyles={!isHidden ? modifyToggleStyles: toggleStyles}
-                    isHidden={isHidden}
                     text={name}  
-                    textFontSize={"1.3em"}
+                    textFontSize={"1.1em"}
+                    textFontWeight={"bold"}
+
                     iconName={this.setExerciseIcon(type)} 
                     iconColor={variables.$grayBlue}
                     iconFontSize={25}
+
+                    buttonBackgroundColor={variables.$grayBlue}
+                    buttonColor={"white"}
+                    
+                    handleFunction={()=> this.handleArrowButton()} 
+                    flexStyles={!isHidden ? modifyToggleStyles: toggleStyles}
+                    isHidden={isHidden}
                 />
                 {!isHidden ?    <Content 
-                                    type={type} 
-                                    planKey={planKey}
-                                    exerciseKey={exerciseKey}
-                                    trainingDays={trainingDays}
-                                    currentSeries={currentSeries}
                                     currentTraining={currentTraining}
+                                    amountOfSeries={amountOfSeries}
+                                    currentSeries={currentSeries}
+                                    trainingDays={trainingDays}
+                                    exerciseKey={exerciseKey}
+                                    priority={priority}
+                                    planKey={planKey}
+                                    type={type} 
                                 /> : null}
             </Container>
         )

@@ -36,17 +36,16 @@ class TrainingDay extends Component {
     }
 
     renderSeries() {
-        return this.filterSeries().map(series => {
+        const array = this.filterSeries();
+        return array.map(series => {
             return (
                 <Paragraph 
-                    fontSize={"1.2em"}
+                    text={` ${series.id}) ${series.reps} x ${series.weight}kg `}
                     color={variables.$gray}
-                    text={` ${series.id}. ${series.reps} x ${series.weight} `}
+                    fontSize={"1.2em"}
                     align={"flex-start"}
-
                     key={series.id}
                 />
-                // <div key={series.id}> {series.id}. {series.reps} x {series.weight} </div>
             )
         })
     }
@@ -57,11 +56,10 @@ class TrainingDay extends Component {
             <StyledContainer>
                 <HeaderWrapper>
                     <Paragraph 
-                        fontSize={"1.2em"}
-                        fontWeight={"bold"}
-                        color={variables.$gray}
                         text={`Dzień ${id+1}`}
                         align={"flex-start"}
+                        fontWeight={"bold"}
+                        fontSize={"1.2em"}
                     />
                 </HeaderWrapper>
                 <SeriesWrapper>

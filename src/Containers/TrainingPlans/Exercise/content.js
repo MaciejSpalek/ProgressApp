@@ -9,23 +9,24 @@ import { variables, flexCenter, FlexComponent } from '../../../Components/styleH
 import { faPlusSquare, faTimes } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import PlusButton from '../../../Components/plusButton';
+import ChartButton from './chartButton';
 
 
 const inputStyles = {
     "border": `.1em solid ${variables.$lightGray}`,
-    "width": "80px",
-    "height": "35px",
     "borderRadius": ".3em",
-    "padding": ".5em"
+    "padding": ".5em",
+    "height": "35px",
+    "width": "80px",
 }
 
 const modifyInputStyles = {
     "border": `.1em solid ${variables.$lightGray}`,
-    "width": "100%",
-    "height": "35px",
     "borderRadius": ".3em",
+    "marginRight": ".5em",
     "padding": ".5em",
-    "marginRight": ".5em"
+    "height": "35px",
+    "width": "100%",
 }
 
 const StyledFormWrapper = styled(FlexComponent)`
@@ -51,16 +52,18 @@ class Content extends Component {
     
 
     updateExerciseCounters() {
-        const { planKey, 
-                exerciseKey, 
-                currentSeries, 
-                currentTraining 
+        const { 
+            currentTraining,
+            amountOfSeries, 
+            currentSeries, 
+            exerciseKey, 
+            planKey, 
         } = this.props;
 
         let tempCurrentSeries = currentSeries;
         let tempCurrentTraining = currentTraining;
 
-        if(tempCurrentSeries >=3) {
+        if(tempCurrentSeries >= amountOfSeries) {
             tempCurrentSeries = 0;
             tempCurrentTraining++;
         }
@@ -75,36 +78,73 @@ class Content extends Component {
                 currentTraining: tempCurrentTraining
             })
     }
-
-    addSeries(e){
-        e.preventDefault()
-         const { type,
-                 exerciseKey, 
-                 currentSeries, 
-                 currentTraining 
-        } = this.props;
+    areInputsEmpty(type, weight, reps, time) {
+        if(type === "repsWithWeight") {
+            return !helpers.isInputEmpty(weight) && !helpers.isInputEmpty(reps)
+        }
+         
+        else if(type === "repsWithoutWeight") {
+            return !helpers.isInputEmpty(reps)
+        } 
         
-        const { reps, time, weight } = e.target.elements;
-
-
-        // if(!helpers.isInputEmpty()) {
-            const currentTrainingRef = app.getRealTimeDatabase().ref(`training-days`).child(currentTraining);
-            const seriesKey = currentTrainingRef.push().key;
-            const updates = {};
-            const seriesData = {
+        else {
+            return !helpers.isInputEmpty(time) 
+        }
+    }
+    getSeriesData(type, weight, reps, time, currentSeries, exerciseKey) {
+        
+        if(type === "repsWithWeight") {
+            return {
                 id: currentSeries,
                 exerciseKey: exerciseKey,  
                 reps:  reps.value,
                 weight: weight.value
             }
+        } else if(type === "repsWithoutWeight") {
+            return {
+                id: currentSeries,
+                exerciseKey: exerciseKey,  
+                reps:  reps.value,
+            }
+        } else {
+            return {
+                id: currentSeries,
+                exerciseKey: exerciseKey,  
+                time:  time.value,   
+            }
+        }
+    }
+    addSeries(e){
+        e.preventDefault()
+         const { 
+             currentTraining,
+             currentSeries, 
+             exerciseKey, 
+             type,
+        } = this.props;
+        
+        const { 
+            weight, 
+            reps, 
+            time, 
+        } = e.target.elements;
+
+
+        if(this.areInputsEmpty(type, weight, reps, time)) {
+            const currentTrainingRef = app.getRealTimeDatabase().ref(`training-days`).child(currentTraining);
+            const seriesKey = currentTrainingRef.push().key;
+            const updates = {};
+            const seriesData = this.getSeriesData(type, weight, reps, time, currentSeries, exerciseKey);
+            console.log(seriesData)
             this.updateExerciseCounters();
             updates[`training-days/${currentTraining}${exerciseKey}/${seriesKey}`] = seriesData;
             return app.getRealTimeDatabase().ref().update(updates);
-        // }
+        }
     }
 
     renderTrainingDays() {
-        return this.props.trainingDays.map((day, index) => {
+        const array = this.props.trainingDays;
+        return array.map((day, index) => {
             return (
                 <TrainingDay 
                     id={index}
@@ -126,7 +166,13 @@ class Content extends Component {
                         style={inputStyles}
                         placeholder={"powt."}
                     />
-                    <FontAwesomeIcon icon={faTimes} style={{fontSize: 20, color: variables.$gray}}/>
+                    <FontAwesomeIcon 
+                        icon={faTimes} 
+                        style={{
+                            fontSize: 20, 
+                            color: variables.$gray
+                        }}
+                    />
                     <Input 
                         name={"weight"}  
                         type={"number"}
@@ -142,12 +188,17 @@ class Content extends Component {
                         style={modifyInputStyles}
                         placeholder={type === "repsWithoutWeight" ? "powtórzenia" : "czas"}
                     />                
-                    <FontAwesomeIcon icon={faPlusSquare} style={{fontSize: 40, color: variables.$grayBlue}}/>
+                    <FontAwesomeIcon 
+                        icon={faPlusSquare} 
+                        style={{
+                            fontSize: 40, 
+                            color: variables.$grayBlue
+                        }}  
+                    />
                 </>} 
             </Form>
         )
     }
-
     render() {
         return (
             <StyledFormWrapper>
@@ -158,7 +209,9 @@ class Content extends Component {
                     padding={".3em 0"}
                     color={variables.$gray}
                 />
+
                 {this.renderForm()}
+                <ChartButton />
                 {this.renderTrainingDays()}
             </StyledFormWrapper>
         )

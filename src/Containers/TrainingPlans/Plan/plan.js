@@ -159,41 +159,48 @@ class Plan extends Component {
     addExercise(e, planKey){
         e.preventDefault()
         const { radio } = this.state;
-        const { name } = e.target.elements;
+        const { name, amountOfSeries, priority } = e.target.elements;
 
         if(!helpers.isInputEmpty(name)) {
             const userID = app.getUserID();
             const currentPlanRef = app.getRealTimeDatabase().ref('users-plans').child(userID).child(planKey);
             const exerciseKey = currentPlanRef.push().key;
             const updates = {};
-            const data = {
+            const exerciseData = {
+                name: helpers.capitalizeFirstLetter(name.value),
+                amountOfSeries: amountOfSeries.value,
+                priority: priority.value,
+                type: radio,
+
                 planKey: this.props.planKey,
                 exerciseKey: exerciseKey,
-                name: helpers.capitalizeFirstLetter(name.value),
-                type: radio,
+                
                 currentTraining: 1,
                 currentSeries: 1
             }
-            updates[`users-plans/${userID}/${planKey}/${exerciseKey}`] = data;
+            updates[`users-plans/${userID}/${planKey}/${exerciseKey}`] = exerciseData;
             helpers.clearInput(name);
+            helpers.clearInput(amountOfSeries);
             return app.getRealTimeDatabase().ref().update(updates);
         }
     }
-    filterExercises(array) {
+    filterExercisesByPlanKey(array) {
         return array.filter(item => item.planKey === this.props.planKey);
     }
     renderExercise() {
-        const filteredArray = this.filterExercises(this.state.exercises);
+        const filteredArray = this.filterExercisesByPlanKey(this.state.exercises);
         return filteredArray.map((exercise, index) => {
             return (
                 <Exercise
-                    key={index}
-                    exerciseKey={exercise.exerciseKey}
-                    planKey={exercise.planKey}
-                    currentSeries={exercise.currentSeries}
                     currentTraining={exercise.currentTraining}
-                    name={exercise.name}
+                    amountOfSeries={exercise.amountOfSeries}
+                    currentSeries={exercise.currentSeries}
+                    exerciseKey={exercise.exerciseKey}
+                    priority={exercise.priority}
+                    planKey={exercise.planKey}
                     type={exercise.type}
+                    name={exercise.name}
+                    key={index}                    
                 />
             )
         })
@@ -202,7 +209,7 @@ class Plan extends Component {
         return this.state.exercises.length > 0;
     }
     getAmountOfExercises() {
-        const filteredArray = this.filterExercises(this.state.exercises);
+        const filteredArray = this.filterExercisesByPlanKey(this.state.exercises);
         return filteredArray.length;
     }
     changeHiddenState(planKey, isHidden) {
@@ -220,11 +227,13 @@ class Plan extends Component {
         const AddPanel =    <StyledAddPanel>
                                 {!isAddPanelHidden ?
                                 <Form onSubmit={(e)=> this.addExercise(e, planKey)}>
-                                    <Input  type="text" 
+                                    <Input  required
+                                            type="text" 
                                             name="name" 
                                             placeholder="nazwa ćwiczenia">
                                     </Input>
-                                    <Input  type="number" 
+                                    <Input  required
+                                            type="number" 
                                             name="amountOfSeries"  
                                             min="1" 
                                             max="20" 
@@ -232,7 +241,7 @@ class Plan extends Component {
                                     </Input>
 
                                     <Paragraph>Priorytet ćwiczenia</Paragraph>
-                                    <Select>
+                                    <Select name="priority">
                                         <Option value="0">Niski</Option>
                                         <Option value="1">Średni</Option>
                                         <Option value="2">Wysoki</Option>
@@ -275,15 +284,20 @@ class Plan extends Component {
                                 </Form>
                                 : null}
                                 <TogglePanel 
-                                    flexStyles={toggleFlexStyles}
                                     text={`Nowe ćwiczenie`}   
-                                    isHidden={isAddPanelHidden}
-                                    handleFunction={()=> this.handleAddPanel()} 
-                                    buttonBackgroundColor={variables.$grayBlue}
-                                    buttonColor={variables.$orange}
+                                    textFontSize={"1.3em"}
+                                    textFontWeight={"bold"}
+
                                     iconName={faRunning} 
                                     iconColor={variables.$grayBlue}
                                     iconFontSize={25}
+
+                                    buttonBackgroundColor={variables.$grayBlue}
+                                    buttonColor={variables.$orange}
+
+                                    flexStyles={toggleFlexStyles}
+                                    isHidden={isAddPanelHidden}
+                                    handleFunction={()=> this.handleAddPanel()} 
                                 />
                             </StyledAddPanel>
         const planContent = <PlanContent isHidden={isAddPanelHidden}>
@@ -298,15 +312,20 @@ class Plan extends Component {
         return (
             <Container isHidden={isHidden}>
                 <TogglePanel 
-                    flexStyles={toggleFlexStyles}
-                    text={`Plan ${id},  ${date}`}   
-                    handleFunction={()=> this.changeHiddenState(planKey, isHidden)} 
-                    buttonBackgroundColor={variables.$grayBlue}
-                    buttonColor={variables.$orange}
-                    isHidden={isHidden}
+                    text={`Plan ${id},  ${date}`} 
+                    textFontSize={"1.3em"}
+                    textFontWeight={"bold"}
+
                     iconName={faTasks} 
                     iconColor={variables.$grayBlue}
                     iconFontSize={30}
+
+                    buttonBackgroundColor={variables.$grayBlue}
+                    buttonColor={variables.$orange}
+
+                    flexStyles={toggleFlexStyles}
+                    handleFunction={()=> this.changeHiddenState(planKey, isHidden)} 
+                    isHidden={isHidden}
                 />
                 {!isHidden ? planContent : null}
             </Container>
