@@ -1,15 +1,15 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
+import helpers from '../../../Components/helpers';
+import app from '../../../base';
+import PlusButton from '../../../Components/plusButton';
+import ChartButton from './chartButton';
 import Input from '../../../Components/input';
 import Paragraph from '../../../Components/paragraph';
 import TrainingDay from './trainingDay';
-import helpers from '../../../Components/helpers';
-import app from '../../../base';
 import { variables, flexCenter, FlexComponent } from '../../../Components/styleHelpers'
 import { faPlusSquare, faTimes } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import PlusButton from '../../../Components/plusButton';
-import ChartButton from './chartButton';
 
 
 const inputStyles = {
@@ -30,25 +30,25 @@ const modifyInputStyles = {
 }
 
 const StyledFormWrapper = styled(FlexComponent)`
-    flex-direction: column;
-    background-color: white;
-    width: calc(100% - .5em);
-    border-bottom-left-radius: .3em;
     border-bottom-right-radius: .3em;
+    border-bottom-left-radius: .3em;
+    width: calc(100% - .5em);
+    background-color: white;
+    flex-direction: column;
 `
 
 const StyledHeaderWrapper = styled(FlexComponent)`
     justify-content: space-between;
-    width: 100%;
     padding: .5em 0;
+    width: 100%;
 `
 const Form = styled.form`
-    ${flexCenter};
+    border-top: .1em solid ${variables.$lightGray};
     justify-content: space-between;
     background-color: white;
     width: calc(100%);
-    border-top: .1em solid ${variables.$lightGray};
-    padding: .5em 0;
+    padding: .5em 0 2em;
+    ${flexCenter};
 `
 
 
@@ -160,6 +160,7 @@ class Content extends Component {
                     id={index}
                     key={index}
                     day={day}
+                    days={array}
                 />
             )
         })
@@ -217,10 +218,10 @@ class Content extends Component {
             <StyledFormWrapper>
                 <StyledHeaderWrapper>
                     <Paragraph
+                        color={variables.$gray}
                         text={"Nowa seria"}
                         fontSize={"1.3em"}
                         padding={".3em 0"}
-                        color={variables.$gray}
                     />
                     <ChartButton />
                 </StyledHeaderWrapper>

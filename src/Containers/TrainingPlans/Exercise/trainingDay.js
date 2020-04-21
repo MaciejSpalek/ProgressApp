@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
-import { FlexComponent, variables } from '../../../Components/styleHelpers';
 import Paragraph from '../../../Components/paragraph';
+import ProgressSign from './progressSign';
+import { FlexComponent, variables } from '../../../Components/styleHelpers';
+
 
 const StyledContainer = styled(FlexComponent)`
     flex-direction: column;
@@ -32,22 +34,25 @@ const Thead = styled.thead`
     background-color: ${variables.$grayBlue};
     color: white;
 `
-const Tbody = styled.tbody`
-    
+const Tbody = styled.tbody``
+const Tfoot = styled.tfoot`
+    border: .15em solid ${variables.$grayBlue};
+    font-weight: bold;
+    color: black;
 `
-
 const Th = styled.th`
     padding: .5em;
 `
-const Tr = styled.tr`
-    border-bottom: 1px solid ${variables.$lightGray};
-    :nth-last-of-type(even) {
-        background-color: ${variables.$lightGray};
+const BodyTr = styled.tr`
+    /* border-bottom: 1px solid ${variables.$lightGray}; */
+    :nth-child(even) {
+        background-color: ${variables.$lightGray}
     }
     :last-of-type {
         border-bottom: .1em solid ${variables.$grayBlue};
     }
 `
+const Tr = styled.tr``
 const Td = styled.td`
     padding: .5em;
 `
@@ -59,53 +64,82 @@ class TrainingDay extends Component {
         super(props);
     }
 
-    filterSeries() {
-        const array = this.props.day;
+    getTrainingDays() {
+        const array = this.props.days;
+        const allDays = [];
+        
+        array.forEach(day => {
+            const oneDay = []
+            for(let allSeries in day) {
+                oneDay.push(day[allSeries])
+            }
+            allDays.push(oneDay)
+        });
+        return allDays;
+    }
+    getSeries(array) {
         const tempArray = [];
-        for(let dayKey in array) {
-            tempArray.push(array[dayKey])
+        for(let series in array) {
+            tempArray.push(array[series])
         }
         return tempArray;
     }
+    getProgressInPercentage(currentDay) {
+        const { id } = this.props;
+        const array = this.getTrainingDays();
 
-    renderSeries = (series) =>      <Tr key={series.id}>
+        if(id === 0) {
+            return 0
+        } else {
+            const previousVolume = this.getTreningVolume(array[id-1])
+            const currentVolume = this.getTreningVolume(currentDay)
+            const trainingVolume = (currentVolume/previousVolume)*100 - 100;
+            const roundVolume = trainingVolume.toFixed(1);
+
+            return roundVolume;
+        }
+    }
+    getTreningVolume(array) {
+        const tempArray = this.getSeries(array);
+        return tempArray.reduce((volume, series) => volume + series.weight*series.reps, 0)
+    }
+    renderSeries = (series) =>      <BodyTr key={series.id}>
                                         <Td> {series.id} </Td>
                                         <Td> {series.reps} </Td>
                                         <Td> {series.weight} </Td>
-                                        <Td> {series.weight * series.reps} </Td>
-                                    </Tr>
-   
+                                    </BodyTr>
     renderTrainingDay() {
-        const array = this.filterSeries();
+        const array = this.getSeries(this.props.day);
         return (
-      
                 <Table style={{width: "100%"}}>
                     <Thead>
                         <Tr>
                             <Th>seria</Th>
                             <Th>powtórzenia</Th>
                             <Th>ciężar</Th>
-                            <Th>objętość</Th>
                         </Tr>
                     </Thead>
                     <Tbody>
                         {array.map(this.renderSeries)}
                     </Tbody>
+                    <Tfoot>
+                        <Tr>
+                            <Td>Objętość</Td>
+                            <Td> {this.getTreningVolume(array)} </Td>
+                            <Td>
+                                <ProgressSign 
+                                    percents={this.getProgressInPercentage(array)}
+                                /> 
+                            </Td>
+                        </Tr>
+                    </Tfoot>
                 </Table>
             )
     }
-    getProgressInPercentage() {
-        const array = this.filterSeries();
-        
-    }
-    getTreningVolume() {
-        const array = this.filterSeries();
-        return array.reduce((volume, series) => volume + series.weight*series.reps, 0)
-    }
+  
+
     render() {
         const { id } = this.props;
-        const trainingVolume = this.getTreningVolume();
-        
  
         return (
             <StyledContainer>
@@ -120,13 +154,6 @@ class TrainingDay extends Component {
                 </HeaderWrapper>
                 <SeriesWrapper>
                     {this.renderTrainingDay()}
-                    <Paragraph 
-                        text={`Objętość: ${trainingVolume}`}
-                        align={"flex-start"}
-                        fontWeight={"bold"}
-                        fontSize={"1.2em"}
-                        color={variables.$gray}
-                    />
                 </SeriesWrapper>
             </StyledContainer>
         )
