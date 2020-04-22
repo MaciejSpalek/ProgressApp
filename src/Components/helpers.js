@@ -8,6 +8,7 @@ class Helpers {
         let year = newDate.getFullYear();
         return `${date}${separator}${month<10?`0${month}`:`${month}`}${separator}${year}`
     }
+
     getFullDate = (separator="/") => {
         let newDate = new Date()
         let date = newDate.getDate();
@@ -21,6 +22,7 @@ class Helpers {
     cutTimeFromDate(date) {
         return date.split(" ")[0];
     }
+
     snapshotToArray(snapshot) {
         const returnArr = [];
         snapshot.forEach(childSnapshot => {
@@ -30,19 +32,52 @@ class Helpers {
         });
         return returnArr;
     }
+
     getAmountOfObjectProperties(object) {
         return Object.keys(object).length;
     } 
+
     capitalizeFirstLetter = (string) => {
         if(typeof string !== "undefined") {
             return string.charAt(0).toUpperCase() + string.slice(1);
         }
     }
+
     clearInput(input) {
         input.value = "";
     }
+
     isInputEmpty(input) {
         return input.value === "";
+    }
+
+
+    // for TrainingPlans folder (trainingDay.js & content.js)
+
+    getSeries(array) {
+        const tempArray = [];
+        for(let series in array) {
+            tempArray.push(array[series])
+        }
+        return tempArray;
+    }
+
+    getTreningVolume(array) {
+        const tempArray = this.getSeries(array);
+        return tempArray.reduce((volume, series) => volume + series.weight*series.reps, 0)
+    }
+
+    getTrainingDays(array) {
+        const allDays = [];
+        
+        array.forEach(day => {
+            const oneDay = []
+            for(let allSeries in day) {
+                oneDay.push(day[allSeries])
+            }
+            allDays.push(oneDay)
+        });
+        return allDays;
     }
 }
 

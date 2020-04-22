@@ -7,6 +7,7 @@ import ChartButton from './chartButton';
 import Input from '../../../Components/input';
 import Paragraph from '../../../Components/paragraph';
 import TrainingDay from './trainingDay';
+import Chart from './chart';
 import { variables, flexCenter, FlexComponent } from '../../../Components/styleHelpers'
 import { faPlusSquare, faTimes } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -59,9 +60,28 @@ const Form = styled.form`
 class Content extends Component {
     constructor(props) {
         super(props);
+        this.state = {
+            isChartButtonHidden: true
+        }
     }
-    
 
+    // function for chart.js
+    getTrainingDaysArray() {
+        const amountOfDays = this.getAmountOfTrainingDays();
+        const tempArray = [];
+        for(let i=0; i<amountOfDays; i++) {
+            tempArray.push(i+1)
+        }
+        return tempArray;
+    }
+    getTrainingVolumesArray() {
+        const newArray = helpers.getTrainingDays(this.props.trainingDays)
+        const tempArray = newArray.map(day => helpers.getTreningVolume(day))
+        return tempArray;
+    }
+    getAmountOfTrainingDays() {
+        return this.props.trainingDays.length;
+    }
     updateExerciseCounters() {
         const { 
             currentTraining,
@@ -146,7 +166,7 @@ class Content extends Component {
             const seriesKey = currentTrainingRef.push().key;
             const updates = {};
             const seriesData = this.getSeriesData(type, weight, reps, time, currentSeries, exerciseKey);
-            console.log(seriesData)
+    
             this.updateExerciseCounters();
             updates[`training-days/${currentTraining}${exerciseKey}/${seriesKey}`] = seriesData;
             return app.getRealTimeDatabase().ref().update(updates);
@@ -159,8 +179,8 @@ class Content extends Component {
                 <TrainingDay 
                     id={index}
                     key={index}
-                    day={day}
-                    days={array}
+                    trainingDay={day}
+                    trainingDays={array}
                 />
             )
         })
@@ -223,9 +243,13 @@ class Content extends Component {
                         fontSize={"1.3em"}
                         padding={".3em 0"}
                     />
-                    <ChartButton />
+                    <ChartButton onClick={()=> this.handleChartButton()}/>
                 </StyledHeaderWrapper>
                 {this.renderForm()}
+                <Chart 
+                    trainingDays={this.getTrainingDaysArray()}
+                    trainingVolumes={this.getTrainingVolumesArray()}
+                />
                 {this.renderTrainingDays()}
             </StyledFormWrapper>
         )
