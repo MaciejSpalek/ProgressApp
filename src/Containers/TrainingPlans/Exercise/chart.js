@@ -29,9 +29,7 @@ class Chart extends Component {
         return (
             <StyledContainer>
                 <Line 
-                    options={{
-                        responsive: true
-                    }}
+                    options={{ responsive: true}}
                     data={this.setChartData(trainingDays, trainingVolumes)}
                 />
             </StyledContainer>

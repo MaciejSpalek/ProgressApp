@@ -13,9 +13,9 @@ const Button = styled.button`
     border: none;
     border-radius: .5em;
 `
-const ChartButton = () => {
+const ChartButton = ({ handleFunction }) => {
     return (
-        <Button>
+        <Button onClick={()=> handleFunction()}>
             <FontAwesomeIcon icon={faChartArea} style={{color: variables.$orange, fontSize: 30, marginRight: ".2em"}} />
             <Paragraph 
                 text={"Wykres"}

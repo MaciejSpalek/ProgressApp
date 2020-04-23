@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import Menu from './menu';
+import app from '../../base';
 import * as styleHelpers  from '../../Components/styleHelpers';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChartLine, faBars, faTimes } from '@fortawesome/free-solid-svg-icons';
@@ -45,12 +46,13 @@ class Navbar extends Component {
             isMenuActive: !prevstate.isMenuActive
         }))
     }
+
     
     render() {
         return (
             <Nav >
                 <Logo>
-                    <FontAwesomeIcon icon={faChartLine} color="#FF8E00" style={{fontSize:30}} />
+                    <FontAwesomeIcon icon={faChartLine} color="#FF8E00" style={{fontSize:30}}/>
                     <Title> ProgressApp </Title>
                 </Logo>
                 { this.props.user ?

@@ -6,7 +6,7 @@ import { faLevelUpAlt, faLevelDownAlt } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 const StyledContainer = styled(FlexComponent)`
-
+    padding: 0;
 `
 
 const ProgressSign = ({ percents }) => {

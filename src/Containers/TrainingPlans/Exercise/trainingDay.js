@@ -25,9 +25,9 @@ const SeriesWrapper = styled(FlexComponent)`
 // table
 const Table = styled.table`
     border-collapse: collapse;
+    margin: 0 0 1.5em;
     font-size: .9em;
     width: 100%;
-    margin: 0 0 1.5em;
 `
 
 
@@ -39,7 +39,7 @@ const Tbody = styled.tbody``
 const Tfoot = styled.tfoot`
     border: .15em solid ${variables.$grayBlue};
     font-weight: bold;
-    color: black;
+    /* background-color: rgba(0, 92, 149, 0.5); */
 `
 const Th = styled.th`
     padding: .5em;
@@ -66,10 +66,16 @@ class TrainingDay extends Component {
     }
 
    
-  
+    isTrainingVolumeDisplayed() {
+        const { trainingDay, amountOfSeries } = this.props;
+        const currentAmountOfSeries = Helpers.getAmountOfSeries(trainingDay)
+        const setAmountOfSeries = amountOfSeries;
+        return currentAmountOfSeries === +setAmountOfSeries
+    }
+
     getProgressInPercentage(currentDay) {
-        const { id } = this.props;
-        const array = Helpers.getTrainingDays(this.props.trainingDays);
+        const { id, trainingDays } = this.props;
+        const array = Helpers.getTrainingDays(trainingDays);
 
         if(id === 0) {
             return 0
@@ -90,7 +96,8 @@ class TrainingDay extends Component {
                                     </BodyTr>
    
     renderTrainingDay() {
-        const array = Helpers.getSeries(this.props.trainingDay);
+        const { trainingDay } = this.props;
+        const array = Helpers.getSeries(trainingDay);
         return (
                 <Table>
                     <Thead>
@@ -103,7 +110,7 @@ class TrainingDay extends Component {
                     <Tbody>
                         {array.map(this.renderSeries)}
                     </Tbody>
-                    <Tfoot>
+                    { this.isTrainingVolumeDisplayed() ? <Tfoot>
                         <Tr>
                             <Td>Objętość</Td>
                             <Td> {Helpers.getTreningVolume(array)} </Td>
@@ -113,15 +120,14 @@ class TrainingDay extends Component {
                                 /> 
                             </Td>
                         </Tr>
-                    </Tfoot>
+                    </Tfoot> : null}
                 </Table>
             )
-    }
+        }
   
 
     render() {
         const { id } = this.props;
-
         return (
             <StyledContainer>
                 <HeaderWrapper>
@@ -130,7 +136,6 @@ class TrainingDay extends Component {
                         fontWeight={"bold"}
                         fontSize={"1.2em"}
                         padding={".5em"}
-                        
                     />
                 </HeaderWrapper>
                 <SeriesWrapper>

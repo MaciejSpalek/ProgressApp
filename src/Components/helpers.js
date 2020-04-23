@@ -61,7 +61,13 @@ class Helpers {
         }
         return tempArray;
     }
-
+    getAmountOfSeries(array) {
+        const tempArray = [];
+        for(let series in array) {
+            tempArray.push(array[series])
+        }
+        return tempArray.length;
+    }
     getTreningVolume(array) {
         const tempArray = this.getSeries(array);
         return tempArray.reduce((volume, series) => volume + series.weight*series.reps, 0)

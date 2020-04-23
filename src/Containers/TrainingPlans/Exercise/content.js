@@ -67,18 +67,20 @@ class Content extends Component {
 
     // function for chart.js
     getTrainingDaysArray() {
-        const amountOfDays = this.getAmountOfTrainingDays();
-        const tempArray = [];
-        for(let i=0; i<amountOfDays; i++) {
-            tempArray.push(i+1)
-        }
-        return tempArray;
+        const { trainingDays, amountOfSeries } = this.props
+        const trainingDaysArray = helpers.getTrainingDays(trainingDays);
+        const filteredArray = trainingDaysArray.filter(day => day.length === +amountOfSeries).map((el, index)=> index+1);
+        return filteredArray;
     }
+
     getTrainingVolumesArray() {
-        const newArray = helpers.getTrainingDays(this.props.trainingDays)
-        const tempArray = newArray.map(day => helpers.getTreningVolume(day))
-        return tempArray;
+        const { trainingDays, amountOfSeries } = this.props;
+        const trainingDaysArray = helpers.getTrainingDays(trainingDays)
+        const filteredArray = trainingDaysArray.map(day => day.length === +amountOfSeries ? helpers.getTreningVolume(day) : null)
+        return filteredArray;
     }
+
+
     getAmountOfTrainingDays() {
         return this.props.trainingDays.length;
     }
@@ -173,17 +175,23 @@ class Content extends Component {
         }
     }
     renderTrainingDays() {
-        const array = this.props.trainingDays;
-        return array.map((day, index) => {
+        const { trainingDays, amountOfSeries } = this.props;
+        return trainingDays.map((day, index) => {
             return (
                 <TrainingDay 
                     id={index}
                     key={index}
                     trainingDay={day}
-                    trainingDays={array}
+                    trainingDays={trainingDays}
+                    amountOfSeries={amountOfSeries}
                 />
             )
         })
+    }
+    handleChartButton() {
+        this.setState(prevState => ({
+            isChartButtonHidden: !prevState.isChartButtonHidden
+        }))
     }
     renderForm() {
         const { type } = this.props;
@@ -233,7 +241,17 @@ class Content extends Component {
             </Form>
         )
     }
+    renderChart() {
+        return (
+                <Chart 
+                    trainingDays={this.getTrainingDaysArray()}
+                    trainingVolumes={this.getTrainingVolumesArray()}
+                /> 
+            )
+        
+    }
     render() {
+        const { isChartButtonHidden } = this.state;
         return (
             <StyledFormWrapper>
                 <StyledHeaderWrapper>
@@ -243,13 +261,10 @@ class Content extends Component {
                         fontSize={"1.3em"}
                         padding={".3em 0"}
                     />
-                    <ChartButton onClick={()=> this.handleChartButton()}/>
+                    <ChartButton handleFunction={()=> this.handleChartButton()}/>
                 </StyledHeaderWrapper>
                 {this.renderForm()}
-                <Chart 
-                    trainingDays={this.getTrainingDaysArray()}
-                    trainingVolumes={this.getTrainingVolumesArray()}
-                />
+                {!isChartButtonHidden ? this.renderChart() : null}
                 {this.renderTrainingDays()}
             </StyledFormWrapper>
         )
