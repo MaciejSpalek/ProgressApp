@@ -14,7 +14,7 @@ const toggleStyles = {
     "width": "calc(100% - .5em)",
     "backgroundColor": "white",
     "margin": ".25em .25em 0",
-    "borderRadius": ".3em",
+    "borderRadius": ".3em"
 }
 
 const modifyToggleStyles = {
@@ -91,20 +91,17 @@ class exercise extends Component {
         return (
             <Container isHidden={isHidden}>
                 <TogglePanel 
-                    text={name}  
-                    textFontSize={"1.1em"}
-                    textFontWeight={"bold"}
-
+                    flexStyles={!isHidden ? modifyToggleStyles: toggleStyles}
+                    handleFunction={()=> this.handleArrowButton()} 
+                    buttonBackgroundColor={variables.$grayBlue}
                     iconName={this.setExerciseIcon(type)} 
                     iconColor={variables.$grayBlue}
-                    iconFontSize={25}
-
-                    buttonBackgroundColor={variables.$grayBlue}
+                    textFontWeight={"bold"}
+                    textFontSize={"1.1em"}
                     buttonColor={"white"}
-                    
-                    handleFunction={()=> this.handleArrowButton()} 
-                    flexStyles={!isHidden ? modifyToggleStyles: toggleStyles}
                     isHidden={isHidden}
+                    iconFontSize={25}
+                    text={name}  
                 />
                 {!isHidden ?    <Content 
                                     currentTraining={currentTraining}

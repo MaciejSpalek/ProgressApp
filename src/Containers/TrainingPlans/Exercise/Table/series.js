@@ -2,10 +2,12 @@ import React from 'react';
 import styled from 'styled-components'
 
 const Tr = styled.tr`
-
+    :nth-child(2n) {
+        background: #f0f3f5;
+    }
 `
 const Td = styled.td`
-
+    padding: .5em;
 `
 
 

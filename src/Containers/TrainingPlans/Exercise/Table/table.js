@@ -11,6 +11,7 @@ const Table = styled.table`
     border-radius: 5px;
     width: 100%;
     box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
+    margin-bottom: 5em;
 `
 
 const DayTable = ({ id, type, trainingDay, trainingDays, amountOfSeries }) => {

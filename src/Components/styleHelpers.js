@@ -10,8 +10,6 @@ export const variables = {
 
     $lightGray: "rgb(230, 230, 230)",
     $lightBlue: "rgb(0, 157, 255)",
-    $lightRed: "rgb(255, 227, 227)",
-    $lightGreen: "rgb(217, 255, 226)",
     
     $gray: "rgb(160, 160, 160)",
     $orange: "#FF8E00",

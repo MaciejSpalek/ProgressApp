@@ -11,6 +11,15 @@ const Tr = styled.tr`
 
 `
 
+const StyledTh = styled(Th)`
+    :first-child {
+        border-top-left-radius: 5px;
+    }
+    :last-child {
+        border-top-right-radius: 5px;
+    }
+`
+
 
 const TableHeader = ({ type }) => {
     const renderHeader = () => {
@@ -18,9 +27,9 @@ const TableHeader = ({ type }) => {
             return (
                 <Thead>
                     <Tr>
-                        <Th>seria</Th>
-                        <Th>powtórzenia</Th>
-                        <Th>ciężar [kg]</Th>
+                        <StyledTh>seria</StyledTh>
+                        <StyledTh>powtórzenia</StyledTh>
+                        <StyledTh>ciężar [kg]</StyledTh>
                     </Tr>
                 </Thead>
             )
@@ -28,8 +37,8 @@ const TableHeader = ({ type }) => {
             return (
                 <Thead>
                     <Tr>
-                        <Th colSpan="2">seria</Th>
-                        <Th colSpan="2">powtórzenia</Th>
+                        <StyledTh colSpan="2">seria</StyledTh>
+                        <StyledTh colSpan="2">powtórzenia</StyledTh>
                     </Tr>
                 </Thead>
             )
@@ -37,8 +46,8 @@ const TableHeader = ({ type }) => {
             return (
                 <Thead>
                     <Tr>
-                        <Th colSpan="2">seria</Th>
-                        <Th colSpan="2">czas [s]</Th>
+                        <StyledTh colSpan="2">seria</StyledTh>
+                        <StyledTh colSpan="2">czas [s]</StyledTh>
                     </Tr>
                 </Thead>
             )

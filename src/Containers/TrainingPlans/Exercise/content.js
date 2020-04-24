@@ -171,6 +171,7 @@ class Content extends Component {
     }
     renderTrainingDays() {
         const { trainingDays, amountOfSeries, type } = this.props;
+        console.log(trainingDays)
         return trainingDays.map((day, index) => {
             return (
                 <TrainingDay 
