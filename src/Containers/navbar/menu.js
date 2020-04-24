@@ -85,20 +85,6 @@ const Menu = ({ isMenuActive, handleHamburger }) => {
                     </ListItem>
                 </Link>
 
-                <Link style={{textDecoration: "none"}} onClick={handleHamburger}  to="/diagrams">
-                    <ListItem>
-                        <Icon><FontAwesomeIcon icon={faChartBar} color="#FF8E00" style={{fontSize:50}} /></Icon>
-                        <Caption>Wykresy</Caption>
-                    </ListItem>
-                </Link>
-
-                <Link style={{textDecoration: "none"}} onClick={handleHamburger}  to="/records">
-                    <ListItem>
-                        <Icon><FontAwesomeIcon icon={faStar} color="#FF8E00" style={{fontSize:50}} /></Icon>
-                        <Caption>Rekordy</Caption>
-                    </ListItem>
-                </Link>
-
                 <Link style={{textDecoration: "none"}} onClick={handleHamburger}  to="/measurements">
                     <ListItem>
                         <Icon><FontAwesomeIcon icon={faRuler} color="#FF8E00" style={{fontSize:50}} /></Icon>

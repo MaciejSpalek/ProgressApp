@@ -18,7 +18,7 @@ class Chart extends Component {
             datasets: [
                 {
                     label: "Objętość treningowa",
-                    backgroundColor: "rgba(0, 92, 149, 0.5)",
+                    backgroundColor: "rgba(255, 140, 0, 0.75)",
                     data: yAxis
                 }
             ]

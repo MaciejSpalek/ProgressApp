@@ -11,14 +11,15 @@ export const variables = {
     $lightGray: "rgb(230, 230, 230)",
     $lightBlue: "rgb(0, 157, 255)",
     $lightRed: "rgb(255, 227, 227)",
-    $lightOrange: "rgb(255, 235, 217)",
     $lightGreen: "rgb(217, 255, 226)",
     
     $gray: "rgb(160, 160, 160)",
     $orange: "#FF8E00",
     $blue: "rgb(255, 255, 255)",
     
-    $grayBlue: "#005D95",
+    // $grayBlue: "#005D95",
+    $grayBlue: "#4a5564",
+
     $darkBlue: "rgb(0, 74, 121)",
 
     
@@ -129,4 +130,20 @@ export const FlexComponent = styled.div`
   ${flexCenter};
   width: 100%;
   padding: .5em;
+`
+
+
+
+// table
+
+export const Th = styled.th`
+    font-family: 'Patua One', cursive;
+    font-size: 16px;
+    font-weight: 400;
+    color: #fff;
+    text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.5);
+    text-align: center;
+    background-color: #4a5564;
+    border-top: 1px solid #858d99;
+    padding: .5em;
 `

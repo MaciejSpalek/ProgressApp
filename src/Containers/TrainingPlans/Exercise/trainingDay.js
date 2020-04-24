@@ -4,6 +4,7 @@ import Paragraph from '../../../Components/paragraph';
 import ProgressSign from './progressSign';
 import Helpers from '../../../Components/helpers';
 import { FlexComponent, variables } from '../../../Components/styleHelpers';
+import DayTable from './Table/table';
 
 
 const StyledContainer = styled(FlexComponent)`
@@ -56,6 +57,7 @@ const BodyTr = styled.tr`
 const Tr = styled.tr``
 const Td = styled.td`
     padding: .5em;
+    width: 100%;
 `
 
 
@@ -66,50 +68,35 @@ class TrainingDay extends Component {
     }
 
    
-    isTrainingVolumeDisplayed() {
-        const { trainingDay, amountOfSeries } = this.props;
-        const currentAmountOfSeries = Helpers.getAmountOfSeries(trainingDay)
-        const setAmountOfSeries = amountOfSeries;
-        return currentAmountOfSeries === +setAmountOfSeries
-    }
-
-    getProgressInPercentage(currentDay) {
-        const { id, trainingDays } = this.props;
-        const array = Helpers.getTrainingDays(trainingDays);
-
-        if(id === 0) {
-            return 0
-        } else {
-            const previousVolume = Helpers.getTreningVolume(array[id-1])
-            const currentVolume = Helpers.getTreningVolume(currentDay)
-            const trainingVolume = (currentVolume/previousVolume)*100 - 100;
-            const roundVolume = trainingVolume.toFixed(1);
-
-            return roundVolume;
-        }
-    }
+   
     
     renderSeries = (series) =>      <BodyTr key={series.id}>
                                         <Td> {series.id} </Td>
                                         <Td> {series.reps} </Td>
-                                        <Td> {series.weight} </Td>
+                                        <Td> {series.weight}kg </Td>
                                     </BodyTr>
    
+
+    
     renderTrainingDay() {
-        const { trainingDay } = this.props;
+        const { trainingDay, type } = this.props;
         const array = Helpers.getSeries(trainingDay);
         return (
                 <Table>
                     <Thead>
                         <Tr>
-                            <Th>seria</Th>
-                            <Th>powtórzenia</Th>
-                            <Th>ciężar</Th>
+                            <Th colSpan="1">seria</Th>
+                            <Th colSpan="1">{type === "repsWithoutWeight" ? "powtórzenia" : "czas"}</Th>
+                            {type === "repsWithWeight" ? <Th colSpan="1">ciężar</Th>: null}
                         </Tr>
                     </Thead>
                     <Tbody>
                         {array.map(this.renderSeries)}
                     </Tbody>
+
+
+
+
                     { this.isTrainingVolumeDisplayed() ? <Tfoot>
                         <Tr>
                             <Td>Objętość</Td>
@@ -127,7 +114,7 @@ class TrainingDay extends Component {
   
 
     render() {
-        const { id } = this.props;
+        const { id, type, trainingDay, trainingDays, amountOfSeries } = this.props;
         return (
             <StyledContainer>
                 <HeaderWrapper>
@@ -139,7 +126,13 @@ class TrainingDay extends Component {
                     />
                 </HeaderWrapper>
                 <SeriesWrapper>
-                    {this.renderTrainingDay()}
+                    <DayTable 
+                        id={id}
+                        type={type} 
+                        trainingDay={trainingDay} 
+                        trainingDays={trainingDays}
+                        amountOfSeries={amountOfSeries}
+                    />
                 </SeriesWrapper>
             </StyledContainer>
         )

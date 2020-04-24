@@ -65,24 +65,19 @@ class Content extends Component {
         }
     }
 
-    // function for chart.js
+    // returns array with days' numbers [1,2,3,4,5 ...], which use to chart.js as values on X axis
     getTrainingDaysArray() {
         const { trainingDays, amountOfSeries } = this.props
         const trainingDaysArray = helpers.getTrainingDays(trainingDays);
         const filteredArray = trainingDaysArray.filter(day => day.length === +amountOfSeries).map((el, index)=> index+1);
         return filteredArray;
     }
-
+    // returns array with training volumes [1000, 1200, 1800, 1340 ...], which use to chart.js as values on Y axis
     getTrainingVolumesArray() {
         const { trainingDays, amountOfSeries } = this.props;
         const trainingDaysArray = helpers.getTrainingDays(trainingDays)
         const filteredArray = trainingDaysArray.map(day => day.length === +amountOfSeries ? helpers.getTreningVolume(day) : null)
         return filteredArray;
-    }
-
-
-    getAmountOfTrainingDays() {
-        return this.props.trainingDays.length;
     }
     updateExerciseCounters() {
         const { 
@@ -175,12 +170,13 @@ class Content extends Component {
         }
     }
     renderTrainingDays() {
-        const { trainingDays, amountOfSeries } = this.props;
+        const { trainingDays, amountOfSeries, type } = this.props;
         return trainingDays.map((day, index) => {
             return (
                 <TrainingDay 
                     id={index}
                     key={index}
+                    type={type}
                     trainingDay={day}
                     trainingDays={trainingDays}
                     amountOfSeries={amountOfSeries}
