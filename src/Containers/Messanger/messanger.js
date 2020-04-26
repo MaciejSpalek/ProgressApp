@@ -1,11 +1,11 @@
 import React, { Component } from "react";
 import styled from "styled-components";
-import { flexCenter, variables, FlexWrapper }  from "../../Components/styleHelpers";
+import { flexCenter, variables, FlexComponent, RWD }  from "../../Components/styleHelpers";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch, faPaperPlane } from "@fortawesome/free-solid-svg-icons";
-import app from "../../Components/base";
+import app from "../../base";
 import UserProfile from "./userProfile";
-import FriendBoxItem from "./friendBoxItem";
+import Friend from "./friend";
 import ArrowButton from "../../Components/arrowButton";
 import Cross from "../../Components/cross";
 import Message from "./message";
@@ -19,7 +19,11 @@ const Container = styled.div`
     left: 0;
     width: 100%;
     height: calc(100vh - 64px);
-    background-color: white;
+    
+    @media only screen and (min-width: ${RWD.$desktop}) {
+        max-width: 370px;
+        left: calc(100% - 420px);
+    }
 `
 
 const MainBox = styled.div`
@@ -64,6 +68,7 @@ const ToggleBox = styled.div`
 `
 const FriendBox = styled.div`
     width: 100%;
+    background-color:white;
     padding: .5em;
 `
 const Caption = styled.p`
@@ -89,8 +94,11 @@ const MessageWindowHeader = styled.div`
     justify-content: space-between;
     width: 100%;
     padding: .5em;
-    border-bottom: .05em solid ${variables.$blue};
-    
+    border-bottom: .05em solid ${variables.$lightGray};   
+`
+const StyledWrapper = styled(FlexComponent)`
+    width: auto;
+    padding: 0;
 `
 const Nick = styled.p`
     color: ${variables.$grayBlue};
@@ -101,6 +109,7 @@ const Image = styled.div`
     position:relative;
     width:2.5em;
     height: 2.5em;
+    background-image: url(${props => props.url});
     background-position: center;
     background-size: cover;
     border-radius: 50%;
@@ -113,7 +122,7 @@ const LogDot = styled.span`
     right:.02em;
     width: .8em;
     height: .8em;
-    background-color: red;
+    background-color: ${props => props.isLogged ? "green" : "red"};
     border-radius: 50%;
     border: .15em solid white;
 `
@@ -133,7 +142,7 @@ const FormBox = styled.form`
     width: 100%;
     height: 45px;
     padding: .2em .5em;
-    border-bottom: .05em solid ${variables.$gray};
+    border-top: .05em solid ${variables.$lightGray};
     background-color: ${variables.$blue};
 `
 
@@ -171,54 +180,60 @@ class Messanger extends Component {
         }
     }
 
-    scrollToBottom = () => {
+    scrollToBottom() {
         this.messageWindow.current.scrollIntoView();
     };
   
-    componentDidMount = () => {
+    componentDidMount() {
         this._isMounted = true;
-        if(this._isMounted) {
-            app.getAllUsers((tempArray) => {
+        app.getAllUsers((tempArray) => {
+            if(this._isMounted) {
                 this.setState({
                     constUsersArray: tempArray
                 })
-            })
-            app.getAllFriends((tempArray) => {
+            }
+        })
+        app.getAllFriends((tempArray) => {
+            if(this._isMounted) {
                 this.setState({
                     friends: tempArray
                 })
-            })
-            app.countFriends((counter) => {
+            }
+        })
+        app.countFriends((counter) => {
+            if(this._isMounted) {
                 this.setState({
                     amountOfFriends: counter
                 })
-            })
-        }
+            }
+        })
     }
     componentWillUnmount() {
         this._isMounted = false;
     }
     componentDidUpdate() {
         this._isMounted = true;
-        if(this._isMounted) {
-            app.getRealTimeDatabase().ref("users").once('child_changed', snapshot => {
-                app.getAllFriends((tempArray) => {
+        app.getRealTimeDatabase().ref("users").once('child_changed', snapshot => {
+            app.getAllFriends((tempArray) => {
+                if(this._isMounted) {
                     this.setState({
                         friends: tempArray
                     })
-                })
-            });
+                }
+            })
+        });
 
-            app.getRealTimeDatabase().ref("messages").once('child_changed', snapshot => {
-                this.getCurrentConversation((tempArray) => {
-                        this.setState({
-                            conversation: tempArray
-                        }, ()=> {
-                            this.scrollToBottom();
-                        });
-                });
+        app.getRealTimeDatabase().ref("messages").once('child_changed', snapshot => {
+            this.getCurrentConversation((tempArray) => {
+                if(this._isMounted) {
+                    this.setState({
+                        conversation: tempArray
+                    }, ()=> {
+                        this.scrollToBottom();
+                    });
+                }
             });
-        }
+        });
     }
     
     
@@ -269,10 +284,10 @@ class Messanger extends Component {
     renderFriends() {
         return this.state.friends.map((friend, index) => {
             return (
-                <FriendBoxItem
+                <Friend
                     user={friend}
                     key={index}
-                    handleConversation={this.openConversation}
+                    handleConversation={()=> this.openConversation(friend)}
                 />
             )
         })
@@ -293,13 +308,13 @@ class Messanger extends Component {
     }
 
 
-    handleArrowButton = () => {
+    handleArrowButton() {
         this.setState(prevstate => ({
             isBottomBoxHide: !prevstate.isBottomBoxHide
         }))
     }
 
-    openConversation = async (user) => {
+    async openConversation(user) {
         await this.setState({
             isConversationUserLogged: user.isLogged,
             converserPhotoURL: user.url,
@@ -405,16 +420,13 @@ class Messanger extends Component {
             converserPhotoURL, 
             
         } = this.state;
-
         const content = <>
                             <FriendBox>
                                 {inputText === "" ? this.renderFriends(): null}
                             </FriendBox>
-                            
                             <ProfileBox>
                                 {this.renderProfiles()}
                             </ProfileBox>
-                            
                             <SearchBox>
                                 <Input placeholder="Szukaj znajomych..." onChange={(e)=> this.filterNicks(e)} />
                                 <FontAwesomeIcon icon={faSearch} color={variables.$gray} style={{fontSize: "1.5em"}}/>
@@ -428,7 +440,9 @@ class Messanger extends Component {
                     <ToggleBox>
                         <Caption> Znajomi ({amountOfFriends}) </Caption>
                         <ArrowButton 
-                            handleArrowButton={() => this.handleArrowButton()}
+                            color={"white"}
+                            backgroundColor={variables.$grayBlue}
+                            handleFunction={() => this.handleArrowButton()}
                             isHide={isBottomBoxHide}
                         />
                     </ToggleBox>
@@ -436,12 +450,12 @@ class Messanger extends Component {
                 :
                 <MessageWindow>
                     <MessageWindowHeader>
-                        <FlexWrapper>
-                            <Image style={{backgroundImage: `url(${converserPhotoURL})`}}>
-                                <LogDot style={isConversationUserLogged ? {backgroundColor: "green"} : {backgroundColor: "red"}}></LogDot>
+                        <StyledWrapper>
+                            <Image url={converserPhotoURL}>
+                                <LogDot isLogged={isConversationUserLogged}/>
                             </Image>
                             <Nick> {converserNick} </Nick>
-                        </FlexWrapper>
+                        </StyledWrapper>
                         <Cross 
                             handleClick={this.hideConversation}
                             styled={crossStyled}
@@ -452,7 +466,7 @@ class Messanger extends Component {
                         {this.renderMessages()}
                         <div ref={this.messageWindow} />
                     </MessageWindowContent>
-                    <FormBox style={{ border: "none", padding: "1em .5em"}} onSubmit = {(e) => this.sendMessage(e)}>
+                    <FormBox style={{ padding: "1em .5em"}} onSubmit = {(e) => this.sendMessage(e)}>
                         <Input name="input" style={{ margin: 0 }} placeholder="Napisz..."></Input>
                         <FontAwesomeIcon icon={faPaperPlane} color={variables.$grayBlue} style={{fontSize: "1.5em"}}/>
                     </FormBox>

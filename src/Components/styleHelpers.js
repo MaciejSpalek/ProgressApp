@@ -1,14 +1,29 @@
 import styled from "styled-components";
 
+
+export const RWD = {
+  $tablet: "768px",
+  $desktop: "1200px"
+}
+
 export const variables = {
+
+    $lightGray: "rgb(230, 230, 230)",
+    $lightBlue: "rgb(0, 157, 255)",
+    
     $gray: "rgb(160, 160, 160)",
-    $grayBlue: "#005D95",
-    $darkBlue: "rgb(0, 74, 121)",
-    // $blue: "#0080C8",
-    $blue: "rgb(230, 230, 230)",
     $orange: "#FF8E00",
+    $blue: "rgb(255, 255, 255)",
+    
+    // $grayBlue: "#005D95",
+    $grayBlue: "#4a5564",
+
+    $darkBlue: "rgb(0, 74, 121)",
+
+    
     
 }
+
 
 export const flexCenter = {
     "display": "flex",
@@ -16,15 +31,17 @@ export const flexCenter = {
     "align-items": "center"
 }
 
+
+
 // styles for login.js & signup.js
 export const Container = styled.section`
   ${flexCenter};
   position: fixed;
   top: 64px;
-  left: 0;
+  left: 0%;
   width: 100%;
   height: calc(100vh - 64px);
-  background-color: ${variables.$blue};
+  background-color: ${variables.$lightGray};
 `
 export const Form = styled.form`
   ${flexCenter};
@@ -33,7 +50,7 @@ export const Form = styled.form`
   flex-direction: column;
   width: 250px;
   height: 300px;
-  background-color: ${variables.$grayBlue};
+  background-color: ${variables.$gray};
   border-radius: .5em;
   padding: 4em 1em 1em 1em;
 `
@@ -47,28 +64,27 @@ export const Logo = styled.div`
   width: 100px;
   height: 100px;
   border-radius: 50%;
-  border: 0.2em solid ${variables.$grayBlue};
-  background-color: ${variables.$blue};
+  border: 0.2em solid ${variables.$gray};
+  background-color: ${variables.$lightGray};
 `
 
 export const Input = styled.input`
   background-color: white;
-  color: ${variables.$grayBlue};
+  color: ${variables.$gray};
   width: 100%;
   height: 35px;
   font-size: 1em;
-  font-weight: bold;
   border-radius: .2em;
   border: none;
   padding: 0 .3em;
   &::placeholder {
-    color: ${variables.$blue};
+    color: ${variables.$gray};
     font-weight: 100;
   }
 `
 
 export const Button = styled.button`
-  background-color: ${variables.$orange};
+  background-color: ${variables.$grayBlue};
   color: white;
   border: none;
   height: 35px;
@@ -81,7 +97,51 @@ export const Button = styled.button`
 `
 
 
+export const Caption = styled.p`
+    color: ${variables.$gray};
+    font-size: 1.3em;
+    font-weight: bold;
+`
+export const Paragraph = styled.p`
+  font-size: 1.3em;
+  font-weight: bold;
+  align-self: flex-start;
+  color: ${variables.$gray};
+`
+
+
+// flex containers
 export const FlexWrapper = styled.div`
   ${flexCenter};
+  width: 100%;
   height: 100%;
+`
+
+export const SpaceBetweenWrapper = styled.div`
+  ${flexCenter};
+  justify-content: space-between;
+  width: 100%;
+  padding: .5em;
+`
+
+export const FlexComponent = styled.div`
+  ${flexCenter};
+  width: 100%;
+  padding: .5em;
+`
+
+
+
+// table
+
+export const Th = styled.th`
+    font-family: 'Patua One', cursive;
+    font-size: 16px;
+    font-weight: 400;
+    color: #fff;
+    text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.5);
+    text-align: center;
+    background-color: #4a5564;
+    border-top: 1px solid #858d99;
+    padding: .5em;
 `

@@ -58,7 +58,7 @@ class FireBase {
   }
 
   // returns all users except you
-  getAllUsers = (setState) => {
+  getAllUsers(setState) {
     const usersRef = this.getRealTimeDatabase().ref("users");
     const tempArray = [];
     
@@ -74,7 +74,7 @@ class FireBase {
   }
 
   // returns all your friends
-  getAllFriends = (setState) => {
+  getAllFriends(setState) {
     const userID = this.getUserID();
     const friendsRef = this.getRealTimeDatabase().ref("friends").child(userID);
     const usersRef = this.getRealTimeDatabase().ref("users");
@@ -82,13 +82,12 @@ class FireBase {
     friendsRef.on('value', snapshot => {
         const friends = snapshot.val();
         const tempArray = [];
-
         for(let friend in friends) {
-            if(friends[friend].userID !== this.getUserID()) {
-              usersRef.child(friends[friend].userID).once('value', snapshot1 => {
-                tempArray.push(snapshot1.val());
-              })
-            }
+          if(friends[friend].userID !== userID) {
+            usersRef.child(friends[friend].userID).once('value', snapshot1 => {
+              tempArray.push(snapshot1.val());
+            })
+          }   
         }
         setState(tempArray);
     })
@@ -110,7 +109,35 @@ class FireBase {
         setState(counter);
     })
   }
+ 
+
+  isDayKeyIncludesExerciseKey(exerciseKey, traininDayString) {
+    const regex = new RegExp(exerciseKey);
+    return regex.test(traininDayString)
+  }
+
+  getTrainingDays(exerciseKey, setState) {
+    const trainingDaysRef = this.getRealTimeDatabase().ref("training-days");
+
+    trainingDaysRef.on('value', snapshot => {
+        const trainingDays = snapshot.val();
+        const tempArray = [];
+        for(let day in trainingDays) {
+          if(this.isDayKeyIncludesExerciseKey(exerciseKey, day)) {
+              tempArray.push(trainingDays[day]);
+          }   
+        }
+        setState(tempArray);
+    })
+  }
+
+
+
+  sortByDate(array) {
+    return array.sort((a,b) =>  new Date(b.date).getTime() - new Date(a.date).getTime());
+  }
 }
+
 
   
 

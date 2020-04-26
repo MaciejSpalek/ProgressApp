@@ -1,6 +1,6 @@
 import React from "react"
 import * as styleHelpers  from '../../Components/styleHelpers'
-import app from '../../Components/base'
+import app from '../../base'
 import { Link } from 'react-router-dom';
 import styled from 'styled-components'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -20,7 +20,7 @@ const MenuComponent = styled.div`
         width: 100vw;
         height: calc(100vh - 64px);
         transform: translateX(100%);
-        background-color: ${variables.$grayBlue};
+        background-color: rgba(0, 3, 19, 0.969);
         transition: .3s cubic-bezier(0.785, 0.135, 0.15, 0.86);
         overflow-y: scroll;
 `
@@ -37,7 +37,7 @@ const ListItem = styled.li`
         text-decoration: none;
         padding: .5em;
         &:hover {
-            background-color: rgb(0, 65, 102);
+            background-color: rgba(16, 24, 70, 0.801);
         }
 `
 const Caption = styled.h2`
@@ -49,12 +49,12 @@ const Icon = styled.div`
         width: 5em;
 `
 
-const logout = async () => {
+const logout = () => {
     app.getRealTimeDatabase().ref("users").child(app.getUserID()).child("isLogged").set(false)
     app.logout();
 }
 
-const Menu = ({isMenuActive, handleHamburger}) => {
+const Menu = ({ isMenuActive, handleHamburger }) => {
     return (
         <MenuComponent style={isMenuActive ? transformMenu:null}>
             <MenuList>
@@ -71,7 +71,7 @@ const Menu = ({isMenuActive, handleHamburger}) => {
                     </ListItem>
                 </Link>
 
-                <Link style={{textDecoration: "none"}} onClick={handleHamburger}  to="/plan">
+                <Link style={{textDecoration: "none"}} onClick={handleHamburger}  to="/planBoard">
                     <ListItem>
                         <Icon><FontAwesomeIcon icon={faListOl} color="#FF8E00" style={{fontSize:50}} /></Icon>
                         <Caption>Plan</Caption>
@@ -82,20 +82,6 @@ const Menu = ({isMenuActive, handleHamburger}) => {
                     <ListItem>
                         <Icon><FontAwesomeIcon icon={faFacebookMessenger} color="#FF8E00" style={{fontSize:50}} /></Icon>
                         <Caption>Messanger</Caption>
-                    </ListItem>
-                </Link>
-
-                <Link style={{textDecoration: "none"}} onClick={handleHamburger}  to="/diagrams">
-                    <ListItem>
-                        <Icon><FontAwesomeIcon icon={faChartBar} color="#FF8E00" style={{fontSize:50}} /></Icon>
-                        <Caption>Wykresy</Caption>
-                    </ListItem>
-                </Link>
-
-                <Link style={{textDecoration: "none"}} onClick={handleHamburger}  to="/records">
-                    <ListItem>
-                        <Icon><FontAwesomeIcon icon={faStar} color="#FF8E00" style={{fontSize:50}} /></Icon>
-                        <Caption>Rekordy</Caption>
                     </ListItem>
                 </Link>
 

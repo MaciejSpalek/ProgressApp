@@ -1,12 +1,13 @@
 import React, { useCallback } from "react";
-import app from "../../Components/base";
+import app from "../../base";
 import { Logo, Container, Form, Input, Button } from "../../Components/styleHelpers"
 import { withRouter } from "react-router";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUserPlus } from "@fortawesome/free-solid-svg-icons";
 import { variables } from "../../Components/styleHelpers";
-import userPhoto from "../../images/user.png";
+import userPhoto from "../../images/userPhoto.svg";
+
 const SignUp = ({ history }) => {
   const handleSignUp = useCallback(
     async event => {
@@ -44,7 +45,7 @@ const SignUp = ({ history }) => {
         .collection("users")
         .doc(app.getUserID())
         .set({ 
-          measurement: [] 
+          measurement: []
         });
 
         history.push("/");
@@ -59,14 +60,14 @@ const SignUp = ({ history }) => {
         <Input type="text" name="age" placeholder="age" required></Input>
         <Input type="email" name="email" placeholder="email" required></Input>
         <Input type="password" name="password" placeholder="hasło" required></Input>
-        <Button className="form__button"> Stwórz </Button>
-        <Link to="/login" className="form__link">
+        <Button> Stwórz </Button>
+        <Link style={{color: "white", fontWeight: "bold"}} to="/login">
           Przejdź do logowania
         </Link>
         <Logo>
         <FontAwesomeIcon
           icon={faUserPlus}
-          color={variables.$grayBlue}
+          color={variables.$gray}
           style={{ fontSize: 60 }}
         />
       </Logo>

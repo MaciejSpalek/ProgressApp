@@ -1,9 +1,9 @@
 import React, { Component } from "react";
-import app from "../../Components/base";
+import app from "../../base";
 import styled from "styled-components";
 import ShareBox from "../../Components/shareBox";
 import PostBoard from "../MyPosts/postBoard";
-import scroll, { Link } from "react-scroll";
+import Messanger from '../Messanger/messanger';
 import * as styleHelpers  from '../../Components/styleHelpers';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {  
@@ -12,8 +12,9 @@ import {
     faCameraRetro, 
     faExternalLinkSquareAlt
 } from '@fortawesome/free-solid-svg-icons';
+import helpers from "../../Components/helpers";
 
-
+const RWD = styleHelpers.RWD;
 const flexCenter = styleHelpers.flexCenter;
 const variables = styleHelpers.variables;
 const frontActive = {
@@ -24,6 +25,15 @@ const backActive = {
     transform: "rotateY(180deg)"
 }
 
+
+const Wrapper = styled.div`
+    position: relative;
+    ${flexCenter};
+    flex-direction: column;
+    width: 100%;
+    max-width: 500px;
+`
+
 const Container = styled.section`
     ${flexCenter}
     justify-content: flex-start;
@@ -33,7 +43,7 @@ const Container = styled.section`
     left: 0;
     height: calc(100vh - 64px);
     width: 100%;
-    background-color: ${variables.$blue};
+    background-color: ${variables.$lightGray};
     padding: .5em;
     overflow-y: scroll;
 `
@@ -41,9 +51,17 @@ const Container = styled.section`
 const ProfileCard = styled.div`
     ${flexCenter};
     position: relative;
-    width: 280px;
+    width: 100%;
+    max-width: 500px;
     height: 500px;
-    margin: 2em 0;
+    margin-bottom: .5em;
+    @media only screen and (min-width: ${RWD.$desktop}) {
+        position: absolute;
+        width: 320px;
+        height: 522px;
+        top: .05em;
+        right: calc(100% + 1em);
+    }
 `
 
 const Frontside = styled.div`
@@ -54,9 +72,8 @@ const Frontside = styled.div`
     border-radius: .5em;
     transition: .3s linear;
     transform-origin: center;
-    z-index: 1;
     backface-visibility: hidden;
-    /* box-shadow: 0 0 .5em .1em black; */
+    z-index: 1;
 `
 const Backside = styled.div`
     ${flexCenter};
@@ -69,40 +86,39 @@ const Backside = styled.div`
     transition: .3s linear;
     transform-origin: center;
     transform:  rotateY(180deg);
-    /* box-shadow: 0 0 .5em .1em black; */
     background-color: ${variables.$blue};
-    padding-bottom: .5em;
     z-index: -1;
 `
 const PhotoBox = styled.section`
     ${flexCenter}
+    flex-direction: column;
     position: relative;
     width: 100%;
     flex: 1;
-    border-top-right-radius: .5em;
-    border-top-left-radius: .5em;
     transition: .5s linear;
     background-color: ${variables.$blue};
     overflow: hidden;
-   
+`
+
+const Photo = styled.img`
+    width: 12em;
+    height: 12em;
+    border-radius: 50%;
+    margin-bottom: 1em;
 `
 
 const Nick = styled.span`
-    position:absolute;
-    bottom: .5em;
-    left: .5em;
     font-size: 1.5em;
     font-weight: bold;
-    color: white;
+    color: ${variables.$grayBlue};
     line-height:1;
 `
 const ButtonBox = styled.div`
     ${flexCenter}
     justify-content: flex-end;
     width: 100%;
-    background-color: ${variables.$darkBlue};
-    border-bottom-right-radius: .5em;
-    border-bottom-left-radius: .5em;
+    border-top: .1em solid ${variables.$lightGray};
+    background-color: white;
 `
 
 
@@ -113,8 +129,6 @@ const AddBox = styled.form`
     grid-template-rows: repeat(15,1fr);
     grid-gap: .5em;
     width: 100%;
-    border-bottom-right-radius: .5em;
-    border-bottom-left-radius: .5em;
     padding: .5em;
     overflow-y: scroll;
 `
@@ -167,28 +181,11 @@ const ProfileBox = styled.div`
     position: relative;
     width: 100%;
     height: 100%;
+    border-radius: .5em;
+
     padding: .5em;
     overflow-y: scroll;
 `
-const Photo = styled.img`
-    width: auto;
-    height: 100%;
-`
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -216,10 +213,6 @@ class Profile extends Component {
         }
     }
 
-
-
-
-
     componentDidMount() {
         this._isMounted = true;
         this.setProfileData(); // at the beginning function pull out data from Realtime database
@@ -228,11 +221,7 @@ class Profile extends Component {
     componentWillUnmount() {
         this._isMounted = false;
     }
-    capitalizeFirstLetter(string) {
-        if(typeof string !== "undefined") {
-            return string.charAt(0).toUpperCase() + string.slice(1);
-        }
-    }
+   
     rotateCardHandler() {
         this.setState(prevState => ({
             isRotateCard: !prevState.isRotateCard
@@ -245,7 +234,7 @@ class Profile extends Component {
     }
 
     // function invoke on button
-    updateProfileData = (e) => {
+    updateProfileData(e) {
         e.preventDefault();
         const { sex, weight, height, yourSport, priority, trainingExperience, aboutMe } = e.target.elements;
 
@@ -280,7 +269,7 @@ class Profile extends Component {
     getText = (caption, profileData, unit="") => {
         return `${caption}: ${profileData}${unit}`;
     }
-    renderProfileBox = () => {
+    renderProfileBox() {
         const { sex,
             weight,
             height,
@@ -309,15 +298,15 @@ class Profile extends Component {
         }
     }
   
-    choosePhoto = async (e) => {
+    async choosePhoto(e) {
         if (e.target.files[0]) {
             const image = e.target.files[0];
-                await this.setState({image});
-                this.setPhotoURL();
+            await this.setState({image});
+            this.setPhotoURL();
         }
     }
 
-    setPhotoURL = () => {
+    setPhotoURL() {
         const { image } = this.state;
         const userID = app.getUserID();
         const uploadTask = app.getStorage().ref(`users/${userID}/profilePhoto`).put(image);
@@ -329,35 +318,37 @@ class Profile extends Component {
             app.getStorage().ref(`users/${userID}`).child(`profilePhoto`).getDownloadURL().then(URL => {
                 this.setState({
                     url: URL
-                })
+                }, ()=>{
 
-            usersRef.child(app.getUserID()).update({
-                url: this.state.url
-            });
-
-            // update photo in posts after its change
-            postsRef.on('value', snapshot => {
-                const posts = snapshot.val();
-                for(let post in posts) {
-                    if(posts[post].userID === userID) {
-                        postsRef.child(post).update({
-                            url: this.state.url
-                        })
-                    }
-                }
-            });
-
-            // update photo in comments after its change
-            commentsRef.on('value', snapshot => {
-                const comments = snapshot.val();
-                for(let comment in comments) {
-                    if(comments[comment].userID === userID) {
-                        commentsRef.child(comment).update({
-                            url: this.state.url
-                        })
-                    }
-                }
-            });
+                    //  update photo in users after its change
+                    usersRef.child(app.getUserID()).update({
+                        url: this.state.url
+                    });
+        
+                    // update photo in posts after its change
+                    postsRef.on('value', snapshot => {
+                        const posts = snapshot.val();
+                        for(let post in posts) {
+                            if(posts[post].userID === userID) {
+                                postsRef.child(post).update({
+                                    url: this.state.url
+                                })
+                            }
+                        }
+                    });
+        
+                    // update photo in comments after its change
+                    commentsRef.on('value', snapshot => {
+                        const comments = snapshot.val();
+                        for(let comment in comments) {
+                            if(comments[comment].userID === userID) {
+                                commentsRef.child(comment).update({
+                                    url: this.state.url
+                                })
+                            }
+                        }
+                    });
+            })
           }) 
       });
     }
@@ -370,18 +361,20 @@ class Profile extends Component {
         const rootRef = app.getRootRef("users");
         const userID = app.getUserID();
         rootRef.child(userID).orderByKey().on("value", snapshot => {
-            this.setState({
-                nick:  snapshot.val().nick,
-                age:  snapshot.val().age,
-                url:  snapshot.val().url,
-                sex:  snapshot.val().sex,
-                weight:  snapshot.val().weight,
-                height:  snapshot.val().height,
-                yourSport:  snapshot.val().yourSport,
-                trainingExperience:  snapshot.val().trainingExperience,
-                priority:  snapshot.val().priority,
-                aboutMe:  snapshot.val().aboutMe
-            })
+            if(this._isMounted) {
+                this.setState({
+                    nick:  snapshot.val().nick,
+                    age:  snapshot.val().age,
+                    url:  snapshot.val().url,
+                    sex:  snapshot.val().sex,
+                    weight:  snapshot.val().weight,
+                    height:  snapshot.val().height,
+                    yourSport:  snapshot.val().yourSport,
+                    trainingExperience:  snapshot.val().trainingExperience,
+                    priority:  snapshot.val().priority,
+                    aboutMe:  snapshot.val().aboutMe
+                })
+            }
         })
     }
 
@@ -392,46 +385,45 @@ class Profile extends Component {
         const { isRotateCard, isEditButtonActive, nick, age, url } = this.state;
         return (
             <Container>
-                <ProfileCard>
-                    <Frontside style={isRotateCard ? backActive : null}>
-                        <PhotoBox>
-                            <Photo src={url}></Photo>
-                            <Nick> { app.getCurrentUser() ? `${this.capitalizeFirstLetter(nick)}, ${age}l` : null} </Nick>
-                        </PhotoBox>
-                        <ButtonBox>
-                            <FontAwesomeIcon icon={faCameraRetro} style={{fontSize: 35, margin: '.1em'}} color={variables.$orange} />
-                            <label>
-                                <FontAwesomeIcon icon={faImages} style={{fontSize: 35, margin: '.1em'}} color={variables.$orange} />
-                                <input type="file" style={{display: "none"}} onChange={this.choosePhoto}/>
-                            </label>
-                            <FontAwesomeIcon icon={faExternalLinkSquareAlt} style={{fontSize: 35, margin: '.1em'}} color={variables.$orange}  onClick={this.rotateCardHandler.bind(this)}/>
-                        </ButtonBox>
-                    </Frontside>
-                    <Backside style={isRotateCard ? frontActive : null}>
-                        <ButtonBox style={{borderBottomLeftRadius: 0, borderBottomRightRadius: 0, borderTopLeftRadius: ".5em", borderTopRightRadius: ".5em"}}>
-                            <FontAwesomeIcon icon={faPenSquare} style={{fontSize: 35, margin: '.1em'}} color={variables.$orange} onClick={this.editButtonHandler.bind(this)}/>
-                            <FontAwesomeIcon icon={faExternalLinkSquareAlt} style={{fontSize: 35 , margin: '.1em'}} color={variables.$orange}  onClick={this.rotateCardHandler.bind(this)}/>
-                        </ButtonBox>
-                        {
-                        isEditButtonActive ? 
-                            <AddBox onSubmit={(e) => {this.updateProfileData(e)}}>
-                                <Caption> Podstawowe dane: </Caption>
-                                <Input name="sex" placeholder="Płeć" required></Input>
-                                <Input name="trainingExperience" type="Number" placeholder="Staż tren." required></Input>
-                                <Input name="weight" type="number" placeholder="Waga" required></Input>
-                                <Input name="height" type="number" placeholder="Wzrost" required></Input>
-                                <Input name="priority" placeholder="Priorytet" required></Input>
-                                <Input name="yourSport" placeholder="Sport" required></Input>
-                                <About name="aboutMe" placeholder="O mnie"></About>
-                                <styleHelpers.Button>Zapisz</styleHelpers.Button>
-                            </AddBox>
-                        : 
-                            this.renderProfileBox()
-                        }
-                    </Backside>
-                </ProfileCard>
-                <ShareBox/>
-                <PostBoard/>
+                <Wrapper>
+                    <ProfileCard>
+                        <Frontside style={isRotateCard ? backActive : null}>
+                            <PhotoBox>
+                                <Photo src={url}></Photo>
+                                <Nick> { app.getCurrentUser() ? `${helpers.capitalizeFirstLetter(nick)}, ${age}l` : null} </Nick>
+                            </PhotoBox>
+                            <ButtonBox>
+                                <FontAwesomeIcon icon={faCameraRetro} style={{fontSize: 35, margin: '.1em'}} color={variables.$grayBlue} />
+                                <label>
+                                    <FontAwesomeIcon icon={faImages} style={{fontSize: 35, margin: '.1em'}} color={variables.$grayBlue} />
+                                    <input type="file" style={{display: "none"}} onChange={(e) => this.choosePhoto(e)}/>
+                                </label>
+                                <FontAwesomeIcon icon={faExternalLinkSquareAlt} style={{fontSize: 35, margin: '.1em'}} color={variables.$grayBlue}  onClick={this.rotateCardHandler.bind(this)}/>
+                            </ButtonBox>
+                        </Frontside>
+                        <Backside style={isRotateCard ? frontActive : null}>
+                            {isEditButtonActive ? 
+                                <AddBox onSubmit={(e) => {this.updateProfileData(e)}}>
+                                    <Caption> Podstawowe dane: </Caption>
+                                    <Input name="sex" placeholder="Płeć" required></Input>
+                                    <Input name="trainingExperience" type="Number" placeholder="Staż tren." required></Input>
+                                    <Input name="weight" type="number" placeholder="Waga" required></Input>
+                                    <Input name="height" type="number" placeholder="Wzrost" required></Input>
+                                    <Input name="priority" placeholder="Priorytet" required></Input>
+                                    <Input name="yourSport" placeholder="Sport" required></Input>
+                                    <About name="aboutMe" placeholder="O mnie"></About>
+                                    <styleHelpers.Button>Zapisz</styleHelpers.Button>
+                                </AddBox> : this.renderProfileBox()}
+                                <ButtonBox>
+                                    <FontAwesomeIcon icon={faPenSquare} style={{fontSize: 35, margin: '.1em'}} color={variables.$grayBlue} onClick={this.editButtonHandler.bind(this)}/>
+                                    <FontAwesomeIcon icon={faExternalLinkSquareAlt} style={{fontSize: 35 , margin: '.1em'}} color={variables.$grayBlue}  onClick={this.rotateCardHandler.bind(this)}/>
+                                </ButtonBox>
+                        </Backside>
+                    </ProfileCard>
+                    <ShareBox/>
+                    <PostBoard destination={"profile"}/>
+                </Wrapper>
+                {/* <Messanger /> */}
             </Container>
         )
     }

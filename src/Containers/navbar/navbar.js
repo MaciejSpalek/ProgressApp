@@ -1,5 +1,6 @@
-import React from 'react';
+import React, {Component} from 'react';
 import Menu from './menu';
+import app from '../../base';
 import * as styleHelpers  from '../../Components/styleHelpers';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChartLine, faBars, faTimes } from '@fortawesome/free-solid-svg-icons';
@@ -14,12 +15,11 @@ const Nav = styled.div`
     justify-content: space-between;
     padding: .2em .5em;
     color: white;
-    background-color: ${variables.$darkBlue};
+    background-color: ${variables.$grayBlue};
     width: 100%;
     height: 64px;
     font-size: 1em;
     z-index: 1;
-    /* box-shadow: 0 .05em .5em .1em black; */
 `;
 const Logo = styled.div`
     ${flexCenter};
@@ -32,7 +32,7 @@ const Title = styled.span`
 
 
 
-class Navbar extends React.Component {
+class Navbar extends Component {
     constructor(props) {
         super(props);
         this.handleHamburger = this.handleHamburger.bind(this)
@@ -46,12 +46,13 @@ class Navbar extends React.Component {
             isMenuActive: !prevstate.isMenuActive
         }))
     }
+
     
     render() {
         return (
             <Nav >
                 <Logo>
-                    <FontAwesomeIcon icon={faChartLine} color="#FF8E00" style={{fontSize:30}} />
+                    <FontAwesomeIcon icon={faChartLine} color="#FF8E00" style={{fontSize:30}}/>
                     <Title> ProgressApp </Title>
                 </Logo>
                 { this.props.user ?

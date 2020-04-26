@@ -1,7 +1,6 @@
 import React, { Component } from "react"
 import styled from 'styled-components';
-import app from "./base";
-import Helpers from "./helpers";
+import app from "../base";
 import * as styleHelpers  from './styleHelpers';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFileUpload } from '@fortawesome/free-solid-svg-icons';
@@ -13,7 +12,10 @@ const Container = styled.form`
     ${flexCenter}
     flex-direction: column;
     width: 100%;
-    border-radius: .5em;
+    max-width: 500px;
+    /* @media only screen and (min-width: 1200px) {
+        width: 500px;
+    } */
 `
 const TextArea = styled.textarea`
     ${flexCenter}
@@ -27,7 +29,7 @@ const TextArea = styled.textarea`
     resize:none;
     margin-bottom: .5em;
     &::placeholder {
-        color: ${variables.$blue};
+        color: ${variables.$gray};
     }
 `
 const AddArea = styled.div`
@@ -92,12 +94,11 @@ class ShareBox extends Component {
                 content: textarea.value,
                 url: url,
                 nick: nick,
-                date: Helpers.getFullDate(),
+                date: new Date(),
                 likes: 0,
                 comments: 0
             };
             textarea.value = "";
-            // updates['/user-posts/' + postData.userID + '/' + newPostKey] = postData;
             updates['/posts/' + newPostKey] = postData;
             return app.getRealTimeDatabase().ref().update(updates);
         }
@@ -109,7 +110,7 @@ class ShareBox extends Component {
                 <TextArea name="textarea" placeholder="Napisz coś..."></TextArea>
                 <AddArea>
                     <label>
-                        <FontAwesomeIcon icon={faFileUpload} style={{fontSize: 35, margin: '.1em'}} color={variables.$orange} />
+                        <FontAwesomeIcon icon={faFileUpload} style={{fontSize: 35, margin: '.1em'}} color={variables.$grayBlue} />
                         <input type="file" style={{display: "none"}}/>
                     </label>
                     <styleHelpers.Button>Opublikuj</styleHelpers.Button>
