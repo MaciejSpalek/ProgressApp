@@ -25,7 +25,7 @@ const Td = styled(Th)`
     padding: .2em;
 `
 
-const TableFooter = ({ id, trainingDay, trainingDays, amountOfSeries }) => {
+const TableFooter = ({ id, type, trainingDay, trainingDays, amountOfSeries }) => {
     const array = Helpers.getSeries(trainingDay);
 
     const isTrainingVolumeDisplayed = () => {
@@ -39,8 +39,8 @@ const TableFooter = ({ id, trainingDay, trainingDays, amountOfSeries }) => {
         if(id === 0) {
             return 0
         } else {
-            const previousVolume = Helpers.getTreningVolume(allTrainingDays[id-1])
-            const currentVolume = Helpers.getTreningVolume(currentDay)
+            const previousVolume = Helpers.getTreningVolume(allTrainingDays[id-1], type)
+            const currentVolume = Helpers.getTreningVolume(currentDay, type)
             const trainingVolume = (currentVolume/previousVolume)*100 - 100;
             const roundVolume = trainingVolume.toFixed(1);
 
@@ -54,7 +54,7 @@ const TableFooter = ({ id, trainingDay, trainingDays, amountOfSeries }) => {
                 <Tr>
                     <Td colSpan="2">Objętość</Td>
                     <Td style={styleRightTopTd}>
-                        {Helpers.getTreningVolume(array)}
+                        {Helpers.getTreningVolume(array, type)}
                     </Td>
                 </Tr>
                 <Tr>

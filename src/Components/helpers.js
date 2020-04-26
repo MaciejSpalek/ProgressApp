@@ -68,9 +68,15 @@ class Helpers {
         }
         return tempArray.length;
     }
-    getTreningVolume(array) {
+    getTreningVolume(array, type) {
         const tempArray = this.getSeries(array);
-        return tempArray.reduce((volume, series) => volume + series.weight*series.reps, 0)
+        if(type === "repsWithWeight") {
+            return tempArray.reduce((volume, series) => volume + series.weight*series.reps, 0)
+        } else if(type === "repsWithoutWeight") {
+            return tempArray.reduce((volume, series) => volume + +series.reps, 0)
+        } else {
+            return tempArray.reduce((volume, series) => volume + +series.time, 0)
+        }
     }
 
     getTrainingDays(array) {

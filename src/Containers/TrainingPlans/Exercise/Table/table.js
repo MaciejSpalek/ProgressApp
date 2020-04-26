@@ -17,7 +17,10 @@ const Table = styled.table`
 const DayTable = ({ id, type, trainingDay, trainingDays, amountOfSeries }) => {
     return (
         <Table>
-            <TableHeader type={type}/>
+            <TableHeader 
+                type={type}
+                id={id}
+            />
             <TableBody 
                 trainingDay={trainingDay}
                 type={type} 

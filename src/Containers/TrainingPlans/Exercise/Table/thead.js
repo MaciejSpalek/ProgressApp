@@ -18,27 +18,35 @@ const StyledTh = styled(Th)`
     :last-child {
         border-top-right-radius: 5px;
     }
+    font-size: 1.3em;
+    font-weight: bold;
 `
 
 
-const TableHeader = ({ type }) => {
+const TableHeader = ({ type, id }) => {
     const renderHeader = () => {
         if(type === "repsWithWeight") {
             return (
                 <Thead>
                     <Tr>
-                        <StyledTh>seria</StyledTh>
-                        <StyledTh>powtórzenia</StyledTh>
-                        <StyledTh>ciężar [kg]</StyledTh>
+                        <StyledTh colSpan="3">{`Dzień ${id+1}`}</StyledTh>
+                    </Tr>
+                    <Tr>
+                        <Th>Seria</Th>
+                        <Th>Powtórzenia</Th>
+                        <Th>Ciężar [kg]</Th>
                     </Tr>
                 </Thead>
             )
         } else if(type === "repsWithoutWeight") {
             return (
                 <Thead>
+                     <Tr>
+                        <StyledTh colSpan="3">{`Dzień ${id+1}`}</StyledTh>
+                    </Tr>
                     <Tr>
-                        <StyledTh colSpan="2">seria</StyledTh>
-                        <StyledTh colSpan="2">powtórzenia</StyledTh>
+                        <Th colSpan="2">Seria</Th>
+                        <Th colSpan="2">Powtórzenia</Th>
                     </Tr>
                 </Thead>
             )
@@ -46,8 +54,11 @@ const TableHeader = ({ type }) => {
             return (
                 <Thead>
                     <Tr>
-                        <StyledTh colSpan="2">seria</StyledTh>
-                        <StyledTh colSpan="2">czas [s]</StyledTh>
+                        <StyledTh colSpan="3">{`Dzień ${id+1}`}</StyledTh>
+                    </Tr>
+                    <Tr>
+                        <Th colSpan="2">Seria</Th>
+                        <Th colSpan="2">Czas [s]</Th>
                     </Tr>
                 </Thead>
             )

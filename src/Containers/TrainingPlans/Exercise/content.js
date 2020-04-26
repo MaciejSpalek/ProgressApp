@@ -8,6 +8,7 @@ import Input from '../../../Components/input';
 import Paragraph from '../../../Components/paragraph';
 import TrainingDay from './trainingDay';
 import Chart from './chart';
+import Timer from './timer';
 import { variables, flexCenter, FlexComponent } from '../../../Components/styleHelpers'
 import { faPlusSquare, faTimes } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -39,12 +40,12 @@ const StyledFormWrapper = styled(FlexComponent)`
 `
 
 const StyledHeaderWrapper = styled(FlexComponent)`
+    border-bottom: .1em solid ${variables.$lightGray};
     justify-content: space-between;
     padding: .5em 0;
     width: 100%;
 `
 const Form = styled.form`
-    border-top: .1em solid ${variables.$lightGray};
     justify-content: space-between;
     background-color: white;
     width: calc(100%);
@@ -61,8 +62,10 @@ class Content extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            isChartButtonHidden: true
+            isChartButtonHidden: true,
+            time: 0
         }
+        this.timerInterval = null;
     }
 
     // returns array with days' numbers [1,2,3,4,5 ...], which use to chart.js as values on X axis
@@ -74,10 +77,22 @@ class Content extends Component {
     }
     // returns array with training volumes [1000, 1200, 1800, 1340 ...], which use to chart.js as values on Y axis
     getTrainingVolumesArray() {
-        const { trainingDays, amountOfSeries } = this.props;
+        const { trainingDays, amountOfSeries, type } = this.props;
         const trainingDaysArray = helpers.getTrainingDays(trainingDays)
-        const filteredArray = trainingDaysArray.map(day => day.length === +amountOfSeries ? helpers.getTreningVolume(day) : null)
+        const filteredArray = trainingDaysArray.map(day => day.length === +amountOfSeries ? helpers.getTreningVolume(day, type) : null)
         return filteredArray;
+    }
+    startTimer() {
+        this.timerInterval = setInterval(()=> {
+            this.setState(prevState => ({
+                time: prevState.time + 1
+            }))
+        }, 1000)
+    }
+    stopTimer(e){  
+        clearInterval(this.timerInterval)
+        this.addSeries(e)
+        this.setState({time: 0})
     }
     updateExerciseCounters() {
         const { 
@@ -106,21 +121,17 @@ class Content extends Component {
                 currentTraining: tempCurrentTraining
             })
     }
-    areInputsEmpty(type, weight, reps, time) {
+    areInputsEmpty(type, weight, reps) {
         if(type === "repsWithWeight") {
             return !helpers.isInputEmpty(weight) && !helpers.isInputEmpty(reps)
-        }
-         
-        else if(type === "repsWithoutWeight") {
+        } else if(type === "repsWithoutWeight") {
             return !helpers.isInputEmpty(reps)
-        } 
-        
-        else {
-            return !helpers.isInputEmpty(time) 
+        } else {
+            return true;
         }
     }
-    getSeriesData(type, weight, reps, time, currentSeries, exerciseKey) {
-        
+
+    getSeriesData(type, weight, reps, currentSeries, exerciseKey) {
         if(type === "repsWithWeight") {
             return {
                 id: currentSeries,
@@ -138,7 +149,7 @@ class Content extends Component {
             return {
                 id: currentSeries,
                 exerciseKey: exerciseKey,  
-                time:  time.value,   
+                time: this.state.time   
             }
         }
     }
@@ -151,18 +162,20 @@ class Content extends Component {
              type,
         } = this.props;
         
-        const { 
-            weight, 
-            reps, 
-            time, 
-        } = e.target.elements;
+            let weight = null;
+            let reps = null;
+
+            if(type !== "time") {
+                weight = e.target.elements.weight;
+                reps = e.target.elements.reps;
+            }
 
 
-        if(this.areInputsEmpty(type, weight, reps, time)) {
+        if(this.areInputsEmpty(type, weight, reps)) {
             const currentTrainingRef = app.getRealTimeDatabase().ref(`training-days`).child(currentTraining);
             const seriesKey = currentTrainingRef.push().key;
             const updates = {};
-            const seriesData = this.getSeriesData(type, weight, reps, time, currentSeries, exerciseKey);
+            const seriesData = this.getSeriesData(type, weight, reps, currentSeries, exerciseKey);
     
             this.updateExerciseCounters();
             updates[`training-days/${currentTraining}${exerciseKey}/${seriesKey}`] = seriesData;
@@ -171,7 +184,6 @@ class Content extends Component {
     }
     renderTrainingDays() {
         const { trainingDays, amountOfSeries, type } = this.props;
-        console.log(trainingDays)
         return trainingDays.map((day, index) => {
             return (
                 <TrainingDay 
@@ -219,21 +231,18 @@ class Content extends Component {
                     <PlusButton styles={{
                         marginLeft: ".5em"
                     }}/>
-                </> :
+                </> 
+                :
                 <>
                     <Input 
-                        name={type === "repsWithoutWeight" ? "reps" : "time"}  
+                        name={"reps"}  
                         type={"number"}
                         style={modifyInputStyles}
-                        placeholder={type === "repsWithoutWeight" ? "powtórzenia" : "czas"}
+                        placeholder={"powtórzenia"}
                     />                
-                    <FontAwesomeIcon 
-                        icon={faPlusSquare} 
-                        style={{
-                            fontSize: 40, 
-                            color: variables.$grayBlue
-                        }}  
-                    />
+                     <PlusButton styles={{
+                        marginLeft: ".5em"
+                    }}/>
                 </>} 
             </Form>
         )
@@ -248,7 +257,8 @@ class Content extends Component {
         
     }
     render() {
-        const { isChartButtonHidden } = this.state;
+        const { isChartButtonHidden, time } = this.state;
+        const { type } = this.props;
         return (
             <StyledFormWrapper>
                 <StyledHeaderWrapper>
@@ -260,7 +270,14 @@ class Content extends Component {
                     />
                     <ChartButton handleFunction={()=> this.handleChartButton()}/>
                 </StyledHeaderWrapper>
-                {this.renderForm()}
+                {type !== "time" ? 
+                    this.renderForm()
+                    : 
+                    <Timer 
+                        time={time} 
+                        startTimer={()=> this.startTimer()}
+                        stopTimer={(e)=> this.stopTimer(e)}
+                    />}
                 {!isChartButtonHidden ? this.renderChart() : null}
                 {this.renderTrainingDays()}
             </StyledFormWrapper>

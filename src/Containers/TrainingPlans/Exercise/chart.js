@@ -6,6 +6,7 @@ import { FlexComponent } from '../../../Components/styleHelpers'
 
 const StyledContainer = styled(FlexComponent)`
     padding: 0;
+    margin-bottom: 3em;
 `
 class Chart extends Component {
     constructor(props) {
