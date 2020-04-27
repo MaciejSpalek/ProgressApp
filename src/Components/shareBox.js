@@ -1,12 +1,12 @@
 import React, { Component } from "react"
 import styled from 'styled-components';
 import app from "../base";
-import * as styleHelpers  from './styleHelpers';
+import { FlexComponent, Button, variables, flexCenter }  from './styleHelpers';
+import Paragraph from './paragraph';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFileUpload } from '@fortawesome/free-solid-svg-icons';
+import { faFileUpload, faAddressCard } from '@fortawesome/free-solid-svg-icons';
 
-const flexCenter = styleHelpers.flexCenter;
-const variables = styleHelpers.variables;
+
 
 const Container = styled.form`
     ${flexCenter}
@@ -17,11 +17,20 @@ const Container = styled.form`
         width: 500px;
     } */
 `
+const HeaderArea = styled(FlexComponent)`
+    justify-content: flex-start;
+    padding: .2em;
+    background-color: ${variables.$grayBlue};
+    border-top-left-radius: .3em;
+    border-top-right-radius: .3em;
+`
 const TextArea = styled.textarea`
     ${flexCenter}
     width: 100%;
     height:150px;
     border-radius: .3em;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
     border: none;
     background-color: white;
     padding: .5em;
@@ -107,13 +116,22 @@ class ShareBox extends Component {
     render() {
         return (
             <Container onSubmit={(e) => {this.addPost(e)}}>
+                <HeaderArea>
+                    <FontAwesomeIcon icon={faAddressCard} style={{fontSize: 25, margin: '.2em'}} color={"white"} />
+                    <Paragraph
+                        color={"white"}
+                        text={"Stwórz post"}
+                        fontSize={"1.4em"}
+                        // padding={".3em 0"}
+                    />
+                </HeaderArea>
                 <TextArea name="textarea" placeholder="Napisz coś..."></TextArea>
                 <AddArea>
                     <label>
                         <FontAwesomeIcon icon={faFileUpload} style={{fontSize: 35, margin: '.1em'}} color={variables.$grayBlue} />
                         <input type="file" style={{display: "none"}}/>
                     </label>
-                    <styleHelpers.Button>Opublikuj</styleHelpers.Button>
+                    <Button>Opublikuj</Button>
                 </AddArea>
             </Container>
         )

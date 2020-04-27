@@ -109,10 +109,10 @@ class Plan extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            isHidden: true,
             isAddPanelHidden: false,
-            exercises: [],
-            radio: "repsWithWeight"
+            radio: "repsWithWeight",
+            isHidden: true,
+            exercises: []
         }
     }
 
@@ -219,8 +219,6 @@ class Plan extends Component {
             .child(planKey)
             .update({isHidden: !isHidden})
     }
-  
-
     render() {
         const { date, planKey, id, isHidden } = this.props;
         const { radio, isAddPanelHidden } = this.state;
