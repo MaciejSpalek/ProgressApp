@@ -17,6 +17,7 @@ import helpers from "../../Components/helpers";
 const RWD = styleHelpers.RWD;
 const flexCenter = styleHelpers.flexCenter;
 const variables = styleHelpers.variables;
+
 const frontActive = {
     transform:  "rotateY(360deg)",
     zIndex: 1
@@ -55,6 +56,7 @@ const ProfileCard = styled.div`
     max-width: 500px;
     height: 500px;
     margin-bottom: .5em;
+
     @media only screen and (min-width: ${RWD.$desktop}) {
         position: absolute;
         width: 320px;
@@ -69,10 +71,10 @@ const Frontside = styled.div`
     flex-direction: column;
     width: 100%;
     height: 100%;
-    border-radius: .5em;
     transition: .3s linear;
     transform-origin: center;
     backface-visibility: hidden;
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
     z-index: 1;
 `
 const Backside = styled.div`
@@ -82,11 +84,11 @@ const Backside = styled.div`
     position: absolute;
     width: 100%;
     height: 100%;
-    border-radius: .5em;
     transition: .3s linear;
     transform-origin: center;
     transform:  rotateY(180deg);
     background-color: ${variables.$blue};
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
     z-index: -1;
 `
 const PhotoBox = styled.section`
@@ -233,6 +235,7 @@ class Profile extends Component {
         }))
     }
 
+    
     // function invoke on button
     updateProfileData(e) {
         e.preventDefault();
@@ -359,7 +362,7 @@ class Profile extends Component {
     //////// Realtime Database /////////
     setProfileData() {
         const rootRef = app.getRootRef("users");
-        const userID = app.getUserID();
+        const userID = this.props.user.userID;
         rootRef.child(userID).orderByKey().on("value", snapshot => {
             if(this._isMounted) {
                 this.setState({

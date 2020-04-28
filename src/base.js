@@ -58,14 +58,17 @@ class FireBase {
   }
 
   // returns all users except you
-  getAllUsers(setState) {
+  getAllUsers(setState, withCurrentUser = true) {
     const usersRef = this.getRealTimeDatabase().ref("users");
     const tempArray = [];
     
     usersRef.on('value', snapshot => {
         const users = snapshot.val();
         for(let user in users) {
-            if(users[user].userID !== this.getUserID()) {
+            if(withCurrentUser) {
+              tempArray.push(users[user]);
+            }
+            else if(users[user].userID !== this.getUserID()) {
                 tempArray.push(users[user]);
             }
         }

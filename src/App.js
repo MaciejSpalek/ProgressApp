@@ -11,19 +11,42 @@ import PrivateRoute from "./PrivateRoute";
 import { AuthProvider, AuthContext } from "./Auth";
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import './App.scss';
+import app from './base';
 
 
-function App() {
+const App = () => {
+    const [ users, setUsers ] = useState([]);
+
+    useEffect(()=> {
+      app.getAllUsers((tempArray) => {
+        setUsers(tempArray)
+      })
+    }, [])
+
+    const renderProfile = () => {
+      return users.map((user, index) => {
+        return (
+          <PrivateRoute
+            data={{user}}
+            exact 
+            key={index}  
+            path={`/${user.nick}`} 
+            component={Profile}
+          />
+        )
+      })
+    }
+
     return (
       <div className="App">
           <AuthProvider>
             <AuthContext.Consumer>
               { currentUser => (
                 <Router>  
-                  <Navbar user={currentUser}/>
+                  <Navbar user={currentUser} users={users}/>
                   <Switch>
                       <PrivateRoute exact path="/" component={Home} />
-                      <PrivateRoute exact path="/profile" component={Profile}/>
+                      {renderProfile()}
                       <PrivateRoute exact path="/planBoard" component={PlanBoard}/>
                       <PrivateRoute exact path="/measurements" component={Measurements}/>
                       <PrivateRoute exact path="/messanger" component={Messanger}/>
