@@ -2,6 +2,9 @@ import React from "react";
 import styled from "styled-components";
 import * as styleHelpers  from '../../Components/styleHelpers';
 import Helpers from "../../Components/helpers";
+import relativeTime from'dayjs/plugin/relativeTime';
+import dayjs from "dayjs";
+import 'dayjs/locale/pl';
 
 const flexCenter = styleHelpers.flexCenter;
 const variables = styleHelpers.variables;
@@ -33,30 +36,29 @@ const Image = styled.div`
     margin-right: .5em;
 `
 const Nick = styled.div`
-    color: ${variables.$gray};
     font-size: 1em;
     font-weight: bold;
 `
 const Date = styled.span`
-    color: ${variables.$gray};
     font-size: .8em;   
 `
 const ContentBox = styled.div`
     width: 100%;
-    color: ${variables.$gray};
     text-align: left;
     border-bottom: .05em solid ${variables.$lightGray};
     padding: .5em;
 `
 
 const Comment = ({data}) => {
+    dayjs.locale("pl")
+    dayjs.extend(relativeTime);
     return (
         <Container>
             <TopBox>
                 <Image url={data.url}/>
                 <DescriptionWrapper>
                     <Nick> { Helpers.capitalizeFirstLetter(data.nick) }</Nick>
-                    <Date> {data.date} </Date>
+                    <Date> {dayjs(data.date).fromNow()} </Date>
                 </DescriptionWrapper>
             </TopBox>
             <ContentBox>

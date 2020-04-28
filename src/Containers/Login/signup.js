@@ -1,6 +1,7 @@
 import React, { useCallback } from "react";
 import app from "../../base";
-import { Logo, Container, Form, Input, Button } from "../../Components/styleHelpers"
+import Button from '../../Components/Button'
+import { Logo, Container, Form, Input } from "../../Components/styleHelpers"
 import { withRouter } from "react-router";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -60,7 +61,7 @@ const SignUp = ({ history }) => {
         <Input type="text" name="age" placeholder="age" required></Input>
         <Input type="email" name="email" placeholder="email" required></Input>
         <Input type="password" name="password" placeholder="hasło" required></Input>
-        <Button> Stwórz </Button>
+        <Button handleClick={()=> {}} text={"Stwórz"}/>
         <Link style={{color: "white", fontWeight: "bold"}} to="/login">
           Przejdź do logowania
         </Link>

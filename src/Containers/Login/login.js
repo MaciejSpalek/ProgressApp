@@ -1,8 +1,9 @@
 import React, { useCallback, useContext } from "react";
 import app from "../../base"
+import Button from '../../Components/Button'
 import { withRouter, Redirect } from "react-router";
 import { Link } from "react-router-dom";
-import { Logo, Container, Form, Input, Button } from "../../Components/styleHelpers"
+import { Logo, Container, Form, Input } from "../../Components/styleHelpers"
 import { AuthContext } from "../../Auth"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faUser } from '@fortawesome/free-solid-svg-icons'
@@ -35,7 +36,7 @@ const Login = ({ history }) => {
     <Form onSubmit={handleLogin}>
       <Input type="email" name="email" placeholder="email"></Input>
       <Input type="password" name="password" placeholder="hasło"></Input>
-      <Button> Zaloguj </Button>
+      <Button handleClick={()=> {}} text={"Zaloguj"}/>
       <Link style={{color: "white", fontWeight: "bold"}} to="/signup">
         Stwórz konto
       </Link>

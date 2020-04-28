@@ -1,10 +1,12 @@
 import React, { Component } from "react"
 import styled from 'styled-components';
 import app from "../base";
-import { FlexComponent, Button, variables, flexCenter }  from './styleHelpers';
 import Paragraph from './paragraph';
+import Button from './Button';
+import { FlexComponent, variables, flexCenter }  from './styleHelpers';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFileUpload, faAddressCard } from '@fortawesome/free-solid-svg-icons';
+import helpers from "./helpers";
 
 
 
@@ -17,12 +19,18 @@ const Container = styled.form`
         width: 500px;
     } */
 `
-const HeaderArea = styled(FlexComponent)`
+const StyledWrapper = styled(FlexComponent)`
+    ${flexCenter};
+    flex-direction: column;
+    padding: 0;
+    border-radius: .3em;
+    border: none;
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
+
+`
+
+const HeaderWrapper = styled(FlexComponent)`
     justify-content: flex-start;
-    padding: .2em;
-    background-color: ${variables.$grayBlue};
-    border-top-left-radius: .3em;
-    border-top-right-radius: .3em;
 `
 const TextArea = styled.textarea`
     ${flexCenter}
@@ -36,22 +44,14 @@ const TextArea = styled.textarea`
     padding: .5em;
     font-size: 1.2em;
     resize:none;
-    margin-bottom: .5em;
     &::placeholder {
         color: ${variables.$gray};
     }
 `
-const AddArea = styled.div`
-    ${flexCenter};
+const AddArea = styled(FlexComponent)`
     justify-content: space-between;
-    width: 100%;
+    padding: .5em 0;
 ` 
-
-
-
-
-
-
 
 
 
@@ -103,7 +103,7 @@ class ShareBox extends Component {
                 content: textarea.value,
                 url: url,
                 nick: nick,
-                date: new Date(),
+                date: helpers.getDate(),
                 likes: 0,
                 comments: 0
             };
@@ -116,22 +116,23 @@ class ShareBox extends Component {
     render() {
         return (
             <Container onSubmit={(e) => {this.addPost(e)}}>
-                <HeaderArea>
-                    <FontAwesomeIcon icon={faAddressCard} style={{fontSize: 25, margin: '.2em'}} color={"white"} />
-                    <Paragraph
-                        color={"white"}
-                        text={"Stwórz post"}
-                        fontSize={"1.4em"}
-                        // padding={".3em 0"}
-                    />
-                </HeaderArea>
-                <TextArea name="textarea" placeholder="Napisz coś..."></TextArea>
+                <StyledWrapper>
+                    <HeaderWrapper>
+                        <FontAwesomeIcon icon={faAddressCard} style={{fontSize: 25, margin: '.2em'}} color={variables.$grayBlue} />
+                        <Paragraph
+                            color={variables.$grayBlue}
+                            text={"Stwórz post"}
+                            fontSize={"1.4em"}
+                        />
+                    </HeaderWrapper>
+                    <TextArea name="textarea" placeholder="Napisz coś..."></TextArea>
+                </StyledWrapper>
                 <AddArea>
                     <label>
-                        <FontAwesomeIcon icon={faFileUpload} style={{fontSize: 35, margin: '.1em'}} color={variables.$grayBlue} />
+                        <FontAwesomeIcon icon={faFileUpload} style={{fontSize: 42, marginRight: '.1em'}} color={variables.$grayBlue} />
                         <input type="file" style={{display: "none"}}/>
                     </label>
-                    <Button>Opublikuj</Button>
+                    <Button handleClick={()=> {}} text={"Opublikuj"}/>
                 </AddArea>
             </Container>
         )

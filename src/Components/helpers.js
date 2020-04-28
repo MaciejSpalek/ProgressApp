@@ -9,6 +9,9 @@ class Helpers {
         return `${date}${separator}${month<10?`0${month}`:`${month}`}${separator}${year}`
     }
 
+    getDate() {
+        return new Date();
+    }
     getFullDate = (separator="/") => {
         let newDate = new Date()
         let date = newDate.getDate();

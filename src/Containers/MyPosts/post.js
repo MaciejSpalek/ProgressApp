@@ -1,22 +1,22 @@
 import React, { Component } from "react";
 import styled from "styled-components";
-import * as styleHelpers  from '../../Components/styleHelpers';
-import Helpers from "../../Components/helpers.js";
+import app from "../../base";
 import Comments from "./comments";
+import Input from '../../Components/input';
+import Helpers from "../../Components/helpers.js";
+import { flexCenter, variables, FlexComponent}  from '../../Components/styleHelpers';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faComment, faHeart, faTimes } from '@fortawesome/free-solid-svg-icons';
-import app from "../../base";
 
 import relativeTime from'dayjs/plugin/relativeTime';
 import dayjs from "dayjs";
 import 'dayjs/locale/pl';
 
 
-const flexCenter = styleHelpers.flexCenter;
-const variables = styleHelpers.variables;
-
-
-
+const inputStyles = {
+    "border": `.1em solid ${variables.$lightGray}`,
+    "width": "80%"
+}
 
 
 
@@ -26,7 +26,7 @@ const Container = styled.div`
     flex-direction: column;
     width: 100%;
     margin: 1em 0;
-    /* box-shadow: 0 0 .2em .01em gray; */
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
 `
 
 
@@ -92,7 +92,7 @@ const BottomBox = styled.div`
     width: 100%;
     justify-content: space-between;
     border-top: .05em solid  ${variables.$lightGray};
-    background-color: ${variables.$blue};
+    background-color: ${variables.$lightGray};
 `
 const IconBox = styled.div`
     ${flexCenter};
@@ -109,21 +109,14 @@ const IconCaption = styled.span`
 
 const CommentBox = styled.form`
     ${flexCenter}
-    flex-direction: column;
-`
-const Input = styled.input`
-    width: 80%;
-    height: 35px;
-    border: none;
-    border-radius: .3em;
-    font-size: 1.1em;
-    padding: 0 .5em;
-`
-const AddBox = styled.div `
-    ${flexCenter}
     width: 100%;
-    background-color: ${variables.$gray};
-    padding: .5em 0;
+    flex-direction: column;
+    border-top: .1em solid ${variables.$lightGray};
+`
+
+const AddBox = styled(FlexComponent)`
+    justify-content: flex-start;
+    padding: .5em .3em;
 `
 
 
@@ -299,7 +292,7 @@ class Post extends Component  {
             }
         })
     }
-    addComment(e, postKey) {
+    addComment = (e, postKey) => {
         e.preventDefault();
         const { input } = e.target.elements;
         if(input.value !== "") {
@@ -311,7 +304,7 @@ class Post extends Component  {
                 content: input.value,
                 url: this.state.url,
                 nick: this.state.nick,
-                date: Helpers.getFullDate(),
+                date: Helpers.getDate(),
                 commentKey: commentKey
             };
             input.value = "";
@@ -335,8 +328,20 @@ class Post extends Component  {
     render() {
         dayjs.locale("pl")
         dayjs.extend(relativeTime);
-        const { url, nick, content, date, likes, postKey } = this.props;
-        const { comments } = this.state;
+        const { 
+            url, 
+            nick, 
+            content, 
+            date, 
+            likes, 
+            postKey 
+        } = this.props;
+
+        const { 
+            isCommentBoxActive,
+            didUserLike,
+            comments
+        } = this.state;
         return (
             <Container>
                 <TopBox>
@@ -345,22 +350,19 @@ class Post extends Component  {
                         <Nick> { Helpers.capitalizeFirstLetter(nick)}</Nick>
                         <Date> {dayjs(date).fromNow()} </Date>
                     </DescriptionWrapper>
-                    {   
-                        app.getCurrentUser() ?
-                            this.isYourPost(postKey) ? 
-                            <CrossIcon onClick={() => this.removePost(postKey)}>
-                                <FontAwesomeIcon icon={faTimes} style={{fontSize: "1.5em"}}/>
-                            </CrossIcon> : null
-                        : null
+                    {app.getCurrentUser() ?
+                        this.isYourPost(postKey) ? 
+                        <CrossIcon onClick={() => this.removePost(postKey)}>
+                            <FontAwesomeIcon icon={faTimes} style={{fontSize: "1.5em"}}/>
+                        </CrossIcon> : null
+                    : null
                     }
                 </TopBox>
-
                 <ContentBox>
                     { content }
                 </ContentBox>
-
                 <BottomBox>
-                    <IconBox onClick={() => this.handleLike(postKey)} style={this.state.didUserLike ? {color:variables.$grayBlue} : {color:variables.$gray}}>
+                    <IconBox onClick={() => this.handleLike(postKey)} style={didUserLike ? {color:variables.$grayBlue} : {color:variables.$gray}}>
                         <FontAwesomeIcon icon={faHeart} style={{margin: '.2em', fontSize: "1.2em"}}/>
                         <IconCaption>{ likes }</IconCaption>
                     </IconBox>
@@ -369,18 +371,24 @@ class Post extends Component  {
                         <IconCaption>{ this.countComments(postKey, comments) }</IconCaption>
                     </IconBox>
                 </BottomBox>
-
                 {
-                this.state.isCommentBoxActive ? 
+                isCommentBoxActive ? 
                 <CommentBox onSubmit={(e) => this.addComment(e, postKey)}>
                     <Comments comments={this.filterComments(postKey, comments)}/>
                     <AddBox>
-                        <Image style={{
-                            backgroundImage: `url(${this.state.url})`, 
-                            width: "2.8em",
-                            height: "2.8em"}}>
+                        <Image 
+                            style={{
+                                backgroundImage: `url(${url})`, 
+                                width: "2.8em",
+                                height: "2.8em",
+                                marginRight: ".5em"
+                            }}>
                         </Image>
-                        <Input name="input" placeholder="Skomentuj..."></Input>
+                        <Input 
+                            name={"input"}
+                            placeholder={"Skomentuj..."}
+                            style={inputStyles}
+                        />
                     </AddBox>
                 </CommentBox> : null
                 }

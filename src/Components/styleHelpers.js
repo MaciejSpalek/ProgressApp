@@ -7,21 +7,13 @@ export const RWD = {
 }
 
 export const variables = {
-
     $lightGray: "rgb(230, 230, 230)",
     $lightBlue: "rgb(0, 157, 255)",
-    
     $gray: "rgb(160, 160, 160)",
     $orange: "#FF8E00",
     $blue: "rgb(255, 255, 255)",
-    
-    // $grayBlue: "#005D95",
     $grayBlue: "#4a5564",
-
     $darkBlue: "rgb(0, 74, 121)",
-
-    
-    
 }
 
 

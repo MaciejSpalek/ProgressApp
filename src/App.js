@@ -1,4 +1,4 @@
-import React, { Component, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import Navbar from './Containers/navbar/navbar';
 import Login from './Containers/Login/login';
 import SignUp from './Containers/Login/signup';
