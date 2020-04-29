@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import Menu from './menu';
-import app from '../../base';
 import * as styleHelpers  from '../../Components/styleHelpers';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChartLine, faBars, faTimes } from '@fortawesome/free-solid-svg-icons';
@@ -35,35 +34,41 @@ const Title = styled.span`
 class Navbar extends Component {
     constructor(props) {
         super(props);
-        this.handleHamburger = this.handleHamburger.bind(this)
-        this.state = {
-            isMenuActive: false
-        }
+        this.state = { isMenuActive: false }
     }
     
-    handleHamburger = () => {
+ 
+    handleHamburger() {
         this.setState(prevstate => ({
             isMenuActive: !prevstate.isMenuActive
         }))
     }
 
+
     
     render() {
+        const { isMenuActive } = this.state;
+        const { user } = this.props;
+       
         return (
             <Nav >
                 <Logo>
                     <FontAwesomeIcon icon={faChartLine} color="#FF8E00" style={{fontSize:30}}/>
                     <Title> ProgressApp </Title>
                 </Logo>
-                { this.props.user ?
+                { user ?
                      <FontAwesomeIcon 
-                     icon={!this.state.isMenuActive ? faBars: faTimes} 
-                     color="#FF8E00" 
-                     style={!this.state.isMenuActive ? {fontSize:40, transition: ".4s cubic-bezier(0.785, 0.135, 0.15, 0.86)"} : {fontSize: 50, transition: ".4s cubic-bezier(0.785, 0.135, 0.15, 0.86)"}} 
-                     onClick={this.handleHamburger}
+                        icon={!isMenuActive ? faBars: faTimes} 
+                        color="#FF8E00" 
+                        style={!isMenuActive ? {fontSize:40, transition: ".4s cubic-bezier(0.785, 0.135, 0.15, 0.86)"} : {fontSize: 50, transition: ".4s cubic-bezier(0.785, 0.135, 0.15, 0.86)"}} 
+                        onClick={()=> this.handleHamburger()}
                 /> : null
                 }
-                <Menu handleHamburger={this.handleHamburger} isMenuActive={this.state.isMenuActive}/>
+                <Menu 
+                    handleHamburger={()=> this.handleHamburger()} 
+                    isMenuActive={isMenuActive}
+                    user ={user}
+                />
             </Nav>
         );
     }

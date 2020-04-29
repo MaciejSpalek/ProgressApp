@@ -3,6 +3,7 @@ import app from "../../base";
 import styled from "styled-components";
 import ShareBox from "../../Components/shareBox";
 import PostBoard from "../MyPosts/postBoard";
+import ProfileCard from './profileCard';
 import Messanger from '../Messanger/messanger';
 import * as styleHelpers  from '../../Components/styleHelpers';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -49,22 +50,6 @@ const Container = styled.section`
     overflow-y: scroll;
 `
 
-const ProfileCard = styled.div`
-    ${flexCenter};
-    position: relative;
-    width: 100%;
-    max-width: 500px;
-    height: 500px;
-    margin-bottom: .5em;
-
-    @media only screen and (min-width: ${RWD.$desktop}) {
-        position: absolute;
-        width: 320px;
-        height: 522px;
-        top: .05em;
-        right: calc(100% + 1em);
-    }
-`
 
 const Frontside = styled.div`
     ${flexCenter}
@@ -229,6 +214,7 @@ class Profile extends Component {
             isRotateCard: !prevState.isRotateCard
         }))
     }
+
     editButtonHandler() {
         this.setState(prevState => ({
             isEditButtonActive: !prevState.isEditButtonActive
@@ -281,6 +267,7 @@ class Profile extends Component {
             yourSport,
             aboutMe
         } = this.state;
+
         return ( 
             <ProfileBox>
                 <DataItem> { this.getText("Płeć", sex) } </DataItem>
@@ -389,40 +376,12 @@ class Profile extends Component {
         return (
             <Container>
                 <Wrapper>
-                    <ProfileCard>
-                        <Frontside style={isRotateCard ? backActive : null}>
-                            <PhotoBox>
-                                <Photo src={url}></Photo>
-                                <Nick> { app.getCurrentUser() ? `${helpers.capitalizeFirstLetter(nick)}, ${age}l` : null} </Nick>
-                            </PhotoBox>
-                            <ButtonBox>
-                                <FontAwesomeIcon icon={faCameraRetro} style={{fontSize: 35, margin: '.1em'}} color={variables.$grayBlue} />
-                                <label>
-                                    <FontAwesomeIcon icon={faImages} style={{fontSize: 35, margin: '.1em'}} color={variables.$grayBlue} />
-                                    <input type="file" style={{display: "none"}} onChange={(e) => this.choosePhoto(e)}/>
-                                </label>
-                                <FontAwesomeIcon icon={faExternalLinkSquareAlt} style={{fontSize: 35, margin: '.1em'}} color={variables.$grayBlue}  onClick={this.rotateCardHandler.bind(this)}/>
-                            </ButtonBox>
-                        </Frontside>
-                        <Backside style={isRotateCard ? frontActive : null}>
-                            {isEditButtonActive ? 
-                                <AddBox onSubmit={(e) => {this.updateProfileData(e)}}>
-                                    <Caption> Podstawowe dane: </Caption>
-                                    <Input name="sex" placeholder="Płeć" required></Input>
-                                    <Input name="trainingExperience" type="Number" placeholder="Staż tren." required></Input>
-                                    <Input name="weight" type="number" placeholder="Waga" required></Input>
-                                    <Input name="height" type="number" placeholder="Wzrost" required></Input>
-                                    <Input name="priority" placeholder="Priorytet" required></Input>
-                                    <Input name="yourSport" placeholder="Sport" required></Input>
-                                    <About name="aboutMe" placeholder="O mnie"></About>
-                                    <styleHelpers.Button>Zapisz</styleHelpers.Button>
-                                </AddBox> : this.renderProfileBox()}
-                                <ButtonBox>
-                                    <FontAwesomeIcon icon={faPenSquare} style={{fontSize: 35, margin: '.1em'}} color={variables.$grayBlue} onClick={this.editButtonHandler.bind(this)}/>
-                                    <FontAwesomeIcon icon={faExternalLinkSquareAlt} style={{fontSize: 35 , margin: '.1em'}} color={variables.$grayBlue}  onClick={this.rotateCardHandler.bind(this)}/>
-                                </ButtonBox>
-                        </Backside>
-                    </ProfileCard>
+                    <ProfileCard 
+                        nick={nick}
+                        age={age}
+                        url={url}
+                        isLogged={this.props.user.isLogged}
+                    />
                     <ShareBox/>
                     <PostBoard destination={"profile"}/>
                 </Wrapper>
@@ -433,3 +392,38 @@ class Profile extends Component {
 }
 
 export default Profile;
+
+
+
+{/* <Frontside>
+<PhotoBox>
+    <Photo src={url}></Photo>
+    <Nick> { app.getCurrentUser() ? `${helpers.capitalizeFirstLetter(nick)}, ${age}l` : null} </Nick>
+</PhotoBox> */}
+{/* <ButtonBox>
+    <FontAwesomeIcon icon={faCameraRetro} style={{fontSize: 35, margin: '.1em'}} color={variables.$grayBlue} />
+    <label>
+        <FontAwesomeIcon icon={faImages} style={{fontSize: 35, margin: '.1em'}} color={variables.$grayBlue} />
+        <input type="file" style={{display: "none"}} onChange={(e) => this.choosePhoto(e)}/>
+    </label>
+    <FontAwesomeIcon icon={faExternalLinkSquareAlt} style={{fontSize: 35, margin: '.1em'}} color={variables.$grayBlue}  onClick={this.rotateCardHandler.bind(this)}/>
+</ButtonBox> */}
+// </Frontside>
+{/* <Backside style={isRotateCard ? frontActive : null}>
+{isEditButtonActive ? 
+    <AddBox onSubmit={(e) => {this.updateProfileData(e)}}>
+        <Caption> Podstawowe dane: </Caption>
+        <Input name="sex" placeholder="Płeć" required></Input>
+        <Input name="trainingExperience" type="Number" placeholder="Staż tren." required></Input>
+        <Input name="weight" type="number" placeholder="Waga" required></Input>
+        <Input name="height" type="number" placeholder="Wzrost" required></Input>
+        <Input name="priority" placeholder="Priorytet" required></Input>
+        <Input name="yourSport" placeholder="Sport" required></Input>
+        <About name="aboutMe" placeholder="O mnie"></About>
+        <styleHelpers.Button>Zapisz</styleHelpers.Button>
+    </AddBox> : this.renderProfileBox()}
+    <ButtonBox>
+        <FontAwesomeIcon icon={faPenSquare} style={{fontSize: 35, margin: '.1em'}} color={variables.$grayBlue} onClick={()=> this.editButtonHandler()}/>
+        <FontAwesomeIcon icon={faExternalLinkSquareAlt} style={{fontSize: 35 , margin: '.1em'}} color={variables.$grayBlue}  onClick={()=> this.rotateCardHandler()}/>
+    </ButtonBox>
+</Backside> */}

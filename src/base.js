@@ -76,6 +76,21 @@ class FireBase {
     })
   }
 
+  getCurrentUserData(setState) {
+    const usersRef = this.getRealTimeDatabase().ref("users");
+    let tempUser;
+    
+    usersRef.on('value', snapshot => {
+        const users = snapshot.val();
+        for(let user in users) {
+            if(users[user].userID === this.getUserID()) {
+              tempUser = users[user];
+            }
+        }
+        setState(tempUser);
+    })
+  }
+
   // returns all your friends
   getAllFriends(setState) {
     const userID = this.getUserID();
@@ -113,7 +128,6 @@ class FireBase {
     })
   }
  
-
   isDayKeyIncludesExerciseKey(exerciseKey, traininDayString) {
     const regex = new RegExp(exerciseKey);
     return regex.test(traininDayString)
@@ -133,8 +147,6 @@ class FireBase {
         setState(tempArray);
     })
   }
-
-
 
   sortByDate(array) {
     return array.sort((a,b) =>  new Date(b.date).getTime() - new Date(a.date).getTime());

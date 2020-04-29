@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState, useEffect } from "react"
 import * as styleHelpers  from '../../Components/styleHelpers'
 import app from '../../base'
 import { Link } from 'react-router-dom';
@@ -49,12 +49,28 @@ const Icon = styled.div`
         width: 5em;
 `
 
-const logout = () => {
-    app.getRealTimeDatabase().ref("users").child(app.getUserID()).child("isLogged").set(false)
-    app.logout();
-}
-
 const Menu = ({ isMenuActive, handleHamburger }) => {
+    const [ user, setUser ] = useState(null)
+
+    const logout = () => {
+        app.getRealTimeDatabase()
+            .ref("users")
+            .child(app.getUserID())
+            .child("isLogged")
+            .set(false);
+        app.logout();
+    }
+
+    const getCurrentUser = () => {
+        app.getCurrentUserData((tempUser) => {
+            setUser(tempUser)
+        })
+    }
+
+    useEffect(() => {
+        getCurrentUser()
+    }, [])
+    
     return (
         <MenuComponent style={isMenuActive ? transformMenu:null}>
             <MenuList>
@@ -64,7 +80,7 @@ const Menu = ({ isMenuActive, handleHamburger }) => {
                         <Caption>Główna</Caption>
                     </ListItem>
                 </Link>
-                <Link style={{textDecoration: "none"}} onClick={handleHamburger}  to="/profile">
+                <Link style={{textDecoration: "none"}} onClick={handleHamburger} to={user ? `/${user.nick}` : '/'} >
                     <ListItem>
                         <Icon><FontAwesomeIcon icon={faUser} color="#FF8E00" style={{fontSize:50}} /></Icon>
                         <Caption>Profil</Caption>
