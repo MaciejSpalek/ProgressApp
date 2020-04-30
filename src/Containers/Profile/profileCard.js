@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components'
 import { RWD, FlexComponent }  from '../../Components/styleHelpers';
 import TopWrapper from './topBox';
-import BottomWrapper from './topBox';
+import BottomWrapper from './bottomBox';
 
 const Container = styled(FlexComponent)`
     position: relative;
@@ -30,13 +30,13 @@ const ProfileCard = ({ nick, age, url, isLogged, onChangefunction }) => {
         <Container>
             <TopWrapper 
                 url={url}
-                width={"10em"}
-                height={"10em"}
+                width={160}
+                height={160}
                 paragraphText={`${nick}, ${age}l`}
                 isLogged={isLogged}
                 onChangefunction={(e)=> onChangefunction(e)}
             />
-            {/* <BottomWrapper /> */}
+            <BottomWrapper />
         </Container>
     )
 }

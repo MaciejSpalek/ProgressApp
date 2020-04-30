@@ -74,7 +74,7 @@ const Menu = ({ isMenuActive, handleHamburger, usersData, currentUser }) => {
     })
     
     return (
-        <MenuComponent onClick={()=> console.log(usersData)} style={isMenuActive ? transformMenu:null}>
+        <MenuComponent style={isMenuActive ? transformMenu:null}>
             <MenuList>
                 <Link style={{textDecoration: "none"}} onClick={handleHamburger}  to="/">
                     <ListItem>

@@ -51,62 +51,7 @@ const Container = styled.section`
 `
 
 
-const Frontside = styled.div`
-    ${flexCenter}
-    flex-direction: column;
-    width: 100%;
-    height: 100%;
-    transition: .3s linear;
-    transform-origin: center;
-    backface-visibility: hidden;
-    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
-    z-index: 1;
-`
-const Backside = styled.div`
-    ${flexCenter};
-    justify-content: space-between;
-    flex-direction: column;
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    transition: .3s linear;
-    transform-origin: center;
-    transform:  rotateY(180deg);
-    background-color: ${variables.$blue};
-    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
-    z-index: -1;
-`
-const PhotoBox = styled.section`
-    ${flexCenter}
-    flex-direction: column;
-    position: relative;
-    width: 100%;
-    flex: 1;
-    transition: .5s linear;
-    background-color: ${variables.$blue};
-    overflow: hidden;
-`
 
-const Photo = styled.img`
-    width: 12em;
-    height: 12em;
-    border-radius: 50%;
-    margin-bottom: 1em;
-`
-
-const Nick = styled.span`
-    font-size: 1.5em;
-    font-weight: bold;
-    color: ${variables.$grayBlue};
-    line-height:1;
-`
-const ButtonBox = styled.div`
-    ${flexCenter}
-    justify-content: flex-end;
-    width: 100%;
-    border-top: .1em solid ${variables.$lightGray};
-    background-color: white;
-`
 
 
 
@@ -119,26 +64,7 @@ const AddBox = styled.form`
     padding: .5em;
     overflow-y: scroll;
 `
-const Input = styled.input`
-    width: 100%;
-    height: 35px;
-    font-size: 1em;
-    font-weight: bold;
-    border-radius: .2em;
-    background-color: white;
-    border: none;
-    padding: 0 .3em;
-    color: ${variables.$grayBlue};
-    &::placeholder {
-        color: ${variables.$blue};
-        font-weight: 100;
-    }
-`
-const Caption = styled.h2`
-    color: white;
-    font-size: 1.5em;
-    text-align: left;
-`
+
 const DataItem = styled.h2`
     color: white;
     font-size: 1.5em;
@@ -372,7 +298,7 @@ class Profile extends Component {
 
 
     render() {
-        const { isRotateCard, isEditButtonActive, nick, age, url } = this.state;
+        const { nick, age, url } = this.state;
         return (
             <Container>
                 <Wrapper>

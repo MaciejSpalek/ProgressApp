@@ -34,7 +34,7 @@ const TopWrapper = ({
                     height={height}
                 />
                 <OnlineDot 
-                    size={"1.8em"}
+                    size={"22px"}
                     isLogged={isLogged}
                 />
             </StyledImageWrapper>
