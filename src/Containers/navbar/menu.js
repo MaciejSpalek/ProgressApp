@@ -49,7 +49,7 @@ const Icon = styled.div`
         width: 5em;
 `
 
-const Menu = ({ isMenuActive, handleHamburger }) => {
+const Menu = ({ isMenuActive, handleHamburger, usersData, currentUser }) => {
     const [ user, setUser ] = useState(null)
 
     const logout = () => {
@@ -62,17 +62,19 @@ const Menu = ({ isMenuActive, handleHamburger }) => {
     }
 
     const getCurrentUser = () => {
-        app.getCurrentUserData((tempUser) => {
-            setUser(tempUser)
-        })
+        const currentUserData = usersData.filter(userData => userData.userID === app.getUserID());
+        setUser(currentUserData[0]);
     }
-
+    
+    
     useEffect(() => {
-        getCurrentUser()
-    }, [])
+        if(currentUser) {
+            getCurrentUser();
+        } 
+    })
     
     return (
-        <MenuComponent style={isMenuActive ? transformMenu:null}>
+        <MenuComponent onClick={()=> console.log(usersData)} style={isMenuActive ? transformMenu:null}>
             <MenuList>
                 <Link style={{textDecoration: "none"}} onClick={handleHamburger}  to="/">
                     <ListItem>
@@ -80,7 +82,7 @@ const Menu = ({ isMenuActive, handleHamburger }) => {
                         <Caption>Główna</Caption>
                     </ListItem>
                 </Link>
-                <Link style={{textDecoration: "none"}} onClick={handleHamburger} to={user ? `/${user.nick}` : '/'} >
+                <Link style={{textDecoration: "none"}} onClick={handleHamburger} to={user ? `/${user.nick}` : `/`} >
                     <ListItem>
                         <Icon><FontAwesomeIcon icon={faUser} color="#FF8E00" style={{fontSize:50}} /></Icon>
                         <Caption>Profil</Caption>

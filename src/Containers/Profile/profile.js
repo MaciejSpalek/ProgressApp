@@ -381,6 +381,7 @@ class Profile extends Component {
                         age={age}
                         url={url}
                         isLogged={this.props.user.isLogged}
+                        onChangefunction={(e)=> this.choosePhoto(e)}
                     />
                     <ShareBox/>
                     <PostBoard destination={"profile"}/>

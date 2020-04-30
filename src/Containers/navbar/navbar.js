@@ -48,12 +48,12 @@ class Navbar extends Component {
     
     render() {
         const { isMenuActive } = this.state;
-        const { user } = this.props;
+        const { user, usersData } = this.props;
        
         return (
-            <Nav >
+            <Nav>
                 <Logo>
-                    <FontAwesomeIcon icon={faChartLine} color="#FF8E00" style={{fontSize:30}}/>
+                    <FontAwesomeIcon icon={faChartLine} color="#FF8E00" style={{fontSize:30}} />
                     <Title> ProgressApp </Title>
                 </Logo>
                 { user ?
@@ -62,12 +62,12 @@ class Navbar extends Component {
                         color="#FF8E00" 
                         style={!isMenuActive ? {fontSize:40, transition: ".4s cubic-bezier(0.785, 0.135, 0.15, 0.86)"} : {fontSize: 50, transition: ".4s cubic-bezier(0.785, 0.135, 0.15, 0.86)"}} 
                         onClick={()=> this.handleHamburger()}
-                /> : null
-                }
+                /> : null }
                 <Menu 
                     handleHamburger={()=> this.handleHamburger()} 
                     isMenuActive={isMenuActive}
-                    user ={user}
+                    usersData={usersData}
+                    currentUser={user}
                 />
             </Nav>
         );

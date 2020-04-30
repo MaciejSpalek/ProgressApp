@@ -62,16 +62,17 @@ class FireBase {
     const usersRef = this.getRealTimeDatabase().ref("users");
     const tempArray = [];
     
-    usersRef.on('value', snapshot => {
+    usersRef.once('value', snapshot => {
         const users = snapshot.val();
         for(let user in users) {
             if(withCurrentUser) {
               tempArray.push(users[user]);
             }
             else if(users[user].userID !== this.getUserID()) {
-                tempArray.push(users[user]);
+              tempArray.push(users[user]);
             }
         }
+        
         setState(tempArray);
     })
   }
@@ -80,7 +81,7 @@ class FireBase {
     const usersRef = this.getRealTimeDatabase().ref("users");
     let tempUser;
     
-    usersRef.on('value', snapshot => {
+    usersRef.once('value', snapshot => {
         const users = snapshot.val();
         for(let user in users) {
             if(users[user].userID === this.getUserID()) {

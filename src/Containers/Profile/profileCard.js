@@ -25,7 +25,7 @@ const Container = styled(FlexComponent)`
     }
 `
 
-const ProfileCard = ({ nick, age, url, isLogged }) => {
+const ProfileCard = ({ nick, age, url, isLogged, onChangefunction }) => {
     return (
         <Container>
             <TopWrapper 
@@ -34,6 +34,7 @@ const ProfileCard = ({ nick, age, url, isLogged }) => {
                 height={"10em"}
                 paragraphText={`${nick}, ${age}l`}
                 isLogged={isLogged}
+                onChangefunction={(e)=> onChangefunction(e)}
             />
             {/* <BottomWrapper /> */}
         </Container>

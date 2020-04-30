@@ -31,6 +31,10 @@ const StyledWrapper = styled(FlexComponent)`
 
 const HeaderWrapper = styled(FlexComponent)`
     justify-content: flex-start;
+    background-color: white;
+    border-bottom: .1em solid ${variables.$lightGray};
+    border-top-left-radius: .3em;
+    border-top-right-radius: .3em;
 `
 const TextArea = styled.textarea`
     ${flexCenter}
