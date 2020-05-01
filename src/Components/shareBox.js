@@ -65,7 +65,7 @@ class ShareBox extends Component {
         super(props);
         this.state = {
             url: "",
-            nick: ""
+            nick: "",
         }
     }
 
@@ -93,6 +93,7 @@ class ShareBox extends Component {
         })
     }
 
+    
     addPost(e) {
         e.preventDefault();
         const { textarea } = e.target.elements;
@@ -119,7 +120,7 @@ class ShareBox extends Component {
     
     render() {
         return (
-            <Container onSubmit={(e) => {this.addPost(e)}}>
+            <Container onSubmit={(e) => this.addPost(e)}>
                 <StyledWrapper>
                     <HeaderWrapper>
                         <FontAwesomeIcon icon={faAddressCard} style={{fontSize: 25, margin: '.2em'}} color={variables.$grayBlue} />

@@ -3,6 +3,7 @@ import styled from "styled-components";
 import app from "../../base";
 import Comments from "./comments";
 import Input from '../../Components/input';
+import ImageWrapper from '../../Components/ImageWrapper';
 import Helpers from "../../Components/helpers.js";
 import { flexCenter, variables, FlexComponent}  from '../../Components/styleHelpers';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -14,8 +15,7 @@ import 'dayjs/locale/pl';
 
 
 const inputStyles = {
-    "border": `.1em solid ${variables.$lightGray}`,
-    "width": "80%"
+    "border": `.1em solid ${variables.$lightGray}`
 }
 
 
@@ -46,15 +46,7 @@ const DescriptionWrapper = styled.div`
     align-items: flex-start;
     flex-direction: column;
 `
-const Image = styled.div`
-    border-radius: 50%;
-    width: 3.5em;
-    height: 3.5em;
-    background-image: url(${props => props.url});
-    background-position: center;
-    background-size: cover;
-    margin-right: .5em;
-`
+
 const Nick = styled.div`
     font-size: 1em;
     font-weight: bold;
@@ -107,16 +99,19 @@ const IconCaption = styled.span`
 
 
 
-const CommentBox = styled.form`
+const CommentBox = styled.div`
     ${flexCenter}
     width: 100%;
     flex-direction: column;
     border-top: .1em solid ${variables.$lightGray};
 `
+const CommentForm = styled.form`
+    width: 100%;
+    margin: 0;
+`
 
 const AddBox = styled(FlexComponent)`
     justify-content: flex-start;
-    padding: .5em .3em;
 `
 
 
@@ -345,7 +340,14 @@ class Post extends Component  {
         return (
             <Container>
                 <TopBox>
-                    <Image url={url}/>
+                    <ImageWrapper 
+                        imgHeight={"3.5em"}
+                        imgWidth={"3.5em"}
+                        dotSize={"0"}
+                        dotBorder={"0"}
+                        margin={"0 .5em 0 0"}
+                        url={url}
+                    />
                     <DescriptionWrapper>
                         <Nick> { Helpers.capitalizeFirstLetter(nick)}</Nick>
                         <Date> {dayjs(date).fromNow()} </Date>
@@ -373,22 +375,25 @@ class Post extends Component  {
                 </BottomBox>
                 {
                 isCommentBoxActive ? 
-                <CommentBox onSubmit={(e) => this.addComment(e, postKey)}>
+                <CommentBox>
                     <Comments comments={this.filterComments(postKey, comments)}/>
                     <AddBox>
-                        <Image 
-                            style={{
-                                backgroundImage: `url(${url})`, 
-                                width: "2.8em",
-                                height: "2.8em",
-                                marginRight: ".5em"
-                            }}>
-                        </Image>
-                        <Input 
-                            name={"input"}
-                            placeholder={"Skomentuj..."}
-                            style={inputStyles}
+                        <ImageWrapper 
+                            isLogged={true}
+                            imgHeight={"2.5em"}
+                            imgWidth={"2.5em"}
+                            dotSize={"0"}
+                            dotBorder={"0"}
+                            margin={"0 .5em 0 0"}
+                            url={url}
                         />
+                        <CommentForm onSubmit={(e) => this.addComment(e, postKey)}>
+                            <Input 
+                                name={"input"}
+                                placeholder={"Skomentuj..."}
+                                style={inputStyles}
+                            />
+                        </CommentForm>
                     </AddBox>
                 </CommentBox> : null
                 }

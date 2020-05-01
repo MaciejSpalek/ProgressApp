@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import app from "../../base";
 import styled from "styled-components";
 import Helpers from "../../Components/helpers.js";
-import { RWD } from '../../Components/styleHelpers';
 import Post from './post';
 
 const Container = styled.div`
@@ -101,14 +100,14 @@ class PostBoard extends Component {
         return array.map((post, index) => {
             return ( 
                 <Post 
-                    userID={post.userID}
-                    postKey={post.postKey}
-                    url={post.url}
-                    nick={post.nick}
-                    likes={post.likes}
                     comments={post.comments}
+                    postKey={post.postKey}
                     content={post.content}
+                    userID={post.userID}
+                    likes={post.likes}
+                    nick={post.nick}
                     date={post.date}
+                    url={post.url}
                     key={index}
                 />
             )

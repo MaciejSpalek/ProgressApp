@@ -27,7 +27,7 @@ class Home extends Component {
     render() {
         return (
             <Container>
-                <ShareBox/>
+                <ShareBox />
                 <PostBoard destination={"home"}/>
                 {/* <Messanger /> */}
             </Container>

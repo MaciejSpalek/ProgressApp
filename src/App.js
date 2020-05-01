@@ -16,11 +16,7 @@ import app from './base';
 
 const App = () => {
     const [ usersData, setUsersData ] = useState([]);
-
-    
-   
     const renderProfile = () => {
-      // console.log(usersData) // render all time 
       return usersData.map((user, index) => {
         return (
           <PrivateRoute
@@ -33,24 +29,31 @@ const App = () => {
         )
       })
     }
+    const handleUsers = () => {
+      app.getAllUsers((tempArray) => {
+        setUsersData(tempArray)
+      })
+    }
 
     useEffect(()=> {
       app.getAllUsers((tempArray) => {
         setUsersData(tempArray)
       })
-    }, [usersData])
-
+    }, [])
 
     return (
-      <div className="App">
+      <div className="App" onClick={() => handleUsers()}>
           <AuthProvider>
             <AuthContext.Consumer>
               { currentUser => (
                 <Router>  
-                  <Navbar user={currentUser} usersData={usersData}/>
+                  <Navbar 
+                    user={currentUser} 
+                    usersData={usersData}
+                  />
                   <Switch>
-                      <PrivateRoute exact path="/" component={Home} />
                       {renderProfile()}
+                      <PrivateRoute exact path="/" component={Home} />
                       <PrivateRoute exact path="/planBoard" component={PlanBoard}/>
                       <PrivateRoute exact path="/measurements" component={Measurements}/>
                       <PrivateRoute exact path="/messanger" component={Messanger}/>

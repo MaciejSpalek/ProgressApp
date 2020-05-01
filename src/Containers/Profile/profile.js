@@ -6,26 +6,10 @@ import PostBoard from "../MyPosts/postBoard";
 import ProfileCard from './profileCard';
 import Messanger from '../Messanger/messanger';
 import * as styleHelpers  from '../../Components/styleHelpers';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {  
-    faImages, 
-    faPenSquare, 
-    faCameraRetro, 
-    faExternalLinkSquareAlt
-} from '@fortawesome/free-solid-svg-icons';
-import helpers from "../../Components/helpers";
 
 const RWD = styleHelpers.RWD;
 const flexCenter = styleHelpers.flexCenter;
 const variables = styleHelpers.variables;
-
-const frontActive = {
-    transform:  "rotateY(360deg)",
-    zIndex: 1
-}
-const backActive = {
-    transform: "rotateY(180deg)"
-}
 
 
 const Wrapper = styled.div`
@@ -236,34 +220,34 @@ class Profile extends Component {
                     url: URL
                 }, ()=>{
 
-                    //  update photo in users after its change
-                    usersRef.child(app.getUserID()).update({
-                        url: this.state.url
-                    });
-        
-                    // update photo in posts after its change
-                    postsRef.on('value', snapshot => {
-                        const posts = snapshot.val();
-                        for(let post in posts) {
-                            if(posts[post].userID === userID) {
-                                postsRef.child(post).update({
-                                    url: this.state.url
-                                })
-                            }
+                //  update photo in users after its change
+                usersRef.child(app.getUserID()).update({
+                    url: this.state.url
+                });
+    
+                // update photo in posts after its change
+                postsRef.on('value', snapshot => {
+                    const posts = snapshot.val();
+                    for(let post in posts) {
+                        if(posts[post].userID === userID) {
+                            postsRef.child(post).update({
+                                url: this.state.url
+                            })
                         }
-                    });
-        
-                    // update photo in comments after its change
-                    commentsRef.on('value', snapshot => {
-                        const comments = snapshot.val();
-                        for(let comment in comments) {
-                            if(comments[comment].userID === userID) {
-                                commentsRef.child(comment).update({
-                                    url: this.state.url
-                                })
-                            }
+                    }
+                });
+    
+                // update photo in comments after its change
+                commentsRef.on('value', snapshot => {
+                    const comments = snapshot.val();
+                    for(let comment in comments) {
+                        if(comments[comment].userID === userID) {
+                            commentsRef.child(comment).update({
+                                url: this.state.url
+                            })
                         }
-                    });
+                    }
+                });
             })
           }) 
       });

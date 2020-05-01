@@ -4,7 +4,7 @@ import app from '../../base'
 import { Link } from 'react-router-dom';
 import styled from 'styled-components'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faChartBar, faStar, faRuler, faListOl, faSignOutAlt, faHome, faUser } from '@fortawesome/free-solid-svg-icons'
+import { faRuler, faListOl, faSignOutAlt, faHome, faUser } from '@fortawesome/free-solid-svg-icons'
 import { faFacebookMessenger } from "@fortawesome/free-brands-svg-icons"
 
 const flexCenter = styleHelpers.flexCenter;
@@ -61,7 +61,7 @@ const Menu = ({ isMenuActive, handleHamburger, usersData, currentUser }) => {
         app.logout();
     }
 
-    const getCurrentUser = () => {
+    const getCurrentUserData = () => {
         const currentUserData = usersData.filter(userData => userData.userID === app.getUserID());
         setUser(currentUserData[0]);
     }
@@ -69,8 +69,8 @@ const Menu = ({ isMenuActive, handleHamburger, usersData, currentUser }) => {
     
     useEffect(() => {
         if(currentUser) {
-            getCurrentUser();
-        } 
+            getCurrentUserData();
+        }
     })
     
     return (
