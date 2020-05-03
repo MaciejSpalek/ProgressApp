@@ -4,6 +4,8 @@ import styled from "styled-components";
 import ShareBox from "../../Components/shareBox";
 import PostBoard from "../MyPosts/postBoard";
 import ProfileCard from './profileCard';
+import SearchBox from '../../Components/searchBox';
+
 import Messanger from '../Messanger/messanger';
 import * as styleHelpers  from '../../Components/styleHelpers';
 
@@ -12,26 +14,27 @@ const flexCenter = styleHelpers.flexCenter;
 const variables = styleHelpers.variables;
 
 
+const Container = styled.section`
+    ${flexCenter}
+    justify-content: flex-start;
+    flex-direction: column;
+    position: fixed;
+    top: calc(64px);
+    left: 0;
+    height: calc(100vh - 64px);
+    width: 100%;
+    background-color: ${variables.$lightGray};
+    overflow-y: scroll;
+`
+
 const Wrapper = styled.div`
     position: relative;
     ${flexCenter};
     flex-direction: column;
     width: 100%;
     max-width: 500px;
-`
-
-const Container = styled.section`
-    ${flexCenter}
-    justify-content: flex-start;
-    flex-direction: column;
-    position: fixed;
-    top: 64px;
-    left: 0;
-    height: calc(100vh - 64px);
-    width: 100%;
-    background-color: ${variables.$lightGray};
-    padding: .5em;
-    overflow-y: scroll;
+    padding: 0 .5em;
+    
 `
 
 
@@ -79,7 +82,6 @@ const ProfileBox = styled.div`
     width: 100%;
     height: 100%;
     border-radius: .5em;
-
     padding: .5em;
     overflow-y: scroll;
 `
@@ -285,6 +287,7 @@ class Profile extends Component {
         const { nick, age, url } = this.state;
         return (
             <Container>
+                <SearchBox />
                 <Wrapper>
                     <ProfileCard 
                         nick={nick}

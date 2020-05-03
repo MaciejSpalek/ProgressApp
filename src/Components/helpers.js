@@ -55,6 +55,14 @@ class Helpers {
     }
 
 
+     // return true if find some nick match with inputText
+     isInputTextMatch(inputText, nick) {
+        const regex = new RegExp(`^${inputText}`, "i");
+        return regex.test(nick)
+    }
+
+
+    
     // for TrainingPlans folder (trainingDay.js & content.js)
 
     getSeries(array) {

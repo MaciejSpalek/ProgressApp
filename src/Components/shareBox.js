@@ -15,9 +15,6 @@ const Container = styled.form`
     flex-direction: column;
     width: 100%;
     max-width: 500px;
-    /* @media only screen and (min-width: 1200px) {
-        width: 500px;
-    } */
 `
 const StyledWrapper = styled(FlexComponent)`
     ${flexCenter};

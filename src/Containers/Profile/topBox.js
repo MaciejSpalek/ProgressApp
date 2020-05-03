@@ -10,7 +10,7 @@ const StyledWrapper = styled(FlexComponent)`
     position: relative;
     flex-direction: column;
     padding: 1em;
-    border-bottom: 1px solid ${variables.$lightGray};
+    border-bottom: .1em solid ${variables.$lightGray};
 `
 
 const TopWrapper = ({ 

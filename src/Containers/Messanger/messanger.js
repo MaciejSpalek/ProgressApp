@@ -237,11 +237,7 @@ class Messanger extends Component {
     }
     
     
-    // return true if find some nick match with inputText
-    isInputTextMatch(inputText, nick) {
-        const regex = new RegExp(`^${inputText}`, "i");
-        return regex.test(nick)
-    }
+   
 
     // function invokes onChange event and set mutableNicksArray, which stores nicks beginning on letters pass by input
     filterNicks(e) {
@@ -250,7 +246,7 @@ class Messanger extends Component {
 
         e.preventDefault();
         this.state.constUsersArray.forEach(user => {
-            if(this.isInputTextMatch(inputValue, user.nick)) {
+            if(helpers.isInputTextMatch(inputValue, user.nick)) {
                 tempUsersArray.push(user);
             }
         })

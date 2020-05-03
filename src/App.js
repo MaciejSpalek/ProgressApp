@@ -20,7 +20,7 @@ const App = () => {
       return usersData.map((user, index) => {
         return (
           <PrivateRoute
-            data={{user}}
+            data={{user, usersData}}
             exact 
             key={index}  
             path={`/${user.nick}`} 
@@ -30,9 +30,9 @@ const App = () => {
       })
     }
     const handleUsers = () => {
-      app.getAllUsers((tempArray) => {
-        setUsersData(tempArray)
-      })
+      // app.getAllUsers((tempArray) => {
+      //   setUsersData(tempArray)
+      // })
     }
 
     useEffect(()=> {
@@ -53,7 +53,7 @@ const App = () => {
                   />
                   <Switch>
                       {renderProfile()}
-                      <PrivateRoute exact path="/" component={Home} />
+                      <PrivateRoute exact path="/" component={()=> <Home usersData={usersData} />} />
                       <PrivateRoute exact path="/planBoard" component={PlanBoard}/>
                       <PrivateRoute exact path="/measurements" component={Measurements}/>
                       <PrivateRoute exact path="/messanger" component={Messanger}/>

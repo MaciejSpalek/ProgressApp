@@ -20,7 +20,7 @@ const Container = styled(FlexComponent)`
         position: absolute;
         width: 320px;
         height: 522px;
-        top: .05em;
+        top: 0;
         right: calc(100% + 1em);
     }
 `
