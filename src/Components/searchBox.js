@@ -12,28 +12,40 @@ const StyledContainer = styled(FlexComponent)`
     height: 55px;
     background-color: ${variables.$lightGray};
     box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
-    padding: .5em;
+    padding: 0;
     margin-bottom: 1em;
+    @media only screen and (min-width: 500px) {
+        padding: .5em;
+    }
 `
 
-const StyledWrapper = styled(FlexComponent)`
-    border-radius: .3em;
+const StyledInputWrapper = styled(FlexComponent)`
     max-width: 500px;
-    padding: .2em .5em;
+    height: 100%;
     background-color: white;
-    border-bottom-left-radius: ${props => props.array ? "0" : ".3em"};
-    border-bottom-right-radius: ${props => props.array ? "0" : ".3em"};
+    border-bottom: .1em solid ${props => props.array ? variables.$lightGray : "none"};
+    @media only screen and (min-width: 500px) {
+        border-radius: .3em;
+        padding: .2em .5em;
+        border-bottom-left-radius: ${props => props.array ? "0" : ".3em"};
+        border-bottom-right-radius: ${props => props.array ? "0" : ".3em"}; 
+    }
 `
 
 const StyledProfilesWrapper = styled(FlexComponent)`
     flex-direction: column;
     position: absolute;
-    top: calc(100% - .4em);
+    top: calc(100%);
+
     max-width: 500px;
     background-color: white;
     border-bottom-left-radius: .3em;
     border-bottom-right-radius: .3em;
+    box-shadow: 0px 4px 5px rgba(0, 0, 0, 0.3);
     z-index: 999;
+    @media only screen and (min-width: 500px) {
+        top: calc(100% - .5em);
+    }
 `
 
 const SearchBox = ({ usersData }) => {
@@ -68,7 +80,7 @@ const SearchBox = ({ usersData }) => {
 
     return (
         <StyledContainer>
-            <StyledWrapper array={mutableUsersArray.length}>
+            <StyledInputWrapper array={mutableUsersArray.length}>
                 <Input 
                     name={"search"}  
                     type={"text"}
@@ -83,7 +95,7 @@ const SearchBox = ({ usersData }) => {
                         marginLeft: ".5em"
                     }}
                 />
-            </StyledWrapper>
+            </StyledInputWrapper>
             {mutableUsersArray.length ? 
                 <StyledProfilesWrapper>
                     {renderProfiles()}

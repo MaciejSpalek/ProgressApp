@@ -287,7 +287,7 @@ class Profile extends Component {
         const { nick, age, url } = this.state;
         return (
             <Container>
-                <SearchBox />
+                <SearchBox usersData={this.props.usersData}/>
                 <Wrapper>
                     <ProfileCard 
                         nick={nick}

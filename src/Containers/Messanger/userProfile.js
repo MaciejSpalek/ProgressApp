@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import styled from "styled-components";
 import Helpers from "../../Components/helpers"
 import app from "../../base"
+import { Link } from 'react-router-dom';
 import { variables, flexCenter, FlexComponent } from "../../Components/styleHelpers";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUserPlus, faUserCheck } from "@fortawesome/free-solid-svg-icons";
@@ -76,6 +77,9 @@ class UserProfile extends Component {
         })
     }
 
+    showProfile() {
+
+    }
     render() {
         const { user } = this.props
         const { isYourFriend } = this.state
@@ -86,10 +90,12 @@ class UserProfile extends Component {
        
         return (
             <Container>
-                <StyledWrapper>
-                    <Image url={user.url}/>
-                    <Nick> { Helpers.capitalizeFirstLetter(user.nick) }</Nick>
-                </StyledWrapper>
+                <Link style={{textDecoration: "none"}} to={`/${user.nick}`}>
+                    <StyledWrapper>
+                        <Image url={user.url}/>
+                        <Nick> { Helpers.capitalizeFirstLetter(user.nick) }</Nick>
+                    </StyledWrapper>
+                </Link>
                 {isYourFriend ? checkedFriendIcon : plusFriendIcon}
             </Container>
         )

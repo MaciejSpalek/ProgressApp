@@ -20,11 +20,10 @@ const App = () => {
       return usersData.map((user, index) => {
         return (
           <PrivateRoute
-            data={{user, usersData}}
             exact 
             key={index}  
             path={`/${user.nick}`} 
-            component={Profile}
+            component={()=> <Profile usersData={usersData} user={user} />} 
           />
         )
       })
