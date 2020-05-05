@@ -5,22 +5,27 @@ import Helpers from "../../Components/helpers";
 import relativeTime from'dayjs/plugin/relativeTime';
 import dayjs from "dayjs";
 import 'dayjs/locale/pl';
+import { Link } from "react-router-dom";
 
 const flexCenter = styleHelpers.flexCenter;
 const variables = styleHelpers.variables;
 
+
+const linkStyles = {
+    "display": "flex",
+    "justifyContent": "flexStart",
+    "position": "relative",
+    "width": "100%",
+    "padding": ".3em",
+    "textDecoration": "none",
+    "color": "black"
+}
 const Container = styled.div`
     ${flexCenter};
     flex-direction: column;
     width: 100%;
 `
-const TopBox = styled.div`
-    ${flexCenter};
-    justify-content: flex-start;
-    position: relative; 
-    width: 100%;
-    padding: .3em;
-`
+
 const DescriptionWrapper = styled.div`
     ${flexCenter};
     align-items: flex-start;
@@ -49,20 +54,20 @@ const ContentBox = styled.div`
     padding: .5em;
 `
 
-const Comment = ({data}) => {
+const Comment = ({data:{nick, url, content, date}}) => {
     dayjs.locale("pl")
     dayjs.extend(relativeTime);
     return (
         <Container>
-            <TopBox>
-                <Image url={data.url}/>
+            <Link style={linkStyles} to={`/${nick}`}>
+                <Image url={url}/>
                 <DescriptionWrapper>
-                    <Nick> { Helpers.capitalizeFirstLetter(data.nick) }</Nick>
-                    <Date> {dayjs(data.date).fromNow()} </Date>
+                    <Nick> { Helpers.capitalizeFirstLetter(nick) }</Nick>
+                    <Date> {dayjs(date).fromNow()} </Date>
                 </DescriptionWrapper>
-            </TopBox>
+            </Link>
             <ContentBox>
-                { data.content }
+                { content }
             </ContentBox>
         </Container>
     )

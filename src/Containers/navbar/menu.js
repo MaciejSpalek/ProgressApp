@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from "react"
 import * as styleHelpers  from '../../Components/styleHelpers'
 import app from '../../base'
-import { Link } from 'react-router-dom';
 import styled from 'styled-components'
+import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faRuler, faListOl, faSignOutAlt, faHome, faUser } from '@fortawesome/free-solid-svg-icons'
 import { faFacebookMessenger } from "@fortawesome/free-brands-svg-icons"
 
 const flexCenter = styleHelpers.flexCenter;
-const variables = styleHelpers.variables;
 const transformMenu = {
     "transform": "translateX(0%)"
 }

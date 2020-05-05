@@ -10,7 +10,7 @@ import TrainingDay from './trainingDay';
 import Chart from './chart';
 import Timer from './timer';
 import { variables, flexCenter, FlexComponent } from '../../../Components/styleHelpers'
-import { faPlusSquare, faTimes } from '@fortawesome/free-solid-svg-icons'
+import { faTimes } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 

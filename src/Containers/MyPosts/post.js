@@ -5,6 +5,7 @@ import Comments from "./comments";
 import Input from '../../Components/input';
 import ImageWrapper from '../../Components/ImageWrapper';
 import Helpers from "../../Components/helpers.js";
+import { Link } from 'react-router-dom';
 import { flexCenter, variables, FlexComponent}  from '../../Components/styleHelpers';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faComment, faHeart, faTimes } from '@fortawesome/free-solid-svg-icons';
@@ -18,7 +19,11 @@ const inputStyles = {
     "border": `.1em solid ${variables.$lightGray}`
 }
 
-
+const linkStyles = {
+    "textDecoration": "none",
+    "color": "black",
+    "display": "flex"
+}
 
 const Container = styled.div`
     ${flexCenter}
@@ -340,18 +345,20 @@ class Post extends Component  {
         return (
             <Container>
                 <TopBox>
-                    <ImageWrapper 
-                        imgHeight={"3.5em"}
-                        imgWidth={"3.5em"}
-                        dotSize={"0"}
-                        dotBorder={"0"}
-                        margin={"0 .5em 0 0"}
-                        url={url}
-                    />
-                    <DescriptionWrapper>
-                        <Nick> { Helpers.capitalizeFirstLetter(nick)}</Nick>
-                        <Date> {dayjs(date).fromNow()} </Date>
-                    </DescriptionWrapper>
+                    <Link style={linkStyles} to={`/${nick}`}>
+                        <ImageWrapper 
+                            imgHeight={"3.5em"}
+                            imgWidth={"3.5em"}
+                            dotSize={"0"}
+                            dotBorder={"0"}
+                            margin={"0 .5em 0 0"}
+                            url={url}
+                        />
+                        <DescriptionWrapper>
+                            <Nick> { Helpers.capitalizeFirstLetter(nick)}</Nick>
+                            <Date> {dayjs(date).fromNow()} </Date>
+                        </DescriptionWrapper>
+                    </Link>
                     {app.getCurrentUser() ?
                         this.isYourPost(postKey) ? 
                         <CrossIcon onClick={() => this.removePost(postKey)}>
