@@ -29,8 +29,6 @@ const StyledWrapper = styled(FlexComponent)`
 
 
 const Home = ({ usersData }) => {
-    console.log(usersData)
-
     return (
         <Container>
             <SearchBox usersData={usersData}/>

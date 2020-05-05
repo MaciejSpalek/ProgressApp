@@ -5,7 +5,7 @@ import Comments from "./comments";
 import Input from '../../Components/input';
 import ImageWrapper from '../../Components/ImageWrapper';
 import Helpers from "../../Components/helpers.js";
-import { Link } from 'react-router-dom';
+import DataUserWrapper from './dataWrapper';
 import { flexCenter, variables, FlexComponent}  from '../../Components/styleHelpers';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faComment, faHeart, faTimes } from '@fortawesome/free-solid-svg-icons';
@@ -19,11 +19,6 @@ const inputStyles = {
     "border": `.1em solid ${variables.$lightGray}`
 }
 
-const linkStyles = {
-    "textDecoration": "none",
-    "color": "black",
-    "display": "flex"
-}
 
 const Container = styled.div`
     ${flexCenter}
@@ -34,31 +29,15 @@ const Container = styled.div`
     box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
 `
 
-
-
-
 const TopBox = styled.div`
     ${flexCenter};
     justify-content: flex-start;
     position: relative;
     width: 100%;
     background-color:  ${variables.$blue};
-    border-bottom: .05em solid ${variables.$lightGray};
-    padding: .3em;
-`
-const DescriptionWrapper = styled.div`
-    ${flexCenter};
-    align-items: flex-start;
-    flex-direction: column;
+    /* border-bottom: .05em solid ${variables.$lightGray}; */
 `
 
-const Nick = styled.div`
-    font-size: 1em;
-    font-weight: bold;
-`
-const Date = styled.span`
-    font-size: .8em;   
-`
 const CrossIcon = styled.span`
     position: absolute;
     top:.4em;
@@ -126,13 +105,13 @@ class Post extends Component  {
     constructor(props) {
         super(props);
         this.state = {
-            tempLikes: 0,
-            nick: "",
-            url: "",
             isCommentBoxActive: false,
             isLockedLiking: false,
             didUserLike: false,
-            comments: []
+            tempLikes: 0,
+            comments: [],
+            nick: "",
+            url: ""
         }
     }
     
@@ -145,9 +124,6 @@ class Post extends Component  {
     componentWillUnmount() {
         this._isMounted = false;
     }
-
- 
-
     setUserData() {
         const rootRef = app.getRootRef("users");
         const userID = app.getUserID();
@@ -342,23 +318,20 @@ class Post extends Component  {
             didUserLike,
             comments
         } = this.state;
+
         return (
             <Container>
                 <TopBox>
-                    <Link style={linkStyles} to={`/${nick}`}>
-                        <ImageWrapper 
-                            imgHeight={"3.5em"}
-                            imgWidth={"3.5em"}
-                            dotSize={"0"}
-                            dotBorder={"0"}
-                            margin={"0 .5em 0 0"}
-                            url={url}
-                        />
-                        <DescriptionWrapper>
-                            <Nick> { Helpers.capitalizeFirstLetter(nick)}</Nick>
-                            <Date> {dayjs(date).fromNow()} </Date>
-                        </DescriptionWrapper>
-                    </Link>
+                    <DataUserWrapper 
+                        url={url}
+                        nick={nick}
+                        date={date}
+                        imgWidth={"3.5em"}
+                        imgHeight={"3.5em"} 
+                        nickFontSize={"1em"}  
+                        dateFontSize={".8em"} 
+                        imgMargin={"0 .5em 0 0"}
+                    />
                     {app.getCurrentUser() ?
                         this.isYourPost(postKey) ? 
                         <CrossIcon onClick={() => this.removePost(postKey)}>
@@ -399,6 +372,7 @@ class Post extends Component  {
                                 name={"input"}
                                 placeholder={"Skomentuj..."}
                                 style={inputStyles}
+                                handleFunction={()=> {}}
                             />
                         </CommentForm>
                     </AddBox>
