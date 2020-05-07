@@ -15,15 +15,6 @@ const StyledButton = styled.button`
     text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.5);
     padding: .4em;
     overflow: hidden;
-    /* ::before {
-        content: "";
-        position: absolute;
-        top: calc(100% - 3px);
-        left: 0;
-        width: 100%;
-        height: 3px;
-        background-color: #343d47;
-    } */
 `
 
 const Button = ({ text, handleClick }) => {

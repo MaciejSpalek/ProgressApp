@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Th } from '../../../../Components/styleHelpers';
+import { Th, StyledTh } from '../../../../Components/styleHelpers';
 
 
 const Thead = styled.thead`
@@ -10,18 +10,6 @@ const Thead = styled.thead`
 const Tr = styled.tr`
 
 `
-
-const StyledTh = styled(Th)`
-    :first-child {
-        border-top-left-radius: 5px;
-    }
-    :last-child {
-        border-top-right-radius: 5px;
-    }
-    font-size: 1.3em;
-    font-weight: bold;
-`
-
 
 const TableHeader = ({ type, id }) => {
     const renderHeader = () => {
