@@ -25,11 +25,12 @@ const Container = styled(FlexComponent)`
     }
 `
 
-const ProfileCard = ({ nick, age, url, isLogged, onChangefunction }) => {
+const ProfileCard = ({ nick, age, url, userID,  isLogged, onChangefunction }) => {
     return (
         <Container>
             <TopWrapper 
                 url={url}
+                userID={userID}
                 width={160}
                 height={160}
                 paragraphText={`${nick}, ${age}l`}

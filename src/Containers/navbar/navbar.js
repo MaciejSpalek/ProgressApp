@@ -8,16 +8,16 @@ import styled from 'styled-components';
 
 const flexCenter = styleHelpers.flexCenter;
 const variables = styleHelpers.variables;
-const Nav = styled.div`
+const Nav = styled.nav`
     position: fixed;
     ${flexCenter};
     justify-content: space-between;
-    padding: .2em .5em;
     color: white;
     background-color: ${variables.$grayBlue};
     width: 100%;
     height: 64px;
     font-size: 1em;
+    padding: .2em .5em;
     z-index: 1;
 `;
 const Logo = styled.div`
@@ -26,7 +26,6 @@ const Logo = styled.div`
 const Title = styled.span`
     font-size: 1.8em;
     font-weight: bold;
-    
 `;
 
 

@@ -35,7 +35,6 @@ const TopBox = styled.div`
     position: relative;
     width: 100%;
     background-color:  ${variables.$blue};
-    /* border-bottom: .05em solid ${variables.$lightGray}; */
 `
 
 const CrossIcon = styled.span`

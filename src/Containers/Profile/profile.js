@@ -285,15 +285,17 @@ class Profile extends Component {
 
     render() {
         const { nick, age, url } = this.state;
+        const { usersData, user } = this.props;
         return (
             <Container>
-                <SearchBox usersData={this.props.usersData}/>
+                <SearchBox usersData={usersData}/>
                 <Wrapper>
                     <ProfileCard 
                         nick={nick}
                         age={age}
                         url={url}
-                        isLogged={this.props.user.isLogged}
+                        isLogged={user.isLogged}
+                        userID={user.userID}
                         onChangefunction={(e)=> this.choosePhoto(e)}
                     />
                     <ShareBox/>

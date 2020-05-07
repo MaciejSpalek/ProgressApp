@@ -35,8 +35,7 @@ const StyledInputWrapper = styled(FlexComponent)`
 const StyledProfilesWrapper = styled(FlexComponent)`
     flex-direction: column;
     position: absolute;
-    top: calc(100%);
-
+    top: 100%;
     max-width: 500px;
     background-color: white;
     border-bottom-left-radius: .3em;

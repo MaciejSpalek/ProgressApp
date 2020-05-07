@@ -1,7 +1,8 @@
 import React, { useCallback } from "react";
 import app from "../../base";
 import Button from '../../Components/Button'
-import { Logo, Container, Form, Input } from "../../Components/styleHelpers"
+import Input from '../../Components/input';
+import { Logo, Container, Form } from "../../Components/styleHelpers"
 import { withRouter } from "react-router";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -57,10 +58,10 @@ const SignUp = ({ history }) => {
   return (
     <Container>
       <Form onSubmit={handleSignUp}>
-        <Input type="text" name="nick" placeholder="nick" required></Input>
-        <Input type="text" name="age" placeholder="age" required></Input>
-        <Input type="email" name="email" placeholder="email" required></Input>
-        <Input type="password" name="password" placeholder="hasło" required></Input>
+        <Input type={"text"} name={"nick"} placeholder={"nick"} handleFunction={()=> {}} required />
+        <Input type={"text"} name={"age"} placeholder={"wiek"} handleFunction={()=> {}} required />
+        <Input type={"email"} name={"email"} placeholder={"email"} handleFunction={()=> {}} required />
+        <Input type={"password"} name={"password"} placeholder={"hasło"} handleFunction={()=> {}} required />
         <Button handleClick={()=> {}} text={"Stwórz"}/>
         <Link style={{color: "white", fontWeight: "bold"}} to="/login">
           Przejdź do logowania

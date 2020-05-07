@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components'
+import app from '../../base';
 import Paragraph from '../../Components/paragraph';
 import ImageWrapper from '../../Components/ImageWrapper';
 import UploadFileIcon from '../../Components/uploadFileIcon';
@@ -17,10 +18,16 @@ const TopWrapper = ({
     url, 
     width, 
     height, 
-    paragraphText, 
+    userID,
     isLogged,
+    paragraphText, 
     onChangefunction
 }) => {
+
+    const isItYourUserProfile = () => {
+        const currentUserID = app.getUserID();
+        return currentUserID === userID
+    }
     return (
         <StyledWrapper>
             <ImageWrapper 
@@ -30,12 +37,14 @@ const TopWrapper = ({
                 dotSize={"22px"}
                 url={url}
             />
+
+            {isItYourUserProfile() ? 
             <UploadFileIcon 
                 onChangeFunction={(e) => onChangefunction(e)}
                 color={variables.$grayBlue}
                 styles={{fontSize: 35}}
                 icon={faPenSquare}
-            />
+            /> : null}
             <Paragraph
                 text={paragraphText}
                 fontWeight={"bold"}

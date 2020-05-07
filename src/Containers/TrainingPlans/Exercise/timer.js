@@ -21,29 +21,6 @@ const Square = styled.span`
     border-radius: .5em;
     text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.5);
 `
-// const Button = styled.button`
-//     position: relative;
-//     color: white;
-//     font-size: 1.3em;
-//     font-weight: bold;
-//     font-family: 'Patua One', cursive;
-//     background-color: ${variables.$grayBlue};
-//     border-radius: .2em;
-//     border: none;
-//     text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.5);
-//     padding: .5em;
-//     overflow: hidden;
-//     /* box-shadow: inset 0 -2px 5px black; */
-//     ::before {
-//         content: "";
-//         position: absolute;
-//         top: calc(100% - 3px);
-//         left: 0;
-//         width: 100%;
-//         height: 3px;
-//         background-color: #343d47;
-//     }
-// `
 
 const Timer = ({ time, startTimer, stopTimer }) => {
     const getTimeParameter = parameter => {
