@@ -81,7 +81,7 @@ class Measurements extends Component {
             }
         })
     }
-
+ 
     addMeasurements(e) {
         e.preventDefault();
         const userID = app.getUserID();
@@ -100,6 +100,7 @@ class Measurements extends Component {
 
         const inputParameters = {
             measurementsKey: measurementsKey,
+            id: this.state.measurementTables.length+1,
             date: helpers.getCurrentDate(new Date(), "."),
             neck: neck.value,
             chest: chest.value,
@@ -109,7 +110,7 @@ class Measurements extends Component {
             thigh: thigh.value,
             calf: calf.value
         }
-
+        this.handleTogglePanel();
         updates[`users-measurements/${userID}/${measurementsKey}`] = inputParameters;
         return app.getRealTimeDatabase().ref().update(updates);
     }
@@ -117,8 +118,8 @@ class Measurements extends Component {
     
     renderTables = () => {
         const { measurementTables } = this.state;
-        // const sortedArray = helpers.sortByDate(measurementTables);
-        return sortedArray.map((parameter, index) =>{
+        const sortedArrayById = measurementTables.sort((a, b) => b.id - a.id);
+        return sortedArrayById.map((parameter, index) =>{
             return  (
                 <Table 
                     parameters={parameter}
@@ -149,7 +150,7 @@ class Measurements extends Component {
                         iconColor={variables.$grayBlue}
                         textFontWeight={"bold"}
                         textFontSize={"1.2em"}
-                        isHidden={isPanelFormActive}
+                        isHidden={!isPanelFormActive}
                         iconFontSize={25}
                         text={"Dodaj wymiary"}  
                     />

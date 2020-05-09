@@ -41,6 +41,7 @@ class PostBoard extends Component {
             }
         })
     }
+
     // assign data from realtime database to state "friend" && "users"
     setFriends() {
         app.getAllUsers((tempArray) => {
@@ -58,11 +59,13 @@ class PostBoard extends Component {
             }
         })
     }
+
     // return filtered array ( only your posts )
     getUserPostsArray(array) {
         const userID = app.getUserID();
         return array.filter(item => item.userID === userID);
     }
+    
     // return filtered array ( your posts and your friends' posts )
     getFriendsPostsArray(array) {
         const userID = app.getUserID();

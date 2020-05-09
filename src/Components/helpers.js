@@ -10,6 +10,7 @@ class Helpers {
     getDate() {
         return new Date();
     }
+    
     getFullDate = (separator="/") => {
         let newDate = new Date()
         let date = newDate.getDate();
