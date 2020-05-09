@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 import Table from './Table/table'
-import Input from '../../Components/input';
-import Button from '../../Components/Button';
+import app from '../../base';
 import TogglePanel from '../../Components/togglePanel';
+import Form from './form';
 import helpers from '../../Components/helpers';
 import { variables, Container, FlexComponent } from '../../Components/styleHelpers';
 import { faRuler } from '@fortawesome/free-solid-svg-icons'
+import Placeholder from './placeholder';
 
 const StyledContainer = styled(Container)`
     flex-direction: column; 
@@ -17,44 +18,76 @@ const StyledContainer = styled(Container)`
 
 const StyledToggleWrapper = styled(FlexComponent)`
     flex-direction: column;
+    justify-content: space-between;
+    height: ${props => props.state ? "100%" : "auto"};
     padding: 0;
 `
 
 const StyledTablesWrapper = styled(FlexComponent) `
     flex-direction: column;
+    justify-content: flex-start;
+    height: 100%;
     padding: .5em;
+    overflow-y: scroll;
 `
-const Form = styled.form`
-    width: 100%;
-    padding: .5em;
-`
+
 
 class Measurements extends Component {
     _isMounted = true;
     constructor(props) {
         super(props)
         this.state = {
-            isPanelFormActive: true,
+            isPanelFormActive: false,
             measurementTables: []
         }
     }
 
     componentDidMount() {
         this._isMounted = true;
-        this.setMeasurements()
+        this.assignMeasurementsToState()
     }
 
     componentDidUpdate() {
+        this._isMounted = true;
+        this.updateMeasurements()
+    }
+
+    componentWillUnmount() {
         this._isMounted = false;
     }
 
-    setMeasurements() {
-
+    updateMeasurements() {
+        const userID = app.getUserID();
+        const measurementsRef = app.getRealTimeDatabase().ref('users-measurements').child(userID)
+        measurementsRef.on('child_changed', snapshot => {
+            const usersMeasurements = helpers.snapshotToArray(snapshot);
+            if (this._isMounted) {
+                this.setState({
+                    measurementTables: usersMeasurements
+                })
+            }
+        })
     }
 
-    updateMeasurementTables(e) {
+    assignMeasurementsToState() {
+        const userID = app.getUserID();
+        const measurementsRef = app.getRealTimeDatabase().ref('users-measurements').child(userID);
+        measurementsRef.on("value", snapshot => {
+            const usersMeasurements = helpers.snapshotToArray(snapshot);
+            if (this._isMounted) {
+                this.setState({
+                    measurementTables: usersMeasurements
+                })
+            }
+        })
+    }
+
+    addMeasurements(e) {
         e.preventDefault();
-        const { measurementTables } = this.state;
+        const userID = app.getUserID();
+        const measurementsRef = app.getRealTimeDatabase().ref('users-measurements').child(userID);
+        const measurementsKey = measurementsRef.push().key;
+        const updates = {};
         const { 
             neck, 
             chest, 
@@ -66,7 +99,8 @@ class Measurements extends Component {
         } = e.target.elements;
 
         const inputParameters = {
-            data: helpers.getDate(),
+            measurementsKey: measurementsKey,
+            date: helpers.getCurrentDate(new Date(), "."),
             neck: neck.value,
             chest: chest.value,
             biceps: biceps.value,
@@ -75,20 +109,18 @@ class Measurements extends Component {
             thigh: thigh.value,
             calf: calf.value
         }
-        this.setState({
-            measurementTables: [inputParameters, ...measurementTables]
-        }, ()=> {
-            this.setMeasurements()
-        })
+
+        updates[`users-measurements/${userID}/${measurementsKey}`] = inputParameters;
+        return app.getRealTimeDatabase().ref().update(updates);
     }
    
     
     renderTables = () => {
         const { measurementTables } = this.state;
-        return measurementTables.map((parameter, index) =>{
+        // const sortedArray = helpers.sortByDate(measurementTables);
+        return sortedArray.map((parameter, index) =>{
             return  (
                 <Table 
-                    date={helpers.getDate()}
                     parameters={parameter}
                     key={index}
                 /> 
@@ -104,11 +136,12 @@ class Measurements extends Component {
 
     render() {
         const { 
-            isPanelFormActive
+            isPanelFormActive,
+            measurementTables
         } = this.state;
         return (
             <StyledContainer>
-                <StyledToggleWrapper>
+                <StyledToggleWrapper state={isPanelFormActive}>
                     <TogglePanel 
                         handleFunction={()=> this.handleTogglePanel()} 
                         buttonBackgroundColor={variables.$grayBlue}
@@ -120,21 +153,19 @@ class Measurements extends Component {
                         iconFontSize={25}
                         text={"Dodaj wymiary"}  
                     />
-                    { isPanelFormActive ? 
-                    <Form onSubmit={(e)=> this.updateMeasurementTables(e)}>
-                        <Input style={{margin: ".5em 0"}} name={"neck"}  placeholder="kark" handleFunction={()=> {}}/>
-                        <Input style={{margin: ".5em 0"}} name={"chest"}  placeholder="klatka piersiowa" handleFunction={()=> {}}/>
-                        <Input style={{margin: ".5em 0"}} name={"biceps"}  placeholder="biceps" handleFunction={()=> {}}/>
-                        <Input style={{margin: ".5em 0"}} name={"forearm"}  placeholder="przedramię" handleFunction={()=> {}}/>
-                        <Input style={{margin: ".5em 0"}} name={"waist"}  placeholder="talia" handleFunction={()=> {}}/>
-                        <Input style={{margin: ".5em 0"}} name={"thigh"}  placeholder="udo" handleFunction={()=> {}}/>
-                        <Input style={{margin: ".5em 0"}} name={"calf"}  placeholder="łydka" handleFunction={()=> {}}/>
-                        <Button text={"Dodaj"} handleClick={()=> {}} />
-                    </Form> :null }
+                    { isPanelFormActive ? <Form handleFunction={(e)=> this.addMeasurements(e)} /> :null }
                 </StyledToggleWrapper>
-                <StyledTablesWrapper>
-                    {this.renderTables()}
-                </StyledTablesWrapper>
+                {!isPanelFormActive ? 
+                    <StyledTablesWrapper>
+                        { measurementTables.length ? 
+                            this.renderTables() : 
+                            <Placeholder 
+                                iconName={faRuler} 
+                                text={"brak dodanych wymiarów"}
+                            /> 
+                        }
+                    </StyledTablesWrapper> 
+                : null}
             </StyledContainer>
         );
     }

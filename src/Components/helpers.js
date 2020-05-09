@@ -20,6 +20,10 @@ class Helpers {
         return `${date}${separator}${ month<10 ? `0${month}` : month }${separator}${ year } ${ hour }:${ minutes<10 ? `0${minutes}` : minutes }`;
     }
 
+    sortByDate(array) {
+        return array.sort((a,b) =>  new Date(b.date).getTime() - new Date(a.date).getTime());
+    }
+
     cutTimeFromDate(date) {
         return date.split(" ")[0];
     }

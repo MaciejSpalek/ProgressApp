@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import app from "../../base";
 import styled from "styled-components";
-import Helpers from "../../Components/helpers.js";
+import helpers from "../../Components/helpers.js";
 import Post from './post';
 
 const Container = styled.div`
@@ -15,8 +15,8 @@ class PostBoard extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            posts: [],
             friends: [],
+            posts: [],
             users:[]
         }
     }
@@ -35,7 +35,7 @@ class PostBoard extends Component {
     setPosts() {
         const rootRef = app.getRootRef("posts");
         rootRef.on("value", snapshot => {
-            const posts = Helpers.snapshotToArray(snapshot);
+            const posts = helpers.snapshotToArray(snapshot);
             if (this._isMounted) {
                 this.setState({posts})
             }
@@ -87,7 +87,7 @@ class PostBoard extends Component {
         let array = [];
         let destination = this.props.destination;
 
-        const sortedArrayByDate = app.sortByDate(this.state.posts);
+        const sortedArrayByDate = helpers.sortByDate(this.state.posts);
         const userPostsArray = this.getUserPostsArray(sortedArrayByDate);
         const friendsPostsArray = this.getFriendsPostsArray(sortedArrayByDate);
 

@@ -17,9 +17,9 @@ const StyledButton = styled.button`
     overflow: hidden;
 `
 
-const Button = ({ text, handleClick }) => {
+const Button = ({ text, style, handleClick }) => {
     return (
-        <StyledButton onClick={(e)=> handleClick(e)}>
+        <StyledButton style={style} onClick={(e)=> handleClick(e)}>
             {text}
         </StyledButton>
     )

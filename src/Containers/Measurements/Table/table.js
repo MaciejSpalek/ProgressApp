@@ -8,10 +8,10 @@ const StyledTable = styled(Table)`
 
 `
 
-const MeasurementTable = ({ parameters, date }) => {
+const MeasurementTable = ({ parameters }) => {
     return (
         <StyledTable>
-            <Thead date={date}/>
+            <Thead date={parameters.date}/>
             <Tbody parameters={parameters} />
         </StyledTable>
     )
