@@ -1,15 +1,25 @@
 import React from "react"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faBars } from '@fortawesome/free-solid-svg-icons'
+import { faBars, faTimes } from '@fortawesome/free-solid-svg-icons'
 
-const handleHamburger = () => {
-    console.log("hamburger click!")
+const onStyle = {
+    "fontSize": "40", 
+    "transition": ".4s cubic-bezier(0.785, 0.135, 0.15, 0.86)"
+};
+
+const offStyle = {
+    "fontSize": "50", 
+    "transition": ".4s cubic-bezier(0.785, 0.135, 0.15, 0.86)"
 }
 
-
-const Hamburger = () => {
+const Hamburger = ({ handleFunction, isMenuActive }) => {
     return (
-        <FontAwesomeIcon icon={faBars} color="#FF8E00" style={{fontSize:40}} onClick={handleHamburger}/>
+        <FontAwesomeIcon 
+            icon={!isMenuActive ? faBars: faTimes} 
+            color="#FF8E00" 
+            style={!isMenuActive ? onStyle : offStyle} 
+            onClick={()=> handleFunction()}
+        />
     );
 }
 
