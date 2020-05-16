@@ -86,7 +86,6 @@ class UserProfile extends Component {
 
         const plusFriendIcon = <FontAwesomeIcon icon={faUserPlus} style={{color: variables.$darkBlue, fontSize: "1.5em"}} onClick={() => this.addFriendToDatabase(user)}/>
         const checkedFriendIcon = <FontAwesomeIcon icon={faUserCheck} style={{color: variables.$darkBlue, fontSize: "1.5em"}}/>
-        // const deleteFriendIcon = <FontAwesomeIcon icon={faUserTimes} style={{color: variables.$darkBlue, fontSize: "1.5em"}}/>
        
         return (
             <Container>
@@ -96,7 +95,8 @@ class UserProfile extends Component {
                         <Nick> { Helpers.capitalizeFirstLetter(user.nick) }</Nick>
                     </StyledWrapper>
                 </Link>
-                {isYourFriend ? checkedFriendIcon : plusFriendIcon}
+                { user.userID === app.getUserID() ? null
+                : (isYourFriend ? checkedFriendIcon : plusFriendIcon)}
             </Container>
         )
     }
