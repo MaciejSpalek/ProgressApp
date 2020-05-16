@@ -9,7 +9,15 @@ const StyledImageWrapper = styled.div`
     margin: ${props => props.margin};
 `
 
-const ImageWrapper = ({ url, imgWidth, imgHeight, dotSize, dotBorder, isLogged, margin }) => {
+const ImageWrapper = ({ 
+    url, 
+    imgWidth, 
+    imgHeight, 
+    dotSize, 
+    dotBorder, 
+    isLogged, 
+    margin 
+}) => {
     return (
         <StyledImageWrapper margin={margin}>
             <Image 

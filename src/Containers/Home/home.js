@@ -1,8 +1,7 @@
-import React, { Component } from "react";
+import React from "react";
 import styled from "styled-components"
 import ShareBox from "../../Components/shareBox";
 import PostBoard from "../MyPosts/postBoard";
-import Messanger from '../Messanger/messanger';
 import SearchBox from '../../Components/searchBox';
 import { FlexComponent, variables, flexCenter}  from '../../Components/styleHelpers'
 
@@ -36,7 +35,6 @@ const Home = ({ usersData }) => {
                 <ShareBox />
                 <PostBoard destination={"home"} />
             </StyledWrapper>
-            {/* <Messanger /> */}
         </Container>
     )
 }

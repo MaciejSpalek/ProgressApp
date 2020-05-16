@@ -5,25 +5,19 @@ import ShareBox from "../../Components/shareBox";
 import PostBoard from "../MyPosts/postBoard";
 import ProfileCard from './profileCard';
 import SearchBox from '../../Components/searchBox';
+import Form from './form';
+import { 
+    flexCenter, 
+    variables, 
+    Container 
+}  from '../../Components/styleHelpers';
 
-import Messanger from '../Messanger/messanger';
-import * as styleHelpers  from '../../Components/styleHelpers';
-
-const RWD = styleHelpers.RWD;
-const flexCenter = styleHelpers.flexCenter;
-const variables = styleHelpers.variables;
 
 
-const Container = styled.section`
-    ${flexCenter}
+
+const StyledContainer = styled(Container)`
     justify-content: flex-start;
     flex-direction: column;
-    position: fixed;
-    top: calc(64px);
-    left: 0;
-    height: calc(100vh - 64px);
-    width: 100%;
-    background-color: ${variables.$lightGray};
     overflow-y: scroll;
 `
 
@@ -37,11 +31,6 @@ const Wrapper = styled.div`
     
 `
 
-
-
-
-
-
 const AddBox = styled.form`
     display:grid;
     grid-template-columns: repeat(1, 1fr);
@@ -52,11 +41,7 @@ const AddBox = styled.form`
     overflow-y: scroll;
 `
 
-const DataItem = styled.h2`
-    color: white;
-    font-size: 1.5em;
-    text-align: left;
-`
+
 const About = styled.textarea `
     width: 100%;
     height: 200px;
@@ -96,19 +81,17 @@ class Profile extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            isRotateCard: false,
             isEditButtonActive: true,
+            trainingExperience: "-",
+            description: "-",
+            yourSport: "-",
+            weight: "-",
+            height: "-",
+            sex: "-",
             image: "",
             nick: "",
             age: "",
             url: "",
-            sex: "-",
-            weight: "-",
-            height: "-",
-            yourSport: "-",
-            priority: "-",
-            trainingExperience: "-",
-            aboutMe: "-",
         }
     }
 
@@ -121,11 +104,6 @@ class Profile extends Component {
         this._isMounted = false;
     }
    
-    rotateCardHandler() {
-        this.setState(prevState => ({
-            isRotateCard: !prevState.isRotateCard
-        }))
-    }
 
     editButtonHandler() {
         this.setState(prevState => ({
@@ -137,7 +115,13 @@ class Profile extends Component {
     // function invoke on button
     updateProfileData(e) {
         e.preventDefault();
-        const { sex, weight, height, yourSport, priority, trainingExperience, aboutMe } = e.target.elements;
+        const { 
+            sex, 
+            weight, 
+            height,  
+            description,
+            trainingExperience, 
+        } = e.target.elements;
 
         // update profileData in realtime database 
         app.getRootRef("users").child(app.getUserID()).update({
@@ -147,51 +131,24 @@ class Profile extends Component {
             sex: sex.value,
             weight: weight.value,
             height: height.value,
-            yourSport: yourSport.value,
-            priority: priority.value,
+            description: description.value,
             trainingExperience: trainingExperience.value,
-            aboutMe: aboutMe.value
         });
 
         this.setState({
-            isEditButtonActive: !this.state.isEditButtonActive,
             nick: this.state.nick,
             age: this.state.age,
             url: this.state.url,
             sex: sex.value,
             weight: weight.value,
             height: height.value,
-            yourSport: yourSport.value,
-            priority: priority.value,
+            description: description.value,
             trainingExperience: trainingExperience.value,
-            aboutMe: aboutMe.value,
+            isEditButtonActive: !this.state.isEditButtonActive,
         })   
     } 
-    getText = (caption, profileData, unit="") => {
-        return `${caption}: ${profileData}${unit}`;
-    }
-    renderProfileBox() {
-        const { sex,
-            weight,
-            height,
-            trainingExperience,
-            priority,
-            yourSport,
-            aboutMe
-        } = this.state;
-
-        return ( 
-            <ProfileBox>
-                <DataItem> { this.getText("Płeć", sex) } </DataItem>
-                <DataItem> { this.getText("Waga", weight, "kg") } </DataItem>
-                <DataItem> { this.getText("Wzrost", height, "cm") } </DataItem>
-                <DataItem> { this.getText("Staż tren.", trainingExperience, "l") } </DataItem>
-                <DataItem> { this.getText("Priorytet", priority) } </DataItem>
-                <DataItem> { this.getText("Sport",yourSport) } </DataItem>
-                <DataItem style={{marginTop: "1.5em"}}> { this.getText("O mnie", aboutMe) } </DataItem>
-            </ProfileBox>
-        )
-    }
+    
+  
     doesProfilePhotoExist(userStorage) {
         if(userStorage.filter(element => element.name === "profilePhoto")[0]) {
             return true;
@@ -220,15 +177,22 @@ class Profile extends Component {
             app.getStorage().ref(`users/${userID}`).child(`profilePhoto`).getDownloadURL().then(URL => {
                 this.setState({
                     url: URL
-                }, ()=>{
+                }, ()=> {
 
                 //  update photo in users after its change
-                usersRef.child(app.getUserID()).update({
-                    url: this.state.url
+                usersRef.once('value', snapshot => {
+                    const users = snapshot.val();
+                    for(let user in users) {
+                        if(user === userID) {
+                            usersRef.child(userID).update({
+                                url: this.state.url
+                            });
+                        }
+                    }
                 });
-    
+
                 // update photo in posts after its change
-                postsRef.on('value', snapshot => {
+                postsRef.once('value', snapshot => {
                     const posts = snapshot.val();
                     for(let post in posts) {
                         if(posts[post].userID === userID) {
@@ -240,7 +204,7 @@ class Profile extends Component {
                 });
     
                 // update photo in comments after its change
-                commentsRef.on('value', snapshot => {
+                commentsRef.once('value', snapshot => {
                     const comments = snapshot.val();
                     for(let comment in comments) {
                         if(comments[comment].userID === userID) {
@@ -251,8 +215,9 @@ class Profile extends Component {
                     }
                 });
             })
+            
           }) 
-      });
+      })
     }
 
 
@@ -260,9 +225,9 @@ class Profile extends Component {
     
     //////// Realtime Database /////////
     setProfileData() {
-        const rootRef = app.getRootRef("users");
         const userID = this.props.user.userID;
-        rootRef.child(userID).orderByKey().on("value", snapshot => {
+        const rootRef = app.getRootRef("users").child(userID);
+        rootRef.once("value", snapshot => {
             if(this._isMounted) {
                 this.setState({
                     nick:  snapshot.val().nick,
@@ -271,10 +236,8 @@ class Profile extends Component {
                     sex:  snapshot.val().sex,
                     weight:  snapshot.val().weight,
                     height:  snapshot.val().height,
-                    yourSport:  snapshot.val().yourSport,
+                    description: snapshot.val().description,
                     trainingExperience:  snapshot.val().trainingExperience,
-                    priority:  snapshot.val().priority,
-                    aboutMe:  snapshot.val().aboutMe
                 })
             }
         })
@@ -284,25 +247,27 @@ class Profile extends Component {
 
 
     render() {
-        const { nick, age, url } = this.state;
+        const { 
+            isEditButtonActive
+        } = this.state;
+
         const { usersData, user } = this.props;
         return (
-            <Container>
+            <StyledContainer>
                 <SearchBox usersData={usersData}/>
                 <Wrapper>
+                    {isEditButtonActive ? 
                     <ProfileCard 
-                        nick={nick}
-                        age={age}
-                        url={url}
-                        isLogged={user.isLogged}
-                        userID={user.userID}
+                        user={user}
+                        url={this.state.url}
                         onChangefunction={(e)=> this.choosePhoto(e)}
-                    />
-                    <ShareBox/>
-                    <PostBoard destination={"profile"}/>
+                    /> 
+                    :
+                    <Form />}
+                    <ShareBox />
+                    <PostBoard destination={"profile"} />
                 </Wrapper>
-                {/* <Messanger /> */}
-            </Container>
+            </StyledContainer>
         )
     }
 }

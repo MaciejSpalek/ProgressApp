@@ -4,8 +4,10 @@ import app from '../../base';
 import Paragraph from '../../Components/paragraph';
 import ImageWrapper from '../../Components/ImageWrapper';
 import UploadFileIcon from '../../Components/uploadFileIcon';
+import SquareButton from '../../Components/Buttons/SquareButton';
 import { faPenSquare } from '@fortawesome/free-solid-svg-icons';
 import { FlexComponent, variables } from '../../Components/styleHelpers';
+
 
 const StyledWrapper = styled(FlexComponent)`
     position: relative;
@@ -39,12 +41,19 @@ const TopWrapper = ({
             />
 
             {isItYourUserProfile() ? 
-            <UploadFileIcon 
+            (<UploadFileIcon 
                 onChangeFunction={(e) => onChangefunction(e)}
                 color={variables.$grayBlue}
                 styles={{fontSize: 35}}
                 icon={faPenSquare}
-            /> : null}
+            />
+            // <SquareButton 
+            //     onChangeFunction={(e) => onChangefunction(e)}
+            //     iconColor={variables.$grayBlue}
+            //     styles={{fontSize: 35}}
+            //     icon={faPenSquare}
+            // />
+            ): null}
             <Paragraph
                 text={paragraphText}
                 fontWeight={"bold"}

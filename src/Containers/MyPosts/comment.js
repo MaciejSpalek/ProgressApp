@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import DataUserWrapper from './dataWrapper';
-import { variables, FlexComponent }  from '../../Components/styleHelpers';
+import { FlexComponent }  from '../../Components/styleHelpers';
 
 const StyledContainer = styled(FlexComponent)`
     flex-direction: column;

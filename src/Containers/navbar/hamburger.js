@@ -1,6 +1,7 @@
 import React from "react"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBars, faTimes } from '@fortawesome/free-solid-svg-icons'
+import { variables } from "../../Components/styleHelpers";
 
 const onStyle = {
     "fontSize": "40", 
@@ -16,9 +17,9 @@ const Hamburger = ({ handleFunction, isMenuActive }) => {
     return (
         <FontAwesomeIcon 
             icon={!isMenuActive ? faBars: faTimes} 
-            color="#FF8E00" 
             style={!isMenuActive ? onStyle : offStyle} 
             onClick={()=> handleFunction()}
+            color={variables.$orange} 
         />
     );
 }

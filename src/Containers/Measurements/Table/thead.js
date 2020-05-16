@@ -1,5 +1,4 @@
 import React from 'react';
-import helpers from '../../../Components/helpers';
 import { StyledTh, Thead, Tr, Th } from '../../../Components/styleHelpers';
 
 
