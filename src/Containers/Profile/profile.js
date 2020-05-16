@@ -165,13 +165,27 @@ class Profile extends Component {
         }
     }
 
+    updateLoop(refText) {
+        const ref = app.getRootRef(refText);
+        const userID = app.getUserID();
+
+        ref.once('value', snapshot => {
+            const group = snapshot.val();
+            for(let part in group) {
+                if(group[part].userID === userID) {
+                    console.log("update: ", part)
+                    ref.child(part).update({
+                        url: this.state.url
+                    });
+                }
+            }
+        });
+    }
+
     setPhotoURL() {
         const { image } = this.state;
         const userID = app.getUserID();
         const uploadTask = app.getStorage().ref(`users/${userID}/profilePhoto`).put(image);
-        const usersRef = app.getRootRef("users");
-        const postsRef = app.getRootRef("posts");
-        const commentsRef = app.getRootRef("comments");
         
         uploadTask.on('state_changed', () => {
             app.getStorage().ref(`users/${userID}`).child(`profilePhoto`).getDownloadURL().then(URL => {
@@ -180,40 +194,13 @@ class Profile extends Component {
                 }, ()=> {
 
                 //  update photo in users after its change
-                usersRef.once('value', snapshot => {
-                    const users = snapshot.val();
-                    for(let user in users) {
-                        if(user === userID) {
-                            usersRef.child(userID).update({
-                                url: this.state.url
-                            });
-                        }
-                    }
-                });
+                this.updateLoop("users")
 
                 // update photo in posts after its change
-                postsRef.once('value', snapshot => {
-                    const posts = snapshot.val();
-                    for(let post in posts) {
-                        if(posts[post].userID === userID) {
-                            postsRef.child(post).update({
-                                url: this.state.url
-                            })
-                        }
-                    }
-                });
-    
+                this.updateLoop("posts")
+                
                 // update photo in comments after its change
-                commentsRef.once('value', snapshot => {
-                    const comments = snapshot.val();
-                    for(let comment in comments) {
-                        if(comments[comment].userID === userID) {
-                            commentsRef.child(comment).update({
-                                url: this.state.url
-                            })
-                        }
-                    }
-                });
+                this.updateLoop("comments");
             })
             
           }) 
@@ -261,9 +248,10 @@ class Profile extends Component {
                         user={user}
                         url={this.state.url}
                         onChangefunction={(e)=> this.choosePhoto(e)}
+                        handleEditButton={()=> this.editButtonHandler()}
                     /> 
                     :
-                    <Form />}
+                    <Form handleFunction={(e) => this.updateProfileData(e)}/>}
                     <ShareBox />
                     <PostBoard destination={"profile"} />
                 </Wrapper>
@@ -273,38 +261,3 @@ class Profile extends Component {
 }
 
 export default Profile;
-
-
-
-{/* <Frontside>
-<PhotoBox>
-    <Photo src={url}></Photo>
-    <Nick> { app.getCurrentUser() ? `${helpers.capitalizeFirstLetter(nick)}, ${age}l` : null} </Nick>
-</PhotoBox> */}
-{/* <ButtonBox>
-    <FontAwesomeIcon icon={faCameraRetro} style={{fontSize: 35, margin: '.1em'}} color={variables.$grayBlue} />
-    <label>
-        <FontAwesomeIcon icon={faImages} style={{fontSize: 35, margin: '.1em'}} color={variables.$grayBlue} />
-        <input type="file" style={{display: "none"}} onChange={(e) => this.choosePhoto(e)}/>
-    </label>
-    <FontAwesomeIcon icon={faExternalLinkSquareAlt} style={{fontSize: 35, margin: '.1em'}} color={variables.$grayBlue}  onClick={this.rotateCardHandler.bind(this)}/>
-</ButtonBox> */}
-// </Frontside>
-{/* <Backside style={isRotateCard ? frontActive : null}>
-{isEditButtonActive ? 
-    <AddBox onSubmit={(e) => {this.updateProfileData(e)}}>
-        <Caption> Podstawowe dane: </Caption>
-        <Input name="sex" placeholder="Płeć" required></Input>
-        <Input name="trainingExperience" type="Number" placeholder="Staż tren." required></Input>
-        <Input name="weight" type="number" placeholder="Waga" required></Input>
-        <Input name="height" type="number" placeholder="Wzrost" required></Input>
-        <Input name="priority" placeholder="Priorytet" required></Input>
-        <Input name="yourSport" placeholder="Sport" required></Input>
-        <About name="aboutMe" placeholder="O mnie"></About>
-        <styleHelpers.Button>Zapisz</styleHelpers.Button>
-    </AddBox> : this.renderProfileBox()}
-    <ButtonBox>
-        <FontAwesomeIcon icon={faPenSquare} style={{fontSize: 35, margin: '.1em'}} color={variables.$grayBlue} onClick={()=> this.editButtonHandler()}/>
-        <FontAwesomeIcon icon={faExternalLinkSquareAlt} style={{fontSize: 35 , margin: '.1em'}} color={variables.$grayBlue}  onClick={()=> this.rotateCardHandler()}/>
-    </ButtonBox>
-</Backside> */}

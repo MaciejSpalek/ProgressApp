@@ -6,7 +6,7 @@ const Input = styled.input``
 const StyledLabel = styled.label`
     position: absolute;
     right: .5em;
-    top: .5em;
+    top: 3em;
     background-color: white;
 `
 

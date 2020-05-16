@@ -3,19 +3,20 @@ import styled from 'styled-components'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 const StyledButton = styled.button`
+    position: absolute;
     border: none;
     border-radius: .3em;
+    background-color: white;
 `
 const SquareButton = ({ 
     iconName, 
-    iconFontSize, 
     iconColor, 
     buttonStyles, 
     handleFunction 
 }) => {
     return (
         <StyledButton style={buttonStyles} onClick={(e)=> handleFunction(e)}>
-            <FontAwesomeIcon icon={iconName} style={{fontSize: iconFontSize, color: iconColor}}/>
+            <FontAwesomeIcon icon={iconName} color={iconColor} />
         </StyledButton>
     )
 }

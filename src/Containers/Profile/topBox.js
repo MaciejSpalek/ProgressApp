@@ -5,7 +5,7 @@ import Paragraph from '../../Components/paragraph';
 import ImageWrapper from '../../Components/ImageWrapper';
 import UploadFileIcon from '../../Components/uploadFileIcon';
 import SquareButton from '../../Components/Buttons/SquareButton';
-import { faPenSquare } from '@fortawesome/free-solid-svg-icons';
+import { faPenSquare, faFileImage } from '@fortawesome/free-solid-svg-icons';
 import { FlexComponent, variables } from '../../Components/styleHelpers';
 
 
@@ -23,7 +23,8 @@ const TopWrapper = ({
     userID,
     isLogged,
     paragraphText, 
-    onChangefunction
+    onChangefunction,
+    handleEditButton
 }) => {
 
     const isItYourUserProfile = () => {
@@ -41,19 +42,26 @@ const TopWrapper = ({
             />
 
             {isItYourUserProfile() ? 
-            (<UploadFileIcon 
-                onChangeFunction={(e) => onChangefunction(e)}
-                color={variables.$grayBlue}
-                styles={{fontSize: 35}}
-                icon={faPenSquare}
-            />
-            // <SquareButton 
-            //     onChangeFunction={(e) => onChangefunction(e)}
-            //     iconColor={variables.$grayBlue}
-            //     styles={{fontSize: 35}}
-            //     icon={faPenSquare}
-            // />
-            ): null}
+            <>
+                <UploadFileIcon 
+                    onChangeFunction={(e) => onChangefunction(e)}
+                    color={variables.$grayBlue}
+                    styles={{fontSize: 40}}
+                    icon={faFileImage}
+                />
+                <SquareButton 
+                    handleFunction={()=> handleEditButton()}
+                    iconColor={variables.$grayBlue}
+                    buttonStyles={{
+                        top: ".1em",
+                        right: ".2em",
+                        fontSize: 35
+                    }}
+                    iconName={faPenSquare}
+                />
+            </>
+            
+            : null}
             <Paragraph
                 text={paragraphText}
                 fontWeight={"bold"}
