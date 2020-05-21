@@ -1,12 +1,14 @@
 import React, { useCallback, useContext } from "react";
-import app from "../../base"
-import { withRouter, Redirect } from "react-router";
-import { Link } from "react-router-dom";
-import { Logo, Container, Form, Input, Button } from "../../Components/styleHelpers"
-import { AuthContext } from "../../Auth"
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faUser } from '@fortawesome/free-solid-svg-icons'
+import app from "../../base";
+import Button from '../../Components/Button';
+import Input from '../../Components/input';
+import { Logo, Container, Form } from "../../Components/styleHelpers";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faUser } from '@fortawesome/free-solid-svg-icons';
 import { variables } from "../../Components/styleHelpers";
+import { withRouter, Redirect } from "react-router";
+import { AuthContext } from "../../Auth";
+import { Link } from "react-router-dom";
 
 
 const Login = ({ history }) => {
@@ -33,9 +35,9 @@ const Login = ({ history }) => {
   return (
     <Container>
     <Form onSubmit={handleLogin}>
-      <Input type="email" name="email" placeholder="email"></Input>
-      <Input type="password" name="password" placeholder="hasło"></Input>
-      <Button> Zaloguj </Button>
+      <Input type={"email"} name={"email"} placeholder={"email"} handleFunction={()=> {}}/>
+      <Input type={"password"} name={"password"} placeholder={"hasło"} handleFunction={()=> {}}/>
+      <Button handleClick={()=> {}} text={"Zaloguj"}/>
       <Link style={{color: "white", fontWeight: "bold"}} to="/signup">
         Stwórz konto
       </Link>

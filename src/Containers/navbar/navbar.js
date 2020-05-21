@@ -1,72 +1,45 @@
-import React, {Component} from 'react';
+import React, { useState } from 'react';
 import Menu from './menu';
-import app from '../../base';
-import * as styleHelpers  from '../../Components/styleHelpers';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChartLine, faBars, faTimes } from '@fortawesome/free-solid-svg-icons';
+import Logo from './logo';
 import styled from 'styled-components';
+import Hamburger from './hamburger';
+import { flexCenter, variables }  from '../../Components/styleHelpers';
 
-
-const flexCenter = styleHelpers.flexCenter;
-const variables = styleHelpers.variables;
-const Nav = styled.div`
+const Nav = styled.nav`
     position: fixed;
     ${flexCenter};
     justify-content: space-between;
-    padding: .2em .5em;
     color: white;
     background-color: ${variables.$grayBlue};
     width: 100%;
     height: 64px;
     font-size: 1em;
+    padding: .2em .5em;
     z-index: 1;
 `;
-const Logo = styled.div`
-    ${flexCenter};
-`;
-const Title = styled.span`
-    font-size: 1.8em;
-    font-weight: bold;
-    
-`;
 
 
-
-class Navbar extends Component {
-    constructor(props) {
-        super(props);
-        this.handleHamburger = this.handleHamburger.bind(this)
-        this.state = {
-            isMenuActive: false
-        }
-    }
-    
-    handleHamburger = () => {
-        this.setState(prevstate => ({
-            isMenuActive: !prevstate.isMenuActive
-        }))
+const Navbar = ({ user, usersData }) => {
+    const [ activeStatus, setActiveStatus ] = useState(false)
+    const handleHamburger = () => {
+        setActiveStatus(!activeStatus)
     }
 
-    
-    render() {
-        return (
-            <Nav >
-                <Logo>
-                    <FontAwesomeIcon icon={faChartLine} color="#FF8E00" style={{fontSize:30}}/>
-                    <Title> ProgressApp </Title>
-                </Logo>
-                { this.props.user ?
-                     <FontAwesomeIcon 
-                     icon={!this.state.isMenuActive ? faBars: faTimes} 
-                     color="#FF8E00" 
-                     style={!this.state.isMenuActive ? {fontSize:40, transition: ".4s cubic-bezier(0.785, 0.135, 0.15, 0.86)"} : {fontSize: 50, transition: ".4s cubic-bezier(0.785, 0.135, 0.15, 0.86)"}} 
-                     onClick={this.handleHamburger}
-                /> : null
-                }
-                <Menu handleHamburger={this.handleHamburger} isMenuActive={this.state.isMenuActive}/>
-            </Nav>
-        );
-    }
+    return (
+        <Nav>
+            <Logo />
+            { user ? <Hamburger 
+                handleFunction={()=> handleHamburger()}
+                isMenuActive={activeStatus}
+            />: null }
+            <Menu 
+                handleHamburger={()=> handleHamburger()} 
+                isMenuActive={activeStatus}
+                usersData={usersData}
+                currentUser={user}
+            />
+        </Nav>
+    );
 }
 
 export default Navbar;

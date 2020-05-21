@@ -1,11 +1,10 @@
-import React, { Component } from "react";
+import React from "react";
 import styled from "styled-components"
 import ShareBox from "../../Components/shareBox";
 import PostBoard from "../MyPosts/postBoard";
-import * as styleHelpers  from '../../Components/styleHelpers'
-import Messanger from '../Messanger/messanger';
-const flexCenter = styleHelpers.flexCenter;
-const variables = styleHelpers.variables;
+import SearchBox from '../../Components/searchBox';
+import { FlexComponent, variables, flexCenter}  from '../../Components/styleHelpers'
+
 
 const Container = styled.section`
     ${flexCenter}
@@ -17,22 +16,27 @@ const Container = styled.section`
     height: calc(100vh - 64px);
     width: 100%;
     background-color: ${variables.$lightGray};
-    padding: .5em;
     overflow-y: scroll;
-    
 `;
 
+const StyledWrapper = styled(FlexComponent)`
+    position: relative;
+    flex-direction: column;
+    max-width: 500px;
+    padding: 0 .5em;
+`
 
-class Home extends Component {
-    render() {
-        return (
-            <Container>
-                <ShareBox/>
-                <PostBoard destination={"home"}/>
-                {/* <Messanger /> */}
-            </Container>
-        )
-    }
+
+const Home = ({ usersData }) => {
+    return (
+        <Container>
+            <SearchBox usersData={usersData}/>
+            <StyledWrapper>
+                <ShareBox />
+                <PostBoard destination={"home"} />
+            </StyledWrapper>
+        </Container>
+    )
 }
 
 export default Home;

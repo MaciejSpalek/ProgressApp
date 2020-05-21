@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import styled from "styled-components";
 import Helpers from "../../Components/helpers"
 import app from "../../base"
+import { Link } from 'react-router-dom';
 import { variables, flexCenter, FlexComponent } from "../../Components/styleHelpers";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUserPlus, faUserCheck } from "@fortawesome/free-solid-svg-icons";
@@ -76,21 +77,26 @@ class UserProfile extends Component {
         })
     }
 
+    showProfile() {
+
+    }
     render() {
         const { user } = this.props
         const { isYourFriend } = this.state
 
         const plusFriendIcon = <FontAwesomeIcon icon={faUserPlus} style={{color: variables.$darkBlue, fontSize: "1.5em"}} onClick={() => this.addFriendToDatabase(user)}/>
         const checkedFriendIcon = <FontAwesomeIcon icon={faUserCheck} style={{color: variables.$darkBlue, fontSize: "1.5em"}}/>
-        // const deleteFriendIcon = <FontAwesomeIcon icon={faUserTimes} style={{color: variables.$darkBlue, fontSize: "1.5em"}}/>
        
         return (
             <Container>
-                <StyledWrapper>
-                    <Image url={user.url}/>
-                    <Nick> { Helpers.capitalizeFirstLetter(user.nick) }</Nick>
-                </StyledWrapper>
-                {isYourFriend ? checkedFriendIcon : plusFriendIcon}
+                <Link style={{textDecoration: "none"}} to={`/${user.nick}`}>
+                    <StyledWrapper>
+                        <Image url={user.url}/>
+                        <Nick> { Helpers.capitalizeFirstLetter(user.nick) }</Nick>
+                    </StyledWrapper>
+                </Link>
+                { user.userID === app.getUserID() ? null
+                : (isYourFriend ? checkedFriendIcon : plusFriendIcon)}
             </Container>
         )
     }

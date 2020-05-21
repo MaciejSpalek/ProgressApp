@@ -1,13 +1,12 @@
 import React, { Component } from "react";
 import Comment from "./comment";
 import styled from "styled-components";
-import * as styleHelpers  from '../../Components/styleHelpers';
+import { FlexComponent, variables }  from '../../Components/styleHelpers';
 
-const flexCenter = styleHelpers.flexCenter;
-const Container = styled.div`
-    ${flexCenter}
+
+const StyledContainer = styled(FlexComponent)`
     flex-direction: column;
-    width: 100%;
+    background-color: ${variables.$lightGray};
 `
 class Comments extends Component {
 
@@ -24,9 +23,9 @@ class Comments extends Component {
 
     render() {
         return (
-            <Container>
+            <StyledContainer>
                 {this.renderComments()}
-            </Container>
+            </StyledContainer>
         )
     }
 }

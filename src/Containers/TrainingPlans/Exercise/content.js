@@ -10,7 +10,7 @@ import TrainingDay from './trainingDay';
 import Chart from './chart';
 import Timer from './timer';
 import { variables, flexCenter, FlexComponent } from '../../../Components/styleHelpers'
-import { faPlusSquare, faTimes } from '@fortawesome/free-solid-svg-icons'
+import { faTimes } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 
@@ -213,6 +213,7 @@ class Content extends Component {
                         type={"number"}
                         style={inputStyles}
                         placeholder={"powt."}
+                        handleFunction={()=> {}}
                     />
                     <FontAwesomeIcon 
                         icon={faTimes} 
@@ -227,6 +228,7 @@ class Content extends Component {
                         type={"number"}
                         style={inputStyles}
                         placeholder={"kg"}
+                        handleFunction={()=> {}}
                     />
                     <PlusButton styles={{
                         marginLeft: ".5em"
@@ -239,6 +241,7 @@ class Content extends Component {
                         type={"number"}
                         style={modifyInputStyles}
                         placeholder={"powtórzenia"}
+                        handleFunction={()=> {}}
                     />                
                      <PlusButton styles={{
                         marginLeft: ".5em"
@@ -270,14 +273,12 @@ class Content extends Component {
                     />
                     <ChartButton handleFunction={()=> this.handleChartButton()}/>
                 </StyledHeaderWrapper>
-                {type !== "time" ? 
-                    this.renderForm()
-                    : 
-                    <Timer 
-                        time={time} 
-                        startTimer={()=> this.startTimer()}
-                        stopTimer={(e)=> this.stopTimer(e)}
-                    />}
+                {type !== "time" ? this.renderForm() : 
+                <Timer 
+                    time={time} 
+                    startTimer={()=> this.startTimer()}
+                    stopTimer={(e)=> this.stopTimer(e)}
+                />}
                 {!isChartButtonHidden ? this.renderChart() : null}
                 {this.renderTrainingDays()}
             </StyledFormWrapper>

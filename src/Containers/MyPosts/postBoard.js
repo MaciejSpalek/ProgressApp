@@ -1,8 +1,7 @@
 import React, { Component } from "react";
 import app from "../../base";
 import styled from "styled-components";
-import Helpers from "../../Components/helpers.js";
-import { RWD } from '../../Components/styleHelpers';
+import helpers from "../../Components/helpers.js";
 import Post from './post';
 
 const Container = styled.div`
@@ -16,8 +15,8 @@ class PostBoard extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            posts: [],
             friends: [],
+            posts: [],
             users:[]
         }
     }
@@ -36,12 +35,13 @@ class PostBoard extends Component {
     setPosts() {
         const rootRef = app.getRootRef("posts");
         rootRef.on("value", snapshot => {
-            const posts = Helpers.snapshotToArray(snapshot);
+            const posts = helpers.snapshotToArray(snapshot);
             if (this._isMounted) {
                 this.setState({posts})
             }
         })
     }
+
     // assign data from realtime database to state "friend" && "users"
     setFriends() {
         app.getAllUsers((tempArray) => {
@@ -59,11 +59,13 @@ class PostBoard extends Component {
             }
         })
     }
+
     // return filtered array ( only your posts )
     getUserPostsArray(array) {
         const userID = app.getUserID();
         return array.filter(item => item.userID === userID);
     }
+    
     // return filtered array ( your posts and your friends' posts )
     getFriendsPostsArray(array) {
         const userID = app.getUserID();
@@ -88,7 +90,7 @@ class PostBoard extends Component {
         let array = [];
         let destination = this.props.destination;
 
-        const sortedArrayByDate = app.sortByDate(this.state.posts);
+        const sortedArrayByDate = helpers.sortByDate(this.state.posts);
         const userPostsArray = this.getUserPostsArray(sortedArrayByDate);
         const friendsPostsArray = this.getFriendsPostsArray(sortedArrayByDate);
 
@@ -101,14 +103,14 @@ class PostBoard extends Component {
         return array.map((post, index) => {
             return ( 
                 <Post 
-                    userID={post.userID}
-                    postKey={post.postKey}
-                    url={post.url}
-                    nick={post.nick}
-                    likes={post.likes}
                     comments={post.comments}
+                    postKey={post.postKey}
                     content={post.content}
+                    userID={post.userID}
+                    likes={post.likes}
+                    nick={post.nick}
                     date={post.date}
+                    url={post.url}
                     key={index}
                 />
             )

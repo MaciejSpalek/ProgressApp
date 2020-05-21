@@ -1,68 +1,43 @@
 import React from "react";
 import styled from "styled-components";
-import * as styleHelpers  from '../../Components/styleHelpers';
-import Helpers from "../../Components/helpers";
+import DataUserWrapper from './dataWrapper';
+import { FlexComponent }  from '../../Components/styleHelpers';
 
-const flexCenter = styleHelpers.flexCenter;
-const variables = styleHelpers.variables;
-
-const Container = styled.div`
-    ${flexCenter};
+const StyledContainer = styled(FlexComponent)`
     flex-direction: column;
+    padding: 0;
+    background-color: white;
+    margin: .25em 0;
+`
+const ContentWrapper = styled.div`
     width: 100%;
-`
-const TopBox = styled.div`
-    ${flexCenter};
-    justify-content: flex-start;
-    position: relative; 
-    width: 100%;
-    padding: .3em;
-`
-const DescriptionWrapper = styled.div`
-    ${flexCenter};
-    align-items: flex-start;
-    flex-direction: column;
-`
-const Image = styled.div`
-    border-radius: 50%;
-    width: 2.5em;
-    height: 2.5em;
-    background-image: url(${props => props.url});
-    background-position: center;
-    background-size: cover;
-    margin-right: .5em;
-`
-const Nick = styled.div`
-    color: ${variables.$gray};
-    font-size: 1em;
-    font-weight: bold;
-`
-const Date = styled.span`
-    color: ${variables.$gray};
-    font-size: .8em;   
-`
-const ContentBox = styled.div`
-    width: 100%;
-    color: ${variables.$gray};
     text-align: left;
-    border-bottom: .05em solid ${variables.$lightGray};
     padding: .5em;
+    -ms-word-break: break-all; 
+    word-break: break-all;
+    -webkit-hyphens: auto;
+    -moz-hyphens: auto;
+    -ms-hyphens: auto;
+    hyphens: auto;
 `
 
-const Comment = ({data}) => {
+const Comment = ({data:{nick, url, content, date}}) => {
     return (
-        <Container>
-            <TopBox>
-                <Image url={data.url}/>
-                <DescriptionWrapper>
-                    <Nick> { Helpers.capitalizeFirstLetter(data.nick) }</Nick>
-                    <Date> {data.date} </Date>
-                </DescriptionWrapper>
-            </TopBox>
-            <ContentBox>
-                { data.content }
-            </ContentBox>
-        </Container>
+        <StyledContainer>
+            <DataUserWrapper 
+                url={url}
+                nick={nick}
+                date={date}
+                imgWidth={"2.8em"}
+                imgHeight={"2.8em"} 
+                nickFontSize={".8em"}  
+                dateFontSize={".7em"} 
+                imgMargin={"0 .5em 0 0"}
+            />
+            <ContentWrapper>
+                { content }
+            </ContentWrapper>
+        </StyledContainer>
     )
 }
 

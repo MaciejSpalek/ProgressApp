@@ -1,166 +1,173 @@
-import React, { Component } from "react";
-import app from '../../base';
-import helpers from '../../Components/helpers';
-import SaveBox from './saveBox';
-import Input from './input';
-
+import React, { Component } from 'react';
 import styled from 'styled-components';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faRuler, faAngleDown } from '@fortawesome/free-solid-svg-icons'
+import Table from './Table/table'
+import app from '../../base';
+import TogglePanel from '../../Components/togglePanel';
+import Form from './form';
+import helpers from '../../Components/helpers';
+import { variables, Container, FlexComponent } from '../../Components/styleHelpers';
+import { faRuler } from '@fortawesome/free-solid-svg-icons'
+import Placeholder from './placeholder';
 
-const Button = styled.button`
-  font-weight: bold;
-  font-size: 1em;
-  color: white;
-  background-color: #FF8E00;
-  border: none;
-  width:35px;
-  height: 35px;
-  border-radius: .2em;
-`;
+const StyledContainer = styled(Container)`
+    flex-direction: column; 
+    align-items: flex-start;
+    justify-content: flex-start;
+    overflow-y: scroll;
+`
+
+const StyledToggleWrapper = styled(FlexComponent)`
+    flex-direction: column;
+    justify-content: space-between;
+    height: ${props => props.state ? "100%" : "auto"};
+    padding: 0;
+`
+
+const StyledTablesWrapper = styled(FlexComponent) `
+    flex-direction: column;
+    justify-content: flex-start;
+    height: 100%;
+    padding: .5em;
+    overflow-y: scroll;
+`
 
 
 class Measurements extends Component {
+    _isMounted = true;
     constructor(props) {
         super(props)
-        this.handleNewMeasurements = this.handleNewMeasurements.bind(this);
-        this.handleSaveButton = this.handleSaveButton.bind(this);
-        this.handleChange = this.handleChange.bind(this);
         this.state = {
-            isPanelFormActive: true,
-            buttonCaption: "hide",
-            saveBoxes: [],
-            isSaveBoxHidden: true,
-            neck: "",
-            chest: "",
-            biceps: "",
-            waist: "",
-            forearm: "",
-            calf: "",
-            thigh: ""
+            isPanelFormActive: false,
+            measurementTables: []
         }
     }
 
     componentDidMount() {
-        this.setDataFromDocument()
+        this._isMounted = true;
+        this.assignMeasurementsToState()
     }
 
-    clearInputs() {
-        this.setState({
-            neck: "",
-            chest: "",
-            biceps: "",
-            waist: "",
-            forearm: "",
-            calf: "",
-            thigh: ""
+    componentDidUpdate() {
+        this._isMounted = true;
+        this.updateMeasurements()
+    }
+
+    componentWillUnmount() {
+        this._isMounted = false;
+    }
+
+    updateMeasurements() {
+        const userID = app.getUserID();
+        const measurementsRef = app.getRealTimeDatabase().ref('users-measurements').child(userID)
+        measurementsRef.on('child_changed', snapshot => {
+            const usersMeasurements = helpers.snapshotToArray(snapshot);
+            if (this._isMounted) {
+                this.setState({
+                    measurementTables: usersMeasurements
+                })
+            }
         })
     }
 
-    handleSaveButton(e) {
+    assignMeasurementsToState() {
+        const userID = app.getUserID();
+        const measurementsRef = app.getRealTimeDatabase().ref('users-measurements').child(userID);
+        measurementsRef.on("value", snapshot => {
+            const usersMeasurements = helpers.snapshotToArray(snapshot);
+            if (this._isMounted) {
+                this.setState({
+                    measurementTables: usersMeasurements
+                })
+            }
+        })
+    }
+ 
+    addMeasurements(e) {
         e.preventDefault();
-        const { saveBoxes, neck, chest, biceps, waist, forearm, thigh, calf } = this.state;
-        const parameters = {
-            data: helpers.getCurrentDate("-"),
-            neck: neck,
-            chest: chest,
-            biceps: biceps,
-            waist: waist,
-            forearm: forearm,
-            thigh: thigh,
-            calf: calf
+        const userID = app.getUserID();
+        const measurementsRef = app.getRealTimeDatabase().ref('users-measurements').child(userID);
+        const measurementsKey = measurementsRef.push().key;
+        const updates = {};
+        const { 
+            neck, 
+            chest, 
+            biceps, 
+            waist, 
+            forearm, 
+            thigh, 
+            calf 
+        } = e.target.elements;
+
+        const inputParameters = {
+            measurementsKey: measurementsKey,
+            id: this.state.measurementTables.length+1,
+            date: helpers.getCurrentDate(new Date(), "."),
+            neck: neck.value,
+            chest: chest.value,
+            biceps: biceps.value,
+            waist: waist.value,
+            forearm: forearm.value,
+            thigh: thigh.value,
+            calf: calf.value
         }
-        
-        this.setState({
-            isPanelFormActive: false,
-            saveBoxes: [...saveBoxes, parameters]
-        }, ()=> {
-            this.updateSaveBoxes();
-        })   
-        this.clearInputs()
+        this.handleTogglePanel();
+        updates[`users-measurements/${userID}/${measurementsKey}`] = inputParameters;
+        return app.getRealTimeDatabase().ref().update(updates);
     }
    
-    getDocument() {
-        return app.getDatabase().collection('users').doc(app.getCurrentUser().uid);
-    }
-    setDataFromDocument() {
-        const document = this.getDocument();
-        document.get().then(doc => {
-            this.setState({
-                saveBoxes: doc.data().measurement
-            })
-        })
-    }
-    updateSaveBoxes() {
-        this.getDocument().update({
-            "measurement": this.state.saveBoxes
-        })
-    }
-    renderSaveBoxes = () => {
-        const { saveBoxes, isSaveBoxHidden } = this.state;
-        return saveBoxes.map((saveBox, index) => {
-            return ( 
-                <SaveBox 
-                    data={saveBox.data}
-                    neck={saveBox.neck}
-                    chest={saveBox.chest}
-                    biceps={saveBox.biceps}
-                    forearm={saveBox.forearm}
-                    waist={saveBox.waist}
-                    thigh={saveBox.thigh}
-                    calf={saveBox.calf}
+    
+    renderTables = () => {
+        const { measurementTables } = this.state;
+        const sortedArrayById = measurementTables.sort((a, b) => b.id - a.id);
+        return sortedArrayById.map((parameter, index) =>{
+            return  (
+                <Table 
+                    parameters={parameter}
                     key={index}
-                    isSaveBoxHidden={isSaveBoxHidden}
                 /> 
             )
         })
     }
-    handleNewMeasurements() {
-        const { isPanelFormActive } = this.state;
-        this.setState({
-            isPanelFormActive: !isPanelFormActive
-        })
-        isPanelFormActive ? this.setState({buttonCaption: "show"}) : this.setState({buttonCaption: "hide"})
+    
+    handleTogglePanel() {
+        this.setState(prevState => ({
+            isPanelFormActive: !prevState.isPanelFormActive
+        }))
     }
-    handleChange(e) {
-        this.setState({
-            [e.target.name]: e.target.value
-        })
-    }
-   
+
     render() {
-        const { isPanelFormActive, neck, chest, biceps, waist, forearm, thigh, calf } = this.state;
+        const { 
+            isPanelFormActive,
+            measurementTables
+        } = this.state;
         return (
-            <section className="panel">
-                <div className="panel__box">
-                    <div className="panel__header">
-                        <div className="header__title-box">
-                            <FontAwesomeIcon icon={faRuler} color="#FF8E00" style={{fontSize:25}} />
-                            <h2 className="header__caption">Dodaj wymiary</h2>
-                        </div>
-                        <Button onClick={this.handleNewMeasurements}>
-                            <FontAwesomeIcon 
-                                icon={faAngleDown} 
-                                transform={!this.state.isPanelFormActive ? { rotate: 0 } : { rotate: 180 }}
-                                color="white" 
-                                style={{fontSize:30}}
-                            />
-                        </Button>
-                    </div>
-                    { isPanelFormActive ? 
-                    <form className="panel__form">
-                        <Input className="form__input" name="neck" placeholder="szyja"  value={neck} onChange={this.handleChange}/>
-                        <Input className="form__input" name="chest" placeholder="klatka piersiowa" value={chest} onChange={this.handleChange}/>
-                        <Input className="form__input" name="biceps" placeholder="ramię" value={biceps} onChange={this.handleChange}/>
-                        <Input className="form__input" name="forearm" placeholder="przedramię" value={forearm} onChange={this.handleChange}/>
-                        <Input className="form__input" name="waist" placeholder="talia" value={waist} onChange={this.handleChange}/>
-                        <Input className="form__input" name="thigh" placeholder="udo" value={thigh} onChange={this.handleChange}/>
-                        <Input className="form__input" name="calf" placeholder="łydka" value={calf} onChange={this.handleChange}/>
-                        <button className="form__button form__button--save" onClick={this.handleSaveButton}>Zapisz</button>
-                    </form> :null }
-                </div>
-                {this.renderSaveBoxes()}
-            </section>
+            <StyledContainer>
+                <StyledToggleWrapper state={isPanelFormActive}>
+                    <TogglePanel 
+                        handleFunction={()=> this.handleTogglePanel()} 
+                        buttonBackgroundColor={variables.$grayBlue}
+                        iconName={faRuler} 
+                        iconColor={variables.$grayBlue}
+                        textFontWeight={"bold"}
+                        textFontSize={"1.2em"}
+                        isHidden={!isPanelFormActive}
+                        iconFontSize={25}
+                        text={"Dodaj wymiary"}  
+                    />
+                    { isPanelFormActive ? <Form handleFunction={(e)=> this.addMeasurements(e)} /> :null }
+                </StyledToggleWrapper>
+                {!isPanelFormActive ? 
+                    <StyledTablesWrapper>
+                        { measurementTables.length ? 
+                            this.renderTables() : 
+                            <Placeholder 
+                                iconName={faRuler} 
+                                text={"brak dodanych wymiarów"}
+                            /> 
+                        }
+                    </StyledTablesWrapper> 
+                : null}
+            </StyledContainer>
         );
     }
 }

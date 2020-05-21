@@ -9,6 +9,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 const StyledContainer = styled(FlexComponent)`
     ${props => props.styles};
     justify-content: space-between;
+    background-color: white;
 `
 
 const StyledWrapper = styled(FlexComponent)`

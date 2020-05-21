@@ -1,23 +1,23 @@
 import React, { Component } from "react";
 import styled from "styled-components";
-import * as styleHelpers  from '../../Components/styleHelpers';
-import Helpers from "../../Components/helpers.js";
+import app from "../../base";
 import Comments from "./comments";
+import Input from '../../Components/input';
+import ImageWrapper from '../../Components/ImageWrapper';
+import Helpers from "../../Components/helpers.js";
+import DataUserWrapper from './dataWrapper';
+import { flexCenter, variables, FlexComponent}  from '../../Components/styleHelpers';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faComment, faHeart, faTimes } from '@fortawesome/free-solid-svg-icons';
-import app from "../../base";
 
 import relativeTime from'dayjs/plugin/relativeTime';
 import dayjs from "dayjs";
 import 'dayjs/locale/pl';
 
 
-const flexCenter = styleHelpers.flexCenter;
-const variables = styleHelpers.variables;
-
-
-
-
+const inputStyles = {
+    "border": `.1em solid ${variables.$lightGray}`
+}
 
 
 const Container = styled.div`
@@ -26,11 +26,8 @@ const Container = styled.div`
     flex-direction: column;
     width: 100%;
     margin: 1em 0;
-    /* box-shadow: 0 0 .2em .01em gray; */
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
 `
-
-
-
 
 const TopBox = styled.div`
     ${flexCenter};
@@ -38,30 +35,8 @@ const TopBox = styled.div`
     position: relative;
     width: 100%;
     background-color:  ${variables.$blue};
-    border-bottom: .05em solid ${variables.$lightGray};
-    padding: .3em;
 `
-const DescriptionWrapper = styled.div`
-    ${flexCenter};
-    align-items: flex-start;
-    flex-direction: column;
-`
-const Image = styled.div`
-    border-radius: 50%;
-    width: 3.5em;
-    height: 3.5em;
-    background-image: url(${props => props.url});
-    background-position: center;
-    background-size: cover;
-    margin-right: .5em;
-`
-const Nick = styled.div`
-    font-size: 1em;
-    font-weight: bold;
-`
-const Date = styled.span`
-    font-size: .8em;   
-`
+
 const CrossIcon = styled.span`
     position: absolute;
     top:.4em;
@@ -92,7 +67,7 @@ const BottomBox = styled.div`
     width: 100%;
     justify-content: space-between;
     border-top: .05em solid  ${variables.$lightGray};
-    background-color: ${variables.$blue};
+    background-color: ${variables.$lightGray};
 `
 const IconBox = styled.div`
     ${flexCenter};
@@ -107,23 +82,19 @@ const IconCaption = styled.span`
 
 
 
-const CommentBox = styled.form`
-    ${flexCenter}
-    flex-direction: column;
-`
-const Input = styled.input`
-    width: 80%;
-    height: 35px;
-    border: none;
-    border-radius: .3em;
-    font-size: 1.1em;
-    padding: 0 .5em;
-`
-const AddBox = styled.div `
+const CommentBox = styled.div`
     ${flexCenter}
     width: 100%;
-    background-color: ${variables.$gray};
-    padding: .5em 0;
+    flex-direction: column;
+    border-top: .1em solid ${variables.$lightGray};
+`
+const CommentForm = styled.form`
+    width: 100%;
+    margin: 0;
+`
+
+const AddBox = styled(FlexComponent)`
+    justify-content: flex-start;
 `
 
 
@@ -133,13 +104,13 @@ class Post extends Component  {
     constructor(props) {
         super(props);
         this.state = {
-            tempLikes: 0,
-            nick: "",
-            url: "",
             isCommentBoxActive: false,
             isLockedLiking: false,
             didUserLike: false,
-            comments: []
+            tempLikes: 0,
+            comments: [],
+            nick: "",
+            url: ""
         }
     }
     
@@ -152,9 +123,6 @@ class Post extends Component  {
     componentWillUnmount() {
         this._isMounted = false;
     }
-
- 
-
     setUserData() {
         const rootRef = app.getRootRef("users");
         const userID = app.getUserID();
@@ -299,7 +267,7 @@ class Post extends Component  {
             }
         })
     }
-    addComment(e, postKey) {
+    addComment = (e, postKey) => {
         e.preventDefault();
         const { input } = e.target.elements;
         if(input.value !== "") {
@@ -311,7 +279,7 @@ class Post extends Component  {
                 content: input.value,
                 url: this.state.url,
                 nick: this.state.nick,
-                date: Helpers.getFullDate(),
+                date: Helpers.getDate(),
                 commentKey: commentKey
             };
             input.value = "";
@@ -335,32 +303,47 @@ class Post extends Component  {
     render() {
         dayjs.locale("pl")
         dayjs.extend(relativeTime);
-        const { url, nick, content, date, likes, postKey } = this.props;
-        const { comments } = this.state;
+        const { 
+            url, 
+            nick, 
+            content, 
+            date, 
+            likes, 
+            postKey 
+        } = this.props;
+
+        const { 
+            isCommentBoxActive,
+            didUserLike,
+            comments
+        } = this.state;
+
         return (
             <Container>
                 <TopBox>
-                    <Image url={url}/>
-                    <DescriptionWrapper>
-                        <Nick> { Helpers.capitalizeFirstLetter(nick)}</Nick>
-                        <Date> {dayjs(date).fromNow()} </Date>
-                    </DescriptionWrapper>
-                    {   
-                        app.getCurrentUser() ?
-                            this.isYourPost(postKey) ? 
-                            <CrossIcon onClick={() => this.removePost(postKey)}>
-                                <FontAwesomeIcon icon={faTimes} style={{fontSize: "1.5em"}}/>
-                            </CrossIcon> : null
-                        : null
+                    <DataUserWrapper 
+                        url={url}
+                        nick={nick}
+                        date={date}
+                        imgWidth={"3.5em"}
+                        imgHeight={"3.5em"} 
+                        nickFontSize={"1em"}  
+                        dateFontSize={".8em"} 
+                        imgMargin={"0 .5em 0 0"}
+                    />
+                    {app.getCurrentUser() ?
+                        this.isYourPost(postKey) ? 
+                        <CrossIcon onClick={() => this.removePost(postKey)}>
+                            <FontAwesomeIcon icon={faTimes} style={{fontSize: "1.5em"}}/>
+                        </CrossIcon> : null
+                    : null
                     }
                 </TopBox>
-
                 <ContentBox>
                     { content }
                 </ContentBox>
-
                 <BottomBox>
-                    <IconBox onClick={() => this.handleLike(postKey)} style={this.state.didUserLike ? {color:variables.$grayBlue} : {color:variables.$gray}}>
+                    <IconBox onClick={() => this.handleLike(postKey)} style={didUserLike ? {color:variables.$grayBlue} : {color:variables.$gray}}>
                         <FontAwesomeIcon icon={faHeart} style={{margin: '.2em', fontSize: "1.2em"}}/>
                         <IconCaption>{ likes }</IconCaption>
                     </IconBox>
@@ -369,18 +352,28 @@ class Post extends Component  {
                         <IconCaption>{ this.countComments(postKey, comments) }</IconCaption>
                     </IconBox>
                 </BottomBox>
-
                 {
-                this.state.isCommentBoxActive ? 
-                <CommentBox onSubmit={(e) => this.addComment(e, postKey)}>
+                isCommentBoxActive ? 
+                <CommentBox>
                     <Comments comments={this.filterComments(postKey, comments)}/>
                     <AddBox>
-                        <Image style={{
-                            backgroundImage: `url(${this.state.url})`, 
-                            width: "2.8em",
-                            height: "2.8em"}}>
-                        </Image>
-                        <Input name="input" placeholder="Skomentuj..."></Input>
+                        <ImageWrapper 
+                            isLogged={true}
+                            imgHeight={"2.5em"}
+                            imgWidth={"2.5em"}
+                            dotSize={"0"}
+                            dotBorder={"0"}
+                            margin={"0 .5em 0 0"}
+                            url={url}
+                        />
+                        <CommentForm onSubmit={(e) => this.addComment(e, postKey)}>
+                            <Input 
+                                name={"input"}
+                                placeholder={"Skomentuj..."}
+                                style={inputStyles}
+                                handleFunction={()=> {}}
+                            />
+                        </CommentForm>
                     </AddBox>
                 </CommentBox> : null
                 }

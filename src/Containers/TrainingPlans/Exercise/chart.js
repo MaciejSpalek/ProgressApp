@@ -9,10 +9,6 @@ const StyledContainer = styled(FlexComponent)`
     margin-bottom: 3em;
 `
 class Chart extends Component {
-    constructor(props) {
-        super(props)
-    }
-
     setChartData(xAxis, yAxis) {
         return {
             labels: xAxis,

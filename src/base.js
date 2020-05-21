@@ -58,18 +58,37 @@ class FireBase {
   }
 
   // returns all users except you
-  getAllUsers(setState) {
+  getAllUsers(setState, withCurrentUser = true) {
     const usersRef = this.getRealTimeDatabase().ref("users");
     const tempArray = [];
     
-    usersRef.on('value', snapshot => {
+    usersRef.once('value', snapshot => {
         const users = snapshot.val();
         for(let user in users) {
-            if(users[user].userID !== this.getUserID()) {
-                tempArray.push(users[user]);
+            if(withCurrentUser) {
+              tempArray.push(users[user]);
+            }
+            else if(users[user].userID !== this.getUserID()) {
+              tempArray.push(users[user]);
             }
         }
+        
         setState(tempArray);
+    })
+  }
+
+  getCurrentUserData(setState) {
+    const usersRef = this.getRealTimeDatabase().ref("users");
+    let tempUser;
+    
+    usersRef.once('value', snapshot => {
+        const users = snapshot.val();
+        for(let user in users) {
+            if(users[user].userID === this.getUserID()) {
+              tempUser = users[user];
+            }
+        }
+        setState(tempUser);
     })
   }
 
@@ -110,7 +129,6 @@ class FireBase {
     })
   }
  
-
   isDayKeyIncludesExerciseKey(exerciseKey, traininDayString) {
     const regex = new RegExp(exerciseKey);
     return regex.test(traininDayString)
@@ -129,12 +147,6 @@ class FireBase {
         }
         setState(tempArray);
     })
-  }
-
-
-
-  sortByDate(array) {
-    return array.sort((a,b) =>  new Date(b.date).getTime() - new Date(a.date).getTime());
   }
 }
 

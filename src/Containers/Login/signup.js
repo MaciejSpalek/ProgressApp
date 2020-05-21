@@ -1,12 +1,15 @@
 import React, { useCallback } from "react";
 import app from "../../base";
-import { Logo, Container, Form, Input, Button } from "../../Components/styleHelpers"
+import Button from '../../Components/Button'
+import Input from '../../Components/input';
+import userPhoto from "../../images/userPhoto.svg";
+import helpers from "../../Components/helpers";
+import { Logo, Container, Form } from "../../Components/styleHelpers"
 import { withRouter } from "react-router";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUserPlus } from "@fortawesome/free-solid-svg-icons";
 import { variables } from "../../Components/styleHelpers";
-import userPhoto from "../../images/userPhoto.svg";
 
 const SignUp = ({ history }) => {
   const handleSignUp = useCallback(
@@ -26,18 +29,17 @@ const SignUp = ({ history }) => {
         .getRootRef("users")
         .child(app.getUserID())
         .set({
-            nick: nick.value,
-            userID: app.getUserID(),
-            age: age.value,
-            url: userPhoto,
-            isLogged: true,
-            sex: "-",
-            weight: "-",
-            height: "-",
-            yourSport: "-",
-            trainingExperience: "-",
-            priority: "-",
-            aboutMe: "-"
+          dateOfCreation: helpers.getCurrentDate(new Date(), "."),
+          userID: app.getUserID(),
+          nick: nick.value,
+          age: age.value,
+          url: userPhoto,
+          isLogged: true,
+          trainingExperience: "-",
+          description: "-",
+          weight: "-",
+          height: "-",
+          sex: "-"
         })
 
       await app
@@ -56,11 +58,11 @@ const SignUp = ({ history }) => {
   return (
     <Container>
       <Form onSubmit={handleSignUp}>
-        <Input type="text" name="nick" placeholder="nick" required></Input>
-        <Input type="text" name="age" placeholder="age" required></Input>
-        <Input type="email" name="email" placeholder="email" required></Input>
-        <Input type="password" name="password" placeholder="hasło" required></Input>
-        <Button> Stwórz </Button>
+        <Input type={"text"} name={"nick"} placeholder={"nick"} handleFunction={()=> {}} required />
+        <Input type={"text"} name={"age"} placeholder={"wiek"} handleFunction={()=> {}} required />
+        <Input type={"email"} name={"email"} placeholder={"email"} handleFunction={()=> {}} required />
+        <Input type={"password"} name={"password"} placeholder={"hasło"} handleFunction={()=> {}} required />
+        <Button handleClick={()=> {}} text={"Stwórz"}/>
         <Link style={{color: "white", fontWeight: "bold"}} to="/login">
           Przejdź do logowania
         </Link>

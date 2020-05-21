@@ -1,14 +1,16 @@
 
 class Helpers {
-    
-    getCurrentDate = (separator='') => {
-        let newDate = new Date()
+    getCurrentDate = (newDate, separator='') => {
         let date = newDate.getDate();
         let month = newDate.getMonth() + 1;
         let year = newDate.getFullYear();
         return `${date}${separator}${month<10?`0${month}`:`${month}`}${separator}${year}`
     }
 
+    getDate() {
+        return new Date();
+    }
+    
     getFullDate = (separator="/") => {
         let newDate = new Date()
         let date = newDate.getDate();
@@ -17,6 +19,10 @@ class Helpers {
         let hour = newDate.getHours();
         let minutes = newDate.getMinutes();
         return `${date}${separator}${ month<10 ? `0${month}` : month }${separator}${ year } ${ hour }:${ minutes<10 ? `0${minutes}` : minutes }`;
+    }
+
+    sortByDate(array) {
+        return array.sort((a,b) =>  new Date(b.date).getTime() - new Date(a.date).getTime());
     }
 
     cutTimeFromDate(date) {
@@ -52,6 +58,14 @@ class Helpers {
     }
 
 
+     // return true if find some nick match with inputText
+     isInputTextMatch(inputText, nick) {
+        const regex = new RegExp(`^${inputText}`, "i");
+        return regex.test(nick)
+    }
+
+
+    
     // for TrainingPlans folder (trainingDay.js & content.js)
 
     getSeries(array) {

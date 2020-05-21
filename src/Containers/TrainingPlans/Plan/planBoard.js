@@ -92,7 +92,7 @@ class PlanBoard extends Component {
         const plan = {
             planKey: planKey,
             isHidden: true,
-            date: helpers.getCurrentDate("/"),
+            date: helpers.getCurrentDate(new Date(), "."),
             id: this.state.plans.length+1
         }
 
