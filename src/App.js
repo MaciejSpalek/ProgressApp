@@ -16,6 +16,7 @@ import app from './base';
 
 const App = () => {
     const [ usersData, setUsersData ] = useState([]);
+    const [ addedStatus, setAddedStatus ] = useState(false);
     const renderProfile = () => {
       return usersData.map((user, index) => {
         return (
@@ -28,20 +29,27 @@ const App = () => {
         )
       })
     }
-    const handleUsers = () => {
-      // app.getAllUsers((tempArray) => {
-      //   setUsersData(tempArray)
-      // })
-    }
 
     useEffect(()=> {
+      app.getRootRef('users').on("child_added", snapshot => {
+        app.getAllUsers((tempArray) => {
+          setUsersData(tempArray)
+        })
+      })
+    }, [usersData.length])
+
+    app.getRootRef('users').on("child_changed", snapshot => {
       app.getAllUsers((tempArray) => {
         setUsersData(tempArray)
       })
-    }, [])
+    })
+
+   
+    
+    
 
     return (
-      <div className="App" onClick={() => handleUsers()}>
+      <div className="App">
           <AuthProvider>
             <AuthContext.Consumer>
               { currentUser => (
@@ -56,8 +64,8 @@ const App = () => {
                       <PrivateRoute exact path="/planBoard" component={PlanBoard}/>
                       <PrivateRoute exact path="/measurements" component={Measurements}/>
                       <PrivateRoute exact path="/messanger" component={Messanger}/>
-                      <Route path="/signup" component={SignUp} />
-                      <Route path="/login" component={Login} />
+                      <Route exact path="/signup" component={SignUp} />
+                      <Route exact path="/login" component={Login} />
                   </Switch>
                 </Router> 
               )}

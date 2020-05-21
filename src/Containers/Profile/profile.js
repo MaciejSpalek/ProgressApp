@@ -7,12 +7,9 @@ import ProfileCard from './profileCard';
 import SearchBox from '../../Components/searchBox';
 import Form from './form';
 import { 
-    flexCenter, 
-    variables, 
+    flexCenter,  
     Container 
 }  from '../../Components/styleHelpers';
-
-
 
 
 const StyledContainer = styled(Container)`
@@ -30,51 +27,6 @@ const Wrapper = styled.div`
     padding: 0 .5em;
     
 `
-
-const AddBox = styled.form`
-    display:grid;
-    grid-template-columns: repeat(1, 1fr);
-    grid-template-rows: repeat(15,1fr);
-    grid-gap: .5em;
-    width: 100%;
-    padding: .5em;
-    overflow-y: scroll;
-`
-
-
-const About = styled.textarea `
-    width: 100%;
-    height: 200px;
-    font-size: 1.2em;
-    font-weight: bold;
-    border-radius: .2em;
-    background-color: white;
-    border: none;
-    padding: .3em;
-    resize: none;
-    color: ${variables.$grayBlue};
-    &::placeholder {
-        color: ${variables.$blue};
-        font-weight: 200;
-    }
-`
-const ProfileBox = styled.div`
-    ${flexCenter};
-    justify-content: flex-start;
-    align-items: flex-start;
-    flex-direction: column;
-    position: relative;
-    width: 100%;
-    height: 100%;
-    border-radius: .5em;
-    padding: .5em;
-    overflow-y: scroll;
-`
-
-
-
-
-
 
 class Profile extends Component {
     _isMounted = false;
@@ -173,7 +125,6 @@ class Profile extends Component {
             const group = snapshot.val();
             for(let part in group) {
                 if(group[part].userID === userID) {
-                    console.log("update: ", part)
                     ref.child(part).update({
                         url: this.state.url
                     });
@@ -193,14 +144,9 @@ class Profile extends Component {
                     url: URL
                 }, ()=> {
 
-                //  update photo in users after its change
-                this.updateLoop("users")
-
-                // update photo in posts after its change
-                this.updateLoop("posts")
-                
-                // update photo in comments after its change
-                this.updateLoop("comments");
+                this.updateLoop("users") //  update photo in users after its change
+                this.updateLoop("posts") // update photo in posts after its change
+                this.updateLoop("comments"); // update photo in comments after its change
             })
             
           }) 
@@ -224,7 +170,7 @@ class Profile extends Component {
                     weight:  snapshot.val().weight,
                     height:  snapshot.val().height,
                     description: snapshot.val().description,
-                    trainingExperience:  snapshot.val().trainingExperience,
+                    trainingExperience:  snapshot.val().trainingExperience
                 })
             }
         })
