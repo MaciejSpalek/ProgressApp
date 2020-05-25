@@ -2,21 +2,80 @@ import React from 'react';
 import styled from 'styled-components'
 import Input from '../../Components/input';
 import Button from '../../Components/Button';
+import SquareButton from '../../Components/Buttons/SquareButton';
+import { FlexComponent, variables, RWD, flexCenter } from '../../Components/styleHelpers';
+import { faUndoAlt } from "@fortawesome/free-solid-svg-icons";
 
+
+const squareButtonStyles = {
+    position: "static",
+    height: "100%",
+    padding: ".5em",
+    marginLeft: ".5em",
+    backgroundColor: variables.$grayBlue
+}
 const StyledForm = styled.form`
-    width: 100%;
+    ${flexCenter};
+    flex-direction: column;
+    justify-content: space-between;
+    max-width: 500px;
+    min-height: 400px;
+    border-radius: .3em;
+    margin-bottom: .5em;
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
     padding: .5em;
+
+    @media only screen and (min-width: ${RWD.$desktop}) {
+        position: absolute;
+        width: 320px;
+        top: 0;
+        right: calc(100% + 1em);
+    }
 `
 
-const Form = ({ handleFunction }) => {
+
+const StyledButtonWrapper = styled(FlexComponent)`
+    justify-content: space-between;
+    padding: 0;
+`
+const StyledInputWrapper = styled(FlexComponent)`
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 0;
+`
+
+const StyledTextArea = styled.textarea`
+    width: 100%;
+    height: 195px;
+    resize: none;
+    border: none;
+    border-radius: .3em;
+    padding: .5em;
+    font-size: 1.5em;
+`
+
+const Form = ({ handleFunction, handleEditButton }) => {
     return (
         <StyledForm onSubmit={(e)=> handleFunction(e)}>
-            <Input style={{margin: ".5em 0"}} type={"number"} isRequired={true} name={"trainingExperience"}  placeholder="staż treningowy" handleFunction={()=> {}}/>
-            <Input style={{margin: ".5em 0"}} type={"number"} isRequired={true} name={"weight"}  placeholder="waga" handleFunction={()=> {}}/>
-            <Input style={{margin: ".5em 0"}} type={"number"} isRequired={true} name={"height"}  placeholder="wzrost" handleFunction={()=> {}}/>
-            <Input style={{margin: ".5em 0"}} type={"number"} isRequired={true} name={"sex"}  placeholder="płeć" handleFunction={()=> {}}/>
-            <Input style={{margin: ".5em 0"}} type={"number"} isRequired={true} name={"description"}  placeholder="opis" handleFunction={()=> {}}/>
-            <Button style={{marginTop: ".5em"}} text={"Dodaj"} handleClick={()=> {}} />
+            <StyledInputWrapper>
+                <Input style={{margin: ".25em 0"}} type={"number"} isRequired={true} name={"trainingExperience"}  placeholder="staż treningowy" handleFunction={()=> {}}/>
+                <Input style={{margin: ".25em 0"}} type={"number"} isRequired={true} name={"weight"}  placeholder="waga" handleFunction={()=> {}}/>
+                <Input style={{margin: ".25em 0"}} type={"number"} isRequired={true} name={"height"}  placeholder="wzrost" handleFunction={()=> {}}/>
+                <StyledTextArea style={{margin: ".25em 0"}} isRequired={true} name={"height"} name={"description"} placeholder="opis"/>
+            </StyledInputWrapper>
+            <StyledButtonWrapper>
+                <Button  
+                    text={"Dodaj"} 
+                    handleClick={()=> {}} 
+                />
+                <SquareButton 
+                    handleFunction={()=> handleEditButton()}
+                    iconStyle={{fontSize: 29}}
+                    iconName={faUndoAlt}  
+                    iconColor={"white"} 
+                    buttonStyles={squareButtonStyles}
+                />
+            </StyledButtonWrapper>
         </StyledForm>
     )
 }

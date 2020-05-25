@@ -5,11 +5,10 @@ import TopWrapper from './topBox';
 import BottomWrapper from './bottomBox';
 
 const Container = styled(FlexComponent)`
-    position: relative;
     flex-direction: column;
     justify-content: flex-start;
-    max-width: 500px;
-    height: 500px;
+    /* max-width: 500px; */
+    min-height: 400px;
     border-radius: .3em;
     background-color: white;
     margin-bottom: .5em;
@@ -19,7 +18,6 @@ const Container = styled(FlexComponent)`
     @media only screen and (min-width: ${RWD.$desktop}) {
         position: absolute;
         width: 320px;
-        height: 522px;
         top: 0;
         right: calc(100% + 1em);
     }

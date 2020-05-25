@@ -19,10 +19,11 @@ const Container = styled.form`
 const StyledWrapper = styled(FlexComponent)`
     ${flexCenter};
     flex-direction: column;
-    padding: 0;
     border-radius: .3em;
     border: none;
     box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
+    padding: 0;
+    margin-bottom: .5em;
 
 `
 
@@ -49,10 +50,6 @@ const TextArea = styled.textarea`
         color: ${variables.$gray};
     }
 `
-const AddArea = styled(FlexComponent)`
-    justify-content: space-between;
-    padding: .5em 0;
-` 
 
 
 
@@ -129,13 +126,7 @@ class ShareBox extends Component {
                     </HeaderWrapper>
                     <TextArea name="textarea" placeholder="Napisz coś..."></TextArea>
                 </StyledWrapper>
-                <AddArea>
-                    <label>
-                        <FontAwesomeIcon icon={faFileUpload} style={{fontSize: 42, marginRight: '.1em'}} color={variables.$grayBlue} />
-                        <input type="file" style={{display: "none"}}/>
-                    </label>
-                    <Button handleClick={()=> {}} text={"Opublikuj"}/>
-                </AddArea>
+                <Button handleClick={()=> {}} text={"Opublikuj"}/>
             </Container>
         )
     }

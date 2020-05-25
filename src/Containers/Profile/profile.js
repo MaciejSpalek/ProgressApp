@@ -6,10 +6,7 @@ import PostBoard from "../MyPosts/postBoard";
 import ProfileCard from './profileCard';
 import SearchBox from '../../Components/searchBox';
 import Form from './form';
-import { 
-    flexCenter,  
-    Container 
-}  from '../../Components/styleHelpers';
+import { Container }  from '../../Components/styleHelpers';
 
 
 const StyledContainer = styled(Container)`
@@ -20,8 +17,6 @@ const StyledContainer = styled(Container)`
 
 const Wrapper = styled.div`
     position: relative;
-    ${flexCenter};
-    flex-direction: column;
     width: 100%;
     max-width: 500px;
     padding: 0 .5em;
@@ -36,10 +31,8 @@ class Profile extends Component {
             isEditButtonActive: true,
             trainingExperience: "-",
             description: "-",
-            yourSport: "-",
             weight: "-",
             height: "-",
-            sex: "-",
             image: "",
             nick: "",
             age: "",
@@ -56,7 +49,6 @@ class Profile extends Component {
         this._isMounted = false;
     }
    
-
     editButtonHandler() {
         this.setState(prevState => ({
             isEditButtonActive: !prevState.isEditButtonActive
@@ -67,8 +59,8 @@ class Profile extends Component {
     // function invoke on button
     updateProfileData(e) {
         e.preventDefault();
+        const userRoot = app.getRootRef("users").child(app.getUserID());
         const { 
-            sex, 
             weight, 
             height,  
             description,
@@ -76,11 +68,7 @@ class Profile extends Component {
         } = e.target.elements;
 
         // update profileData in realtime database 
-        app.getRootRef("users").child(app.getUserID()).update({
-            nick: this.state.nick,
-            age: this.state.age,
-            url: this.state.url,
-            sex: sex.value,
+        userRoot.update({
             weight: weight.value,
             height: height.value,
             description: description.value,
@@ -88,10 +76,6 @@ class Profile extends Component {
         });
 
         this.setState({
-            nick: this.state.nick,
-            age: this.state.age,
-            url: this.state.url,
-            sex: sex.value,
             weight: weight.value,
             height: height.value,
             description: description.value,
@@ -143,11 +127,10 @@ class Profile extends Component {
                 this.setState({
                     url: URL
                 }, ()=> {
-
-                this.updateLoop("users") //  update photo in users after its change
-                this.updateLoop("posts") // update photo in posts after its change
-                this.updateLoop("comments"); // update photo in comments after its change
-            })
+                    this.updateLoop("users") //  update photo in users after its change
+                    this.updateLoop("posts") // update photo in posts after its change
+                    this.updateLoop("comments"); // update photo in comments after its change
+                })
             
           }) 
       })
@@ -166,7 +149,6 @@ class Profile extends Component {
                     nick:  snapshot.val().nick,
                     age:  snapshot.val().age,
                     url:  snapshot.val().url,
-                    sex:  snapshot.val().sex,
                     weight:  snapshot.val().weight,
                     height:  snapshot.val().height,
                     description: snapshot.val().description,
@@ -177,14 +159,10 @@ class Profile extends Component {
     }
 
 
-
-
     render() {
-        const { 
-            isEditButtonActive
-        } = this.state;
-
+        const { isEditButtonActive } = this.state;
         const { usersData, user } = this.props;
+
         return (
             <StyledContainer>
                 <SearchBox usersData={usersData}/>
@@ -197,7 +175,10 @@ class Profile extends Component {
                         handleEditButton={()=> this.editButtonHandler()}
                     /> 
                     :
-                    <Form handleFunction={(e) => this.updateProfileData(e)}/>}
+                    <Form 
+                        handleFunction={(e) => this.updateProfileData(e)}
+                        handleEditButton={()=> this.editButtonHandler()}
+                    /> }
                     <ShareBox />
                     <PostBoard destination={"profile"} />
                 </Wrapper>

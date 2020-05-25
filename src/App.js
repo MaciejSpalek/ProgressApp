@@ -16,7 +16,6 @@ import app from './base';
 
 const App = () => {
     const [ usersData, setUsersData ] = useState([]);
-    const [ addedStatus, setAddedStatus ] = useState(false);
     const renderProfile = () => {
       return usersData.map((user, index) => {
         return (
@@ -38,11 +37,11 @@ const App = () => {
       })
     }, [usersData.length])
 
-    app.getRootRef('users').on("child_changed", snapshot => {
-      app.getAllUsers((tempArray) => {
-        setUsersData(tempArray)
-      })
-    })
+    // app.getRootRef('users').on("child_changed", snapshot => {
+    //   app.getAllUsers((tempArray) => {
+    //     setUsersData(tempArray)
+    //   })
+    // })
 
    
     
