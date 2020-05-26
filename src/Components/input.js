@@ -10,16 +10,17 @@ const StyledInput = styled.input`
     padding: 0 .5em;
 `
 
-const Input = ({ name, type, style, placeholder, handleFunction, isRequired }) => {
+const Input = ({ name, type, style, placeholder, handleFunction, isRequired, value }) => {
     return (
         <StyledInput 
             name={name}  
             type={type}
             style={style}
+            autoComplete={"off"}
             required={isRequired}
             placeholder={placeholder}
             onChange={(e)=> handleFunction(e)}
-            autoComplete={"off"}
+            defaultValue={value}
         />
     )
 }

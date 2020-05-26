@@ -54,14 +54,53 @@ const StyledTextArea = styled.textarea`
     font-size: 1.5em;
 `
 
-const Form = ({ handleFunction, handleEditButton }) => {
+const Form = ({ handleFunction, handleEditButton, user }) => {
+
+    const { 
+        trainingExperience,
+        weight,
+        height,
+        description
+    } = user;
+
     return (
         <StyledForm onSubmit={(e)=> handleFunction(e)}>
             <StyledInputWrapper>
-                <Input style={{margin: ".25em 0"}} type={"number"} isRequired={true} name={"trainingExperience"}  placeholder="staż treningowy" handleFunction={()=> {}}/>
-                <Input style={{margin: ".25em 0"}} type={"number"} isRequired={true} name={"weight"}  placeholder="waga" handleFunction={()=> {}}/>
-                <Input style={{margin: ".25em 0"}} type={"number"} isRequired={true} name={"height"}  placeholder="wzrost" handleFunction={()=> {}}/>
-                <StyledTextArea style={{margin: ".25em 0"}} isRequired={true} name={"height"} name={"description"} placeholder="opis"/>
+                <Input 
+                    value={trainingExperience}
+                    style={{margin: ".25em 0"}} 
+                    type={"number"} 
+                    // isRequired={true} 
+                    name={"trainingExperience"} 
+                    placeholder="staż treningowy"
+                    handleFunction={()=> {}}
+                />
+                <Input 
+                    value={weight}
+                    style={{margin: ".25em 0"}} 
+                    type={"number"} 
+                    // isRequired={true} 
+                    name={"weight"} 
+                    placeholder="waga" 
+                    handleFunction={()=> {}}
+                />
+                <Input 
+                    value={height}
+                    style={{margin: ".25em 0"}} 
+                    type={"number"} 
+                    // isRequired={true} 
+                    name={"height"} 
+                    placeholder="wzrost" 
+                    handleFunction={()=> {}}
+                />
+                <StyledTextArea 
+                    style={{margin: ".25em 0"}} 
+                    // isRequired={true} 
+                    name={"height"} 
+                    name={"description"} 
+                    placeholder="opis"
+                    defaultValue={description}
+                />
             </StyledInputWrapper>
             <StyledButtonWrapper>
                 <Button  

@@ -178,7 +178,8 @@ class Profile extends Component {
                     <Form 
                         handleFunction={(e) => this.updateProfileData(e)}
                         handleEditButton={()=> this.editButtonHandler()}
-                    /> }
+                        user={user}
+                    />}
                     <ShareBox />
                     <PostBoard destination={"profile"} />
                 </Wrapper>
