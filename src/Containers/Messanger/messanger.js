@@ -1,168 +1,33 @@
-import React, { Component } from "react";
-import styled from "styled-components";
-import { flexCenter, variables, FlexComponent, RWD }  from "../../Components/styleHelpers";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSearch, faPaperPlane } from "@fortawesome/free-solid-svg-icons";
-import app from "../../base";
-import UserProfile from "./userProfile";
-import Friend from "./friend";
-import ArrowButton from "../../Components/arrowButton";
-import Cross from "../../Components/cross";
-import Message from "./message";
-import helpers from "../../Components/helpers";
+import React, { Component } from 'react';
+import styled from 'styled-components';
+
+import app from '../../base';
+import UserProfile from './userProfile';
+import Friend from './friend';
+import Message from './message';
+import helpers from '../../Components/helpers';
+import FriendPanel from './FriendPanel';
+import ConversationPanel from './ConversationPanel';
+import { flexCenter, variables }  from '../../Components/styleHelpers';
+import Placeholder from './placeholder';
 
 const Container = styled.div`
     ${flexCenter}
-    flex-direction: column;
+    flex-direction: ${props=> props.windowWidth > "768" ? "row": "column"};
     position: fixed;
     top: 64px;
     left: 0;
     width: 100%;
     height: calc(100vh - 64px);
-    
-    @media only screen and (min-width: ${RWD.$desktop}) {
-        max-width: 370px;
-        left: calc(100% - 420px);
-    }
+    background-color: ${variables.$lightGray};
 `
-
-const MainBox = styled.div`
-    ${flexCenter};
-    justify-content: flex-end;
-    flex-direction: column;
-    width: 100%;
-    height: 100%;
-`
-
-const SearchBox = styled.div`
-    ${flexCenter};
-    width: 100%;
-    height: 45px;
-    padding: .2em .5em;
-    border-bottom: .05em solid ${variables.$gray};
-    background-color: ${variables.$blue};
-`
-
-const Input = styled.input`
-    width: 100%;
-    border: none;
-    outline: none;
-    font-size:1.3em;
-    margin-right: .5em;
-    background-color: ${variables.$blue};
-`
-const ProfileBox = styled.div`
-    width: 100%;
-    overflow-y: scroll;
-`
-
-
-
-
-const ToggleBox = styled.div`
-    ${flexCenter};
-    justify-content: space-between;
-    width: 100%;
-    background-color: ${variables.$blue};
-    padding: .5em;
-`
-const FriendBox = styled.div`
-    width: 100%;
-    background-color:white;
-    padding: .5em;
-`
-const Caption = styled.p`
-    color: ${variables.$gray};
-    font-size: 1.5em;
-    font-weight: bold;
-`
-
-
-
-
-
-
-const MessageWindow = styled.div`
-    ${flexCenter};
-    flex-direction: column;
-    justify-content: space-between;
-    width: 100%;
-    height: 100%;
-`
-const MessageWindowHeader = styled.div`
-    ${flexCenter};
-    justify-content: space-between;
-    width: 100%;
-    padding: .5em;
-    border-bottom: .05em solid ${variables.$lightGray};   
-`
-const StyledWrapper = styled(FlexComponent)`
-    width: auto;
-    padding: 0;
-`
-const Nick = styled.p`
-    color: ${variables.$grayBlue};
-    font-size: 1.5em;
-    font-weight: bold;
-`
-const Image = styled.div`
-    position:relative;
-    width:2.5em;
-    height: 2.5em;
-    background-image: url(${props => props.url});
-    background-position: center;
-    background-size: cover;
-    border-radius: 50%;
-    margin-right: .5em;
-`
-
-const LogDot = styled.span`
-    position: absolute;
-    bottom: .02em;
-    right:.02em;
-    width: .8em;
-    height: .8em;
-    background-color: ${props => props.isLogged ? "green" : "red"};
-    border-radius: 50%;
-    border: .15em solid white;
-`
-
-const MessageWindowContent = styled.div`
-    ${flexCenter}
-    justify-content: flex-start;
-    flex-direction: column;
-    width: 100%;
-    height: 100%;
-    overflow-y: scroll;
-    padding: .5em;
-`
-
-const FormBox = styled.form`
-    ${flexCenter};
-    width: 100%;
-    height: 45px;
-    padding: .2em .5em;
-    border-top: .05em solid ${variables.$lightGray};
-    background-color: ${variables.$blue};
-`
-
-
-const crossStyled = {
-    color: `${variables.$gray}`
-}
-
-
-
-
-
-  
 
 
 class Messanger extends Component {
     _isMounted = false;
     constructor() {
         super();
-        this.messageWindow = React.createRef();
+        this.messageWindowRef = React.createRef();
         this.state = {
             constUsersArray: [],
             mutableUsersArray: [],
@@ -176,16 +41,19 @@ class Messanger extends Component {
             isConversationUserLogged: false,
             converserNick: "",
             converserPhotoURL: "",
-            converserID: ""
+            converserID: "",
+
+            windowWidth: 0
         }
     }
 
     scrollToBottom() {
-        this.messageWindow.current.scrollIntoView();
+        this.messageWindowRef.current.scrollIntoView();
     };
   
     componentDidMount() {
         this._isMounted = true;
+        this.handleResize()
         app.getAllUsers((tempArray) => {
             if(this._isMounted) {
                 this.setState({
@@ -207,10 +75,18 @@ class Messanger extends Component {
                 })
             }
         })
+        window.addEventListener('resize', ()=> this.handleResize());
     }
+
+    handleResize() {
+        this.setState({windowWidth: window.innerWidth});
+    }
+
     componentWillUnmount() {
+        window.removeEventListener('resize', ()=> this.handleResize());
         this._isMounted = false;
     }
+
     componentDidUpdate() {
         this._isMounted = true;
         app.getRealTimeDatabase().ref("users").once('child_changed', snapshot => {
@@ -237,12 +113,10 @@ class Messanger extends Component {
     }
     
     
-   
-
-    // function invokes onChange event and set mutableNicksArray, which stores nicks beginning on letters pass by input
     filterNicks(e) {
         const inputValue = e.target.value;
         const tempUsersArray = [];
+        
 
         e.preventDefault();
         this.state.constUsersArray.forEach(user => {
@@ -261,8 +135,7 @@ class Messanger extends Component {
                 mutableUsersArray: [],
                 inputText: inputValue
             }) 
-        }
-          
+        } 
     }
 
     renderProfiles() {
@@ -304,11 +177,7 @@ class Messanger extends Component {
     }
 
 
-    handleArrowButton() {
-        this.setState(prevstate => ({
-            isBottomBoxHide: !prevstate.isBottomBoxHide
-        }))
-    }
+  
 
     async openConversation(user) {
         await this.setState({
@@ -372,6 +241,66 @@ class Messanger extends Component {
         })
     }
 
+    getMessangerView() {
+        const { 
+            inputText,
+            windowWidth,
+            converserNick, 
+            amountOfFriends, 
+            converserPhotoURL, 
+            isConversationOpen, 
+            isConversationUserLogged, 
+        } = this.state;
+        if(windowWidth > 768) {
+            return (
+                <Container windowWidth={windowWidth}>
+                    {isConversationOpen ? <ConversationPanel 
+                        windowWidth={windowWidth}
+                        converserNick={converserNick}
+                        converserPhotoURL={converserPhotoURL}
+                        isConversationOpen={isConversationOpen}
+                        isConversationUserLogged={isConversationUserLogged}
+                        messageWindowRef={this.messageWindowRef}
+                        sendMessage={(e)=> this.sendMessage(e)}
+                        renderMessages={()=> this.renderMessages()}
+                        hideConversation={()=> this.hideConversation()}
+                    /> :
+                    <Placeholder />}
+                    <FriendPanel 
+                        windowWidth={windowWidth}
+                        inputText={inputText}
+                        renderFriends={()=> this.renderFriends()}
+                        renderProfiles={()=> this.renderProfiles()}  
+                        filterNicks={(e)=> this.filterNicks(e)}
+                        amountOfFriends={amountOfFriends}
+                    />
+                </Container>
+            )
+        } else  {
+            return (
+                <Container>
+                    {!isConversationOpen ? <FriendPanel 
+                        inputText={inputText}
+                        renderFriends={()=> this.renderFriends()}
+                        renderProfiles={()=> this.renderProfiles()}  
+                        filterNicks={(e)=> this.filterNicks(e)}
+                        amountOfFriends={amountOfFriends}
+                    /> :
+                    <ConversationPanel 
+                        windowWidth={windowWidth}
+                        converserNick={converserNick}
+                        converserPhotoURL={converserPhotoURL}
+                        isConversationOpen={isConversationOpen}
+                        isConversationUserLogged={isConversationUserLogged}
+                        messageWindowRef={this.messageWindowRef}
+                        sendMessage={(e)=> this.sendMessage(e)}
+                        renderMessages={()=> this.renderMessages()}
+                        hideConversation={()=> this.hideConversation()}
+                    />}
+                </Container>
+            )
+        }
+    }
 
 
     sendMessage = (e) => {
@@ -405,70 +334,10 @@ class Messanger extends Component {
             helpers.clearInput(input);
         }
     }
+
     render() {
-        const { 
-            inputText,
-            isBottomBoxHide, 
-            amountOfFriends, 
-            isConversationOpen, 
-            isConversationUserLogged, 
-            converserNick, 
-            converserPhotoURL, 
-            
-        } = this.state;
-        const content = <>
-                            <FriendBox>
-                                {inputText === "" ? this.renderFriends(): null}
-                            </FriendBox>
-                            <ProfileBox>
-                                {this.renderProfiles()}
-                            </ProfileBox>
-                            <SearchBox>
-                                <Input placeholder="Szukaj znajomych..." onChange={(e)=> this.filterNicks(e)} />
-                                <FontAwesomeIcon icon={faSearch} color={variables.$gray} style={{fontSize: "1.5em"}}/>
-                            </SearchBox>
-                        </>
         return (
-            <Container>
-                {!isConversationOpen ?
-                <MainBox>
-                    {!isBottomBoxHide ? content : null}
-                    <ToggleBox>
-                        <Caption> Znajomi ({amountOfFriends}) </Caption>
-                        <ArrowButton 
-                            color={"white"}
-                            backgroundColor={variables.$grayBlue}
-                            handleFunction={() => this.handleArrowButton()}
-                            isHide={isBottomBoxHide}
-                        />
-                    </ToggleBox>
-                </MainBox> 
-                :
-                <MessageWindow>
-                    <MessageWindowHeader>
-                        <StyledWrapper>
-                            <Image url={converserPhotoURL}>
-                                <LogDot isLogged={isConversationUserLogged}/>
-                            </Image>
-                            <Nick> {converserNick} </Nick>
-                        </StyledWrapper>
-                        <Cross 
-                            handleClick={this.hideConversation}
-                            styled={crossStyled}
-                            fontSize={{fontSize: "2em"}}
-                        />
-                    </MessageWindowHeader>
-                    <MessageWindowContent >
-                        {this.renderMessages()}
-                        <div ref={this.messageWindow} />
-                    </MessageWindowContent>
-                    <FormBox style={{ padding: "1em .5em"}} onSubmit = {(e) => this.sendMessage(e)}>
-                        <Input name="input" style={{ margin: 0 }} placeholder="Napisz..."></Input>
-                        <FontAwesomeIcon icon={faPaperPlane} color={variables.$grayBlue} style={{fontSize: "1.5em"}}/>
-                    </FormBox>
-                </MessageWindow>
-                }
-            </Container>
+            this.getMessangerView()
         )
     }
 }

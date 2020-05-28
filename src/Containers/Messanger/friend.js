@@ -6,7 +6,7 @@ const Container = styled.div`
     ${flexCenter};
     justify-content:space-between;
     width: 100%;
-    padding: .3em;
+    padding: .5em;
 `
 
 const StyledWrapper = styled(FlexComponent)`

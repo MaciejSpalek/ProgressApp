@@ -70,7 +70,6 @@ const Form = ({ handleFunction, handleEditButton, user }) => {
                     value={trainingExperience}
                     style={{margin: ".25em 0"}} 
                     type={"number"} 
-                    // isRequired={true} 
                     name={"trainingExperience"} 
                     placeholder="staż treningowy"
                     handleFunction={()=> {}}
@@ -79,23 +78,20 @@ const Form = ({ handleFunction, handleEditButton, user }) => {
                     value={weight}
                     style={{margin: ".25em 0"}} 
                     type={"number"} 
-                    // isRequired={true} 
                     name={"weight"} 
-                    placeholder="waga" 
+                    placeholder="waga [kg]" 
                     handleFunction={()=> {}}
                 />
                 <Input 
                     value={height}
                     style={{margin: ".25em 0"}} 
                     type={"number"} 
-                    // isRequired={true} 
                     name={"height"} 
-                    placeholder="wzrost" 
+                    placeholder="wzrost [cm]" 
                     handleFunction={()=> {}}
                 />
                 <StyledTextArea 
                     style={{margin: ".25em 0"}} 
-                    // isRequired={true} 
                     name={"height"} 
                     name={"description"} 
                     placeholder="opis"
