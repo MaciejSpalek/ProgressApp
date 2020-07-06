@@ -116,6 +116,9 @@ class Profile extends Component {
             }
         });
     }
+    isYourProfile(currentUserID, profileID) {
+        return currentUserID === profileID;
+    }
 
     setPhotoURL() {
         const { image } = this.state;
@@ -180,8 +183,12 @@ class Profile extends Component {
                         handleEditButton={()=> this.editButtonHandler()}
                         user={user}
                     />}
-                    <ShareBox />
-                    <PostBoard destination={"profile"} />
+                    {this.isYourProfile(app.getUserID(), user.userID) ? <ShareBox /> : null}
+                    <PostBoard 
+                        destination={"profile"} 
+                        postsOwner={user.userID}
+                        // isYourProfile={this.isYourProfile(app.getUserID(), user.userID)}
+                    />
                 </Wrapper>
             </StyledContainer>
         )
