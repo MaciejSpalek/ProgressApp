@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import MenuItem from './menuItem';
 import { faRuler, faListOl, faSignOutAlt, faHome, faUser, faMedal } from '@fortawesome/free-solid-svg-icons'
 import { faFacebookMessenger } from "@fortawesome/free-brands-svg-icons"
+import { RWD } from "../../Components/styleHelpers";
 
 
 const transformMenu = {
@@ -11,21 +12,36 @@ const transformMenu = {
 }
 
 const StyledMenu = styled.div`
-        position: fixed;
-        top: 64px;
-        left: 0;
-        width: 100vw;
-        height: calc(100vh - 64px);
-        transform: translateX(100%);
-        background-color: rgba(0, 3, 19, 0.969);
-        transition: .3s cubic-bezier(0.785, 0.135, 0.15, 0.86);
-        overflow-y: scroll;
+    position: fixed;
+    top: 64px;
+    left: 0;
+    width: 100vw;
+    height: calc(100vh - 64px);
+    transform: translateX(100%);
+    background-color: rgba(0, 3, 19, 0.969);
+    transition: .3s cubic-bezier(0.785, 0.135, 0.15, 0.86);
+    overflow-y: scroll;
+
+    @media only screen and (min-width: ${RWD.$desktop}) {
+        position: static;
+        width: auto;
+        transform: translateX(0%);
+        background-color: transparent;
+        height: 100%;
+        overflow-y: hidden;
+    }
 `
 
 const StyledList = styled.ul`
-        display: grid;
-        grid-template-columns: repeat(1, 1fr);
-        width: 100%;
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    width: 100%;
+
+    @media only screen and (min-width: ${RWD.$desktop}) {
+        grid-template-columns: repeat(7, 1fr);
+        grid-template-rows: repeat(1, 1fr);
+        height: 100%;
+    }
 `
 
 

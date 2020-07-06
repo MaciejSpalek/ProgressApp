@@ -32,12 +32,13 @@ const Navbar = ({ user, usersData }) => {
                 handleFunction={()=> handleHamburger()}
                 isMenuActive={activeStatus}
             />: null }
-            <Menu 
+
+            { user ? <Menu 
                 handleHamburger={()=> handleHamburger()} 
                 isMenuActive={activeStatus}
                 usersData={usersData}
                 currentUser={user}
-            />
+            /> : null }
         </Nav>
     );
 }
