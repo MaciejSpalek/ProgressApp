@@ -29,21 +29,19 @@ class Messanger extends Component {
         super();
         this.messageWindowRef = React.createRef();
         this.state = {
-            constUsersArray: [],
-            mutableUsersArray: [],
-            friends: [],
-            amountOfFriends: 0,
-            isBottomBoxHide: false,
-            inputText: "",
-
-            conversation: [],
-            isConversationOpen: false,
             isConversationUserLogged: false,
-            converserNick: "",
+            isConversationOpen: false,
+            isBottomBoxHide: false,
             converserPhotoURL: "",
+            mutableUsersArray: [],
+            constUsersArray: [],
+            amountOfFriends: 0,
+            converserNick: "",
+            conversation: [],
             converserID: "",
-
-            windowWidth: 0
+            windowWidth: 0,
+            inputText: "",
+            friends: [],
         }
     }
 

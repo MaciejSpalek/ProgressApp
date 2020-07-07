@@ -109,12 +109,12 @@ export const FlexWrapper = styled.div`
   height: 100%;
 `
 
-export const SpaceBetweenWrapper = styled.div`
-  ${flexCenter};
-  justify-content: space-between;
-  width: 100%;
-  padding: .5em;
-`
+// export const SpaceBetweenWrapper = styled.div`
+//   ${flexCenter};
+//   justify-content: space-between;
+//   width: 100%;
+//   padding: .5em;
+// `
 
 export const FlexComponent = styled.div`
   ${flexCenter};

@@ -5,30 +5,52 @@ import app from '../../base';
 import TogglePanel from '../../Components/togglePanel';
 import Form from './form';
 import helpers from '../../Components/helpers';
-import { variables, Container, FlexComponent } from '../../Components/styleHelpers';
+import { variables, Container, FlexComponent, flexCenter, RWD } from '../../Components/styleHelpers';
 import { faRuler } from '@fortawesome/free-solid-svg-icons'
 import Placeholder from './placeholder';
 
 const StyledContainer = styled(Container)`
     flex-direction: column; 
-    align-items: flex-start;
-    justify-content: flex-start;
-    overflow-y: scroll;
+    @media only screen and (min-width: 768px) {
+        flex-direction: row;
+    }
+`
+
+const StyledInnerWrapper = styled(FlexComponent)`
+    flex-direction: column;
+    justify-content: flex-start; 
+    height: 100%;
+    padding: 0;
+
+    &:nth-of-type(1) {
+        flex: 3;
+    }
+    &:nth-of-type(2) {
+        max-width: 350px;
+        /* flex: 1; */
+    }
 `
 
 const StyledToggleWrapper = styled(FlexComponent)`
     flex-direction: column;
     justify-content: space-between;
-    height: ${props => props.state ? "100%" : "auto"};
     padding: 0;
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
+    height: 100%;
+    @media only screen and (max-width: 768px) {
+        height: ${props => props.state ? "100%" : "auto"};
+    }
 `
 
 const StyledTablesWrapper = styled(FlexComponent) `
-    flex-direction: column;
-    justify-content: flex-start;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
     height: 100%;
     padding: .5em;
-    overflow-y: scroll;
+    flex-wrap: wrap;
+    overflow-y: auto;
+
 `
 
 
@@ -38,13 +60,16 @@ class Measurements extends Component {
         super(props)
         this.state = {
             isPanelFormActive: false,
-            measurementTables: []
+            measurementTables: [],
+            windowWidth: 0
         }
     }
 
     componentDidMount() {
         this._isMounted = true;
         this.assignMeasurementsToState()
+        this.handleResize()
+        window.addEventListener('resize', ()=> this.handleResize());
     }
 
     componentDidUpdate() {
@@ -54,7 +79,14 @@ class Measurements extends Component {
 
     componentWillUnmount() {
         this._isMounted = false;
+        window.removeEventListener('resize', ()=> this.handleResize());
     }
+
+    handleResize() {
+        this.setState({windowWidth: window.innerWidth});
+    }
+
+    
 
     updateMeasurements() {
         const userID = app.getUserID();
@@ -135,39 +167,81 @@ class Measurements extends Component {
         }))
     }
 
-    render() {
+
+    getMeasurementsView() {
         const { 
             isPanelFormActive,
-            measurementTables
+            measurementTables,
+            windowWidth
         } = this.state;
-        return (
-            <StyledContainer>
-                <StyledToggleWrapper state={isPanelFormActive}>
-                    <TogglePanel 
-                        handleFunction={()=> this.handleTogglePanel()} 
-                        buttonBackgroundColor={variables.$grayBlue}
-                        iconName={faRuler} 
-                        iconColor={variables.$grayBlue}
-                        textFontWeight={"bold"}
-                        textFontSize={"1.2em"}
-                        isHidden={!isPanelFormActive}
-                        iconFontSize={25}
-                        text={"Dodaj wymiary"}  
-                    />
-                    { isPanelFormActive ? <Form handleFunction={(e)=> this.addMeasurements(e)} /> :null }
-                </StyledToggleWrapper>
-                {!isPanelFormActive ? 
-                    <StyledTablesWrapper>
-                        { measurementTables.length ? 
-                            this.renderTables() : 
-                            <Placeholder 
+        if(windowWidth > 768) {
+            return (
+                <StyledContainer>
+                    <StyledInnerWrapper>
+                        <StyledTablesWrapper>
+                            { measurementTables.length ? 
+                                this.renderTables() : 
+                                <Placeholder 
+                                    iconName={faRuler} 
+                                    text={"brak dodanych wymiarów"}
+                                /> 
+                            }
+                        </StyledTablesWrapper> 
+                    </StyledInnerWrapper>
+                    <StyledInnerWrapper>
+                        <StyledToggleWrapper state={isPanelFormActive}>
+                            <TogglePanel 
+                                handleFunction={()=> this.handleTogglePanel()} 
+                                buttonBackgroundColor={variables.$grayBlue}
                                 iconName={faRuler} 
-                                text={"brak dodanych wymiarów"}
-                            /> 
-                        }
-                    </StyledTablesWrapper> 
-                : null}
-            </StyledContainer>
+                                iconColor={variables.$grayBlue}
+                                textFontWeight={"bold"}
+                                textFontSize={"1.2em"}
+                                isHidden={!isPanelFormActive}
+                                iconFontSize={25}
+                                text={"Dodaj wymiary"}  
+                            />
+                            <Form handleFunction={(e)=> this.addMeasurements(e)} />
+                        </StyledToggleWrapper>
+                    </StyledInnerWrapper>
+                </StyledContainer>
+            )
+        } else  {
+            return (
+                <StyledContainer>
+                    <StyledToggleWrapper state={isPanelFormActive}>
+                         <TogglePanel 
+                            handleFunction={()=> this.handleTogglePanel()} 
+                            buttonBackgroundColor={variables.$grayBlue}
+                            iconName={faRuler} 
+                            iconColor={variables.$grayBlue}
+                            textFontWeight={"bold"}
+                            textFontSize={"1.2em"}
+                            isHidden={!isPanelFormActive}
+                            iconFontSize={25}
+                            text={"Dodaj wymiary"}  
+                        />
+                        { isPanelFormActive ? <Form handleFunction={(e)=> this.addMeasurements(e)} /> :null }
+                    </StyledToggleWrapper>
+                    {!isPanelFormActive ? 
+                        <StyledTablesWrapper>
+                            { measurementTables.length ? 
+                                this.renderTables() : 
+                                <Placeholder 
+                                    iconName={faRuler} 
+                                    text={"brak dodanych wymiarów"}
+                                /> 
+                            }
+                        </StyledTablesWrapper> 
+                    : null}
+                </StyledContainer>
+            )
+        }
+    }
+
+    render() {
+        return (
+            this.getMeasurementsView()
         );
     }
 }

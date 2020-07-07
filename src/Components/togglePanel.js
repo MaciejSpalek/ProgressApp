@@ -30,7 +30,7 @@ const SquareWrapper = styled.div`
 const TogglePanel = ({ 
     flexStyles, 
     buttonBackgroundColor, 
-    buttonColor, 
+    buttonColor,
     isHidden,
     handleFunction,
 
@@ -41,6 +41,7 @@ const TogglePanel = ({
     iconName,
     iconFontSize,
     iconColor,
+    isArrowButtonHidden
     
 }) => {
     return (
@@ -57,12 +58,13 @@ const TogglePanel = ({
                     fontWeight={textFontWeight}
                 /> 
             </StyledWrapper>
-            <ArrowButton
-                handleFunction={()=> handleFunction()}
-                backgroundColor={buttonBackgroundColor}
-                fontColor={buttonColor}
-                isHide={isHidden}
-            />
+            {!isArrowButtonHidden ?
+                <ArrowButton
+                    handleFunction={()=> handleFunction()}
+                    backgroundColor={buttonBackgroundColor}
+                    fontColor={buttonColor}
+                    isHide={isHidden}
+                /> : null}
         </StyledContainer>
     )
 }
