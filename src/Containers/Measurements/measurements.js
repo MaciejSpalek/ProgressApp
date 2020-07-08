@@ -27,7 +27,6 @@ const StyledInnerWrapper = styled(FlexComponent)`
     }
     &:nth-of-type(2) {
         max-width: 350px;
-        /* flex: 1; */
     }
 `
 

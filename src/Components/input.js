@@ -10,7 +10,7 @@ const StyledInput = styled.input`
     padding: 0 .5em;
 `
 
-const Input = ({ name, type, style, placeholder, handleFunction, isRequired, value }) => {
+const Input = ({ name, type, style, placeholder, handleFunction, isRequired, value, min, max }) => {
     return (
         <StyledInput 
             name={name}  
@@ -21,6 +21,8 @@ const Input = ({ name, type, style, placeholder, handleFunction, isRequired, val
             placeholder={placeholder}
             onChange={(e)=> handleFunction(e)}
             defaultValue={value}
+            min={min}
+            max={max}
         />
     )
 }

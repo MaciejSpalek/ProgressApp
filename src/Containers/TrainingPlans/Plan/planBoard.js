@@ -31,7 +31,7 @@ const PlanWrapper = styled.div`
     flex-direction: column;
     width: 100%;
     height: 100%;
-    overflow-y: scroll;
+    overflow-y: auto;
     @media only screen and (min-width: ${RWD.$desktop}) {
         width: 500px;
     }

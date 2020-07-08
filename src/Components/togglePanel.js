@@ -64,7 +64,7 @@ const TogglePanel = ({
                     backgroundColor={buttonBackgroundColor}
                     fontColor={buttonColor}
                     isHide={isHidden}
-                /> : <></>}
+                /> : null}
         </StyledContainer>
     )
 }

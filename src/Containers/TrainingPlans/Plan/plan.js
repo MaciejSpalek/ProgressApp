@@ -6,12 +6,10 @@ import helpers from '../../../Components/helpers';
 import TogglePanel from '../../../Components/togglePanel';
 import { 
     variables, 
-    flexCenter, 
-    FlexWrapper,
-    Paragraph,
-    FlexComponent
+    flexCenter
 } from '../../../Components/styleHelpers';
-import { faTasks, faRunning } from '@fortawesome/free-solid-svg-icons';
+import { faTasks } from '@fortawesome/free-solid-svg-icons';
+import PlanContent from './planContent';
 
 
 const toggleFlexStyles = {
@@ -28,81 +26,6 @@ const Container = styled.div`
     height: ${props => props.isHidden ? "auto" : "100%"};
 `
 
-const StyledPlanList = styled(FlexComponent)`
-    flex-direction: column;
-    justify-content: flex-start;
-    overflow: scroll;
-    padding: 0;
-`
-const StyledAddPanel = styled(FlexComponent)`
-    flex-direction: column;
-    padding: 0;
-`
-
-const PlanContent = styled.div`
-    ${flexCenter};
-    flex-direction: column;
-    justify-content: ${props => props.isHidden ? "space-between" : "flex-end"};
-    width: 100%;
-    height: 100%;
-    overflow: scroll;
-`
-
-
-const Form = styled.form`
-    ${flexCenter};
-    flex-direction: column;
-    width: 100%;
-    padding: .5em;
-`
-const Input = styled.input`
-    width: 100%;
-    border: none;
-    border-radius: .3em;
-    font-size: 1.2em;
-    color: ${variables.$gray};
-    margin: .5em 0;
-    padding: .5em; 
-
-    
-`
-const Button = styled.button`
-    width: 100%;
-    background-color: ${variables.$grayBlue};
-    color: white;
-    font-weight: bold;
-    font-size: 1.2em;
-    padding: .5em; 
-    border: none;
-`
-const Label = styled.label`
-    font-size: 1.2em;
-    padding: .25em .5em;
-`
-const Radio = styled.input`
-    width: 1.2em;
-    height: 1.2em;
-`
-
-const Caption = styled.h2`
-    font-size: 1.5em;
-    color: ${variables.$gray};
-    padding: .5em;
-`
-
-
-const Select = styled.select`
-    width: 100%;
-    border: none;
-    font-size: 1.2em;
-    margin: .5em 0;
-    padding: .5em;
-    color: ${variables.$gray};
-`
-
-const Option = styled.option`
-    height: 35px;
-`
 
 class Plan extends Component {
     _isMounted = false;
@@ -222,110 +145,34 @@ class Plan extends Component {
     render() {
         const { date, planKey, id, isHidden } = this.props;
         const { radio, isAddPanelHidden } = this.state;
-        const AddPanel =    <StyledAddPanel>
-                                {!isAddPanelHidden ?
-                                <Form onSubmit={(e)=> this.addExercise(e, planKey)}>
-                                    <Input  required
-                                            type="text" 
-                                            name="name" 
-                                            placeholder="nazwa ćwiczenia">
-                                    </Input>
-                                    <Input  required
-                                            type="number" 
-                                            name="amountOfSeries"  
-                                            min="1" 
-                                            max="20" 
-                                            placeholder="ilość serii">
-                                    </Input>
-
-                                    <Paragraph>Priorytet ćwiczenia</Paragraph>
-                                    <Select name="priority">
-                                        <Option value="0">Niski</Option>
-                                        <Option value="1">Średni</Option>
-                                        <Option value="2">Wysoki</Option>
-                                    </Select>
-
-                                    <Paragraph>Jak chcesz mierzyć serie ?</Paragraph>
-                                    <FlexWrapper style={{ 
-                                        padding: '.5em 0', 
-                                        flexDirection: "column", 
-                                        alignItems: "flex-start" }}>
-                                        <Label>
-                                            <Radio  type="radio" 
-                                                    name="radio" 
-                                                    value="repsWithoutWeight" 
-                                                    checked={radio === "repsWithoutWeight"} 
-                                                    onChange={(e) => this.handleRadioButton(e)}>
-                                            </Radio> 
-                                            na powt. bez ciężaru 
-                                        </Label>
-                                        <Label>
-                                            <Radio  type="radio" 
-                                                    name="radio" 
-                                                    value="repsWithWeight" 
-                                                    checked={radio === "repsWithWeight"} 
-                                                    onChange={(e) => this.handleRadioButton(e)}>
-                                            </Radio>
-                                            na powt. z ciężarem 
-                                        </Label>
-                                        <Label>
-                                            <Radio  type="radio" 
-                                                    name="radio" 
-                                                    value="time" 
-                                                    checked={radio === "time"} 
-                                                    onChange={(e) => this.handleRadioButton(e)}>
-                                            </Radio>
-                                            na czas 
-                                        </Label>
-                                    </FlexWrapper>
-                                    <Button>Dodaj</Button>
-                                </Form>
-                                : null}
-                                <TogglePanel 
-                                    text={`Nowe ćwiczenie`}   
-                                    textFontSize={"1.3em"}
-                                    textFontWeight={"bold"}
-
-                                    iconName={faRunning} 
-                                    iconColor={variables.$grayBlue}
-                                    iconFontSize={25}
-
-                                    buttonBackgroundColor={variables.$grayBlue}
-                                    buttonColor={variables.$orange}
-
-                                    flexStyles={toggleFlexStyles}
-                                    isHidden={isAddPanelHidden}
-                                    handleFunction={()=> this.handleAddPanel()} 
-                                />
-                            </StyledAddPanel>
-        const planContent = <PlanContent isHidden={isAddPanelHidden}>
-                                {isAddPanelHidden ?
-                                    <StyledPlanList>
-                                        <Caption> { this.isExercisesExist() ? `Lista ćwiczeń (${this.getAmountOfExercises()})` : "Brak dodanych ćwiczeń"}</Caption>
-                                        {this.renderExercise()}
-                                    </StyledPlanList> : null}
-                                {AddPanel}
-                            </PlanContent>
 
         return (
             <Container isHidden={isHidden}>
                 <TogglePanel 
-                    text={`Plan ${id},  ${date}`} 
-                    textFontSize={"1.3em"}
-                    textFontWeight={"bold"}
-
-                    iconName={faTasks} 
-                    iconColor={variables.$grayBlue}
-                    iconFontSize={30}
-
-                    buttonBackgroundColor={variables.$grayBlue}
-                    buttonColor={variables.$orange}
-
-                    flexStyles={toggleFlexStyles}
                     handleFunction={()=> this.changeHiddenState(planKey, isHidden)} 
+                    buttonBackgroundColor={variables.$grayBlue}
+                    iconColor={variables.$grayBlue}
+                    iconName={faTasks} 
+                    iconFontSize={30}
+                    text={`Plan ${id},  ${date}`} 
+                    textFontWeight={"bold"}
+                    textFontSize={"1.3em"}
+                    flexStyles={toggleFlexStyles}
                     isHidden={isHidden}
                 />
-                {!isHidden ? planContent : null}
+                {!isHidden ? 
+                <PlanContent 
+                    getAmountOfExercises={()=> this.getAmountOfExercises()}
+                    handleRadioButton={(e)=> this.handleRadioButton(e)}
+                    isAddPanelHidden={isAddPanelHidden}
+                    isExercisesExist={()=> this.isExercisesExist()}
+                    handleAddPanel={()=> this.handleAddPanel()}
+                    renderExercise={()=> this.renderExercise()}
+                    addExercise={(e)=> this.addExercise(e, planKey)}
+                    planKey={planKey}
+                    radio={radio}
+                />
+                : null}
             </Container>
         )
     }
