@@ -200,6 +200,7 @@ class Measurements extends Component {
                                 isHidden={!isPanelFormActive}
                                 iconFontSize={25}
                                 text={"Dodaj wymiary"}  
+                                isArrowButtonHidden={true}
                             />
                             <Form handleFunction={(e)=> this.addMeasurements(e)} />
                         </StyledToggleWrapper>
