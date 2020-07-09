@@ -14,6 +14,8 @@ export const variables = {
     $blue: "rgb(255, 255, 255)",
     $grayBlue: "#4a5564",
     $darkBlue: "rgb(0, 74, 121)",
+    $red: "rgb(199, 0, 0)",
+    $lightRed: "rgb(245, 136, 136)"
 }
 
 
