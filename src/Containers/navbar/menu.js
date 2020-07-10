@@ -22,7 +22,7 @@ const StyledMenu = styled.div`
     transition: .3s cubic-bezier(0.785, 0.135, 0.15, 0.86);
     overflow-y: scroll;
 
-    @media only screen and (min-width: ${RWD.$desktop}) {
+    @media only screen and (min-width: 1200px) {
         position: static;
         width: auto;
         transform: translateX(0%);
@@ -37,7 +37,7 @@ const StyledList = styled.ul`
     grid-template-columns: repeat(1, 1fr);
     width: 100%;
 
-    @media only screen and (min-width: ${RWD.$desktop}) {
+    @media only screen and (min-width: 1200px) {
         grid-template-columns: repeat(7, 1fr);
         grid-template-rows: repeat(1, 1fr);
         height: 100%;

@@ -7,7 +7,6 @@ import BottomWrapper from './bottomBox';
 const Container = styled(FlexComponent)`
     flex-direction: column;
     justify-content: flex-start;
-    /* max-width: 500px; */
     min-height: 400px;
     border-radius: .3em;
     background-color: white;
@@ -15,7 +14,7 @@ const Container = styled(FlexComponent)`
     box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
     padding: 0;
 
-    @media only screen and (min-width: ${RWD.$desktop}) {
+    @media only screen and (min-width: 1200px) {
         position: absolute;
         width: 320px;
         top: 0;

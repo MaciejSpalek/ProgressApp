@@ -13,7 +13,7 @@ const StyledNavLink = styled(NavLink)`
     transition: .2s linear;
     &:hover { background-color: rgba(16, 24, 70, 0.801); }
 
-    @media only screen and (min-width: ${RWD.$desktop}) {
+    @media only screen and (min-width: 1200px) {
         ${flexCenter};
         position: relative;
         width: auto;
@@ -34,7 +34,7 @@ const Icon = styled(FontAwesomeIcon)`
     width: 1.5em;
     font-size: 50px;
     color: ${variables.$orange};
-    @media only screen and (min-width: ${RWD.$desktop}) {
+    @media only screen and (min-width: 1200px) {
         font-size: 30px;
         width: 2.5em;
         margin-right: 5px;
@@ -51,7 +51,7 @@ const Caption = styled.p`
     font-size: 1.6em;
     font-weight: bold;
     color: white;
-    @media only screen and (min-width: ${RWD.$desktop}) {
+    @media only screen and (min-width: 1200px) {
         font-size: 1em;
     }
 `

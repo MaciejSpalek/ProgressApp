@@ -6,6 +6,7 @@ const StyledButton = styled.button`
     position: relative;
     color: white;
     width: 100%;
+    height: 38px;
     font-size: 1.2em;
     font-weight: bold;
     font-family: 'Patua One', cursive;
@@ -13,8 +14,8 @@ const StyledButton = styled.button`
     border-radius: .2em;
     border: none;
     text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.5);
-    padding: .4em;
     overflow: hidden;
+    cursor: pointer;
 `
 
 const Button = ({ text, style, handleClick }) => {

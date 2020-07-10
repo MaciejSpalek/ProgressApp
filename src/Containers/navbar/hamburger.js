@@ -15,7 +15,7 @@ const offStyle = {
 }
 
 const StyledIcon = styled(FontAwesomeIcon)`
-    @media only screen and (min-width: ${RWD.$desktop}) {
+    @media only screen and (min-width: 1200px) {
        display: none;
     }
 `

@@ -25,7 +25,7 @@ const StyledForm = styled.form`
     box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
     padding: .5em;
 
-    @media only screen and (min-width: ${RWD.$desktop}) {
+    @media only screen and (min-width: 1200px) {
         position: absolute;
         width: 320px;
         top: 0;

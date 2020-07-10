@@ -2,8 +2,8 @@ import styled from "styled-components";
 
 
 export const RWD = {
-  $tablet: "768px",
-  $desktop: "1200px"
+  $tablet: 768,
+  $desktop: 1200
 }
 
 export const variables = {
