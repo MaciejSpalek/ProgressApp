@@ -13,9 +13,10 @@ const Button = styled.button`
     
 `
 
-const PlusButton = ({ iconColor, isDisabled, onClickFunction }) => {
+const PlusButton = ({ styles, iconColor, isDisabled, onClickFunction }) => {
     return (
         <Button 
+            style={styles}
             disabled={isDisabled}
             onClick={()=> onClickFunction()}>
             <FontAwesomeIcon 

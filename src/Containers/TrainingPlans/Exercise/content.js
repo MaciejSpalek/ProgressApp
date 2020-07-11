@@ -230,9 +230,13 @@ class Content extends Component {
                         placeholder={"kg"}
                         handleFunction={()=> {}}
                     />
-                    <PlusButton styles={{
-                        marginLeft: ".5em"
-                    }}/>
+                    <PlusButton 
+                        onClickFunction={()=> {}}
+                        iconColor={variables.$grayBlue}
+                        styles={{
+                            marginLeft: ".5em"
+                        }}
+                    />
                 </> 
                 :
                 <>
@@ -243,9 +247,13 @@ class Content extends Component {
                         placeholder={"powtórzenia"}
                         handleFunction={()=> {}}
                     />                
-                     <PlusButton styles={{
-                        marginLeft: ".5em"
-                    }}/>
+                     <PlusButton 
+                        onClickFunction={()=> {}}
+                        iconColor={variables.$grayBlue}
+                        styles={{
+                            marginLeft: ".5em"
+                        }}
+                     />
                 </>} 
             </Form>
         )

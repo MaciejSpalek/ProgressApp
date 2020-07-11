@@ -43,19 +43,23 @@ class Plan extends Component {
         this._isMounted = true;
         this.assignExercisesToState();
     }
+
     componentWillUnmount() {
         this._isMounted = false;
     }
+
     handleRadioButton(e) {
         this.setState({
             [e.target.name]: e.target.value
         })
     }
+
     handleAddPanel() {
         this.setState(prevState =>({
             isAddPanelHidden: !prevState.isAddPanelHidden
         }))
     }
+
     assignExercisesToState() {
         const userID = app.getUserID();
         const usersPlansRef = app.getRealTimeDatabase().ref('users-plans').child(userID);
@@ -79,6 +83,7 @@ class Plan extends Component {
             }
         })
     }
+
     addExercise(e, planKey){
         e.preventDefault()
         const { radio } = this.state;
@@ -94,12 +99,11 @@ class Plan extends Component {
                 amountOfSeries: amountOfSeries.value,
                 priority: priority.value,
                 type: radio,
-
                 planKey: this.props.planKey,
                 exerciseKey: exerciseKey,
-                
                 currentTraining: 1,
-                currentSeries: 1
+                currentSeries: 1,
+                isOpened: false
             }
             updates[`users-plans/${userID}/${planKey}/${exerciseKey}`] = exerciseData;
             helpers.clearInput(name);
@@ -107,34 +111,47 @@ class Plan extends Component {
             return app.getRealTimeDatabase().ref().update(updates);
         }
     }
+
     filterExercisesByPlanKey(array) {
         return array.filter(item => item.planKey === this.props.planKey);
     }
+
+    filterExercisesByOpenedState(array) {
+        return array.filter(item => item.isOpened === true);
+    }
+
     renderExercise() {
-        const filteredArray = this.filterExercisesByPlanKey(this.state.exercises);
-        return filteredArray.map((exercise, index) => {
+        const firstFilteredArray = this.filterExercisesByPlanKey(this.state.exercises);
+        const secondFilteredArray = this.filterExercisesByOpenedState(firstFilteredArray);
+        let finalFilteredArray = [];
+
+        if (firstFilteredArray.every(item => item.isOpened === false)) {
+            console.log(firstFilteredArray)
+            finalFilteredArray = firstFilteredArray;
+        } else {
+            console.log(secondFilteredArray)
+            finalFilteredArray = secondFilteredArray;
+        }
+
+        return finalFilteredArray.map((exercise, index) => {
             return (
                 <Exercise
-                    currentTraining={exercise.currentTraining}
-                    amountOfSeries={exercise.amountOfSeries}
-                    currentSeries={exercise.currentSeries}
-                    exerciseKey={exercise.exerciseKey}
-                    priority={exercise.priority}
-                    planKey={exercise.planKey}
-                    type={exercise.type}
-                    name={exercise.name}
+                    exerciseObject={exercise}
                     key={index}                    
                 />
             )
         })
     }
+
     isExercisesExist() {
         return this.state.exercises.length > 0;
     }
+
     getAmountOfExercises() {
         const filteredArray = this.filterExercisesByPlanKey(this.state.exercises);
         return filteredArray.length;
     }
+
     changeHiddenState(planKey, isHidden) {
         app.getRealTimeDatabase()
             .ref("users-plans")
@@ -142,10 +159,11 @@ class Plan extends Component {
             .child(planKey)
             .update({isHidden: !isHidden})
     }
+
     render() {
         const { date, planKey, id, isHidden } = this.props;
         const { radio, isAddPanelHidden } = this.state;
-
+        
         return (
             <Container isHidden={isHidden}>
                 <TogglePanel 

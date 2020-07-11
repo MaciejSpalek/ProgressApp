@@ -10,9 +10,9 @@ const StyledContainer = styled.div`
     background-color: ${props => props.areThereTooManyPlans ? variables.$lightRed : "white"};
     margin-bottom: 1em;
     padding: .5em;
-    @media only screen and (min-width: ${RWD.$desktop}) {
+    /* @media only screen and (min-width: 1200px) {
         width: 500px;
-    }
+    } */
 `
 const Text = styled.h2`
     color: ${props => props.areThereTooManyPlans ? variables.$red : variables.$gray};

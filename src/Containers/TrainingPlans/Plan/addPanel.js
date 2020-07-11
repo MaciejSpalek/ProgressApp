@@ -23,7 +23,7 @@ const StyledAddPanel = styled(FlexComponent)`
     flex-direction: column;
     padding: 0;
     @media only screen and (min-width: 768px) {
-        width: 350px;
+        width: 400px;
         height: 100%;
         box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
     }

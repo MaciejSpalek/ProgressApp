@@ -8,14 +8,22 @@ import {
     RWD
 } from '../../../Components/styleHelpers';
 
+const StyledWrapper = styled(FlexComponent)`
+    flex-direction: column;
+    justify-content: flex-start;
+    height: 100%;
+`
+
 const StyledExerciseList = styled(FlexComponent)`
     flex-direction: column;
     justify-content: flex-start;
     overflow: auto;
     padding: 0;
     @media only screen and (min-width: 768px) {
-        flex: 1;
-        height: 100%;
+        flex-direction: row;
+        align-items: flex-start;
+        flex-wrap: wrap;
+        
     }
 `
 
@@ -81,10 +89,12 @@ class PlanContent extends Component {
         if(windowWidth > RWD.$tablet) {
             return (
                 <StyledPlanContent isHidden={isAddPanelHidden}>
-                    <StyledExerciseList>
+                    <StyledWrapper>
                         <StyledCaption> { isExercisesExist() ? `Lista ćwiczeń (${getAmountOfExercises()})` : "Brak dodanych ćwiczeń"}</StyledCaption>
-                        {renderExercise()}
-                    </StyledExerciseList>
+                        <StyledExerciseList>
+                            {renderExercise()}
+                        </StyledExerciseList>
+                    </StyledWrapper>
                     <AddPanel 
                         radio={radio}
                         planKey={planKey}
@@ -100,10 +110,12 @@ class PlanContent extends Component {
             return (
                 <StyledPlanContent isHidden={isAddPanelHidden}>
                     {isAddPanelHidden ?
-                    <StyledExerciseList>
+                    <StyledWrapper>
                         <StyledCaption> { isExercisesExist() ? `Lista ćwiczeń (${getAmountOfExercises()})` : "Brak dodanych ćwiczeń"}</StyledCaption>
-                        {renderExercise()}
-                    </StyledExerciseList> : null}
+                        <StyledExerciseList>
+                            {renderExercise()}
+                        </StyledExerciseList>
+                    </StyledWrapper> : null}
                     <AddPanel 
                         radio={radio}
                         planKey={planKey}
