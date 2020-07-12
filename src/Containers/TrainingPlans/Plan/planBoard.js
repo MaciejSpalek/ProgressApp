@@ -106,6 +106,17 @@ class PlanBoard extends Component {
 
         return array;
     }
+    
+    isSomePlanOpened() {
+        let isSomePlanOpened = false;
+        this.state.plans.forEach(plan => {
+            if(!plan.isHidden) {
+                isSomePlanOpened = true;
+            }
+        })
+        return isSomePlanOpened;
+    } 
+
     renderPlans() {
         return this.filterPlans(this.state.plans).map((plan, index) => {
             return (
@@ -119,16 +130,7 @@ class PlanBoard extends Component {
             )
         })
     }
-
-    isSomePlanOpened() {
-        let isSomePlanOpened = false;
-        this.state.plans.forEach(plan => {
-            if(!plan.isHidden) {
-                isSomePlanOpened = true;
-            }
-        })
-        return isSomePlanOpened;
-    }
+    
     render() {
         const { plans } = this.state;
         const placeholder = <Placeholder>

@@ -32,42 +32,20 @@ const Container = styled.div`
     ${flexCenter}
     justify-content: flex-start;
     flex-direction: column;
-    width: 400px;
+    width: ${props => props.isOpened ? "100%" : "400px"};
     overflow: auto;
 `
 
 class exercise extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-            isHidden: true,
-            trainingDays: []
-        }
     }
 
-    handleArrowButton() {
-        const {exerciseObject: {
-            exerciseKey, 
-            isOpened
-        }} = this.props;
-
-        if(!isOpened) {
-            this.setState({
-                trainingDays: []
-            })
-        } else {
-            app.getTrainingDays(exerciseKey, (tempArray)=> {
-                this.setState({
-                    trainingDays: tempArray
-                })
-            })
-        }
-    }
-
+  
     changeExerciseOpenState() {
         const {exerciseObject: {
             exerciseKey, 
-            planKey, 
+            planKey,
             isOpened
         }} = this.props;
 
@@ -92,28 +70,26 @@ class exercise extends Component {
     }
 
     render() {
-        const {exerciseObject: {
-            currentTraining,
-            amountOfSeries,
-            currentSeries, 
-            exerciseKey, 
-            priority,
-            isOpened,
-            planKey, 
-            name, 
-            type, 
-        }} = this.props;
+        const {
+            trainingDays,
+                exerciseObject: {
+                    currentTraining,
+                    amountOfSeries,
+                    currentSeries, 
+                    exerciseKey, 
+                    priority,
+                    isOpened,
+                    planKey, 
+                    name, 
+                    type
+                }
+            } = this.props;
 
-        const { 
-            trainingDays, 
-            isHidden, 
-        } = this.state;
-        
         return (
-            <Container>
+            <Container isOpened={isOpened}>
                 <TogglePanel 
                     flexStyles={isOpened ? modifyToggleStyles: toggleStyles}
-                    handleFunction={()=> {this.handleArrowButton(); this.changeExerciseOpenState()}} 
+                    handleFunction={()=> this.changeExerciseOpenState()} 
                     buttonBackgroundColor={variables.$grayBlue}
                     iconName={this.setExerciseIcon(type)} 
                     iconColor={variables.$grayBlue}

@@ -35,13 +35,15 @@ class Plan extends Component {
             isAddPanelHidden: false,
             radio: "repsWithWeight",
             isHidden: true,
-            exercises: []
+            exercises: [],
+            trainingDays: []
         }
     }
 
     componentDidMount() {
         this._isMounted = true;
         this.assignExercisesToState();
+        this.getAllTrainingDays()
     }
 
     componentWillUnmount() {
@@ -59,6 +61,48 @@ class Plan extends Component {
             isAddPanelHidden: !prevState.isAddPanelHidden
         }))
     }
+
+
+    getAllTrainingDays() {
+        const trainingDaysRef = app.getRealTimeDatabase().ref("training-days");
+        trainingDaysRef.on('value', snapshot => {
+            const trainingDays = snapshot.val();
+            const tempArray = [];
+            for(let day in trainingDays) {
+                tempArray.push(trainingDays[day])
+            }
+            this.setState({
+                trainingDays: tempArray 
+            })
+        })
+    }
+    
+
+    getCurrentTrainingDays(exerciseKey, amountOfSeries) {
+        const { trainingDays } = this.state
+        const tempArray = [];
+        let tempObject = {};
+        let seriesCounter = 0;
+
+        trainingDays.forEach(item => {
+            for(let series in item) {
+                if(exerciseKey === item[series].exerciseKey) {
+                    if(seriesCounter === 0) {
+                        tempArray.push(tempObject);
+                    }
+                    seriesCounter++;
+                    tempObject[series] = item[series];
+                    console.log(tempArray)
+                    if(seriesCounter >= amountOfSeries) {
+                        tempObject = {};
+                        seriesCounter = 0;
+                    }
+                }
+            }
+        })
+        return tempArray;
+    }
+
 
     assignExercisesToState() {
         const userID = app.getUserID();
@@ -126,10 +170,8 @@ class Plan extends Component {
         let finalFilteredArray = [];
 
         if (firstFilteredArray.every(item => item.isOpened === false)) {
-            console.log(firstFilteredArray)
             finalFilteredArray = firstFilteredArray;
         } else {
-            console.log(secondFilteredArray)
             finalFilteredArray = secondFilteredArray;
         }
 
@@ -137,6 +179,7 @@ class Plan extends Component {
             return (
                 <Exercise
                     exerciseObject={exercise}
+                    trainingDays={this.getCurrentTrainingDays(exercise.exerciseKey, exercise.amountOfSeries)}
                     key={index}                    
                 />
             )
