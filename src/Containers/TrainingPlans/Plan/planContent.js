@@ -16,14 +16,13 @@ const StyledWrapper = styled(FlexComponent)`
 
 const StyledExerciseList = styled(FlexComponent)`
     flex-direction: column;
-    justify-content: flex-start;
+    justify-content: center;
     overflow: auto;
     padding: 0;
     @media only screen and (min-width: 768px) {
         flex-direction: row;
         align-items: flex-start;
         flex-wrap: wrap;
-        
     }
 `
 

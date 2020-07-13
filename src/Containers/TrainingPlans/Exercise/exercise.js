@@ -32,8 +32,11 @@ const Container = styled.div`
     ${flexCenter}
     justify-content: flex-start;
     flex-direction: column;
-    width: ${props => props.isOpened ? "100%" : "400px"};
-    overflow: auto;
+    width: 100%;
+
+    @media only screen and (min-width: 768px) {
+        width: ${props => props.isOpened ? "100%" : "400px"};
+    }
 `
 
 class exercise extends Component {

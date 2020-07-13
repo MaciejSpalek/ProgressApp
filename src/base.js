@@ -128,29 +128,7 @@ class FireBase {
         setState(counter);
     })
   }
- 
-  isDayKeyIncludesExerciseKey(exerciseKey, traininDayString) {
-    const regex = new RegExp(exerciseKey);
-    return regex.test(traininDayString)
-  }
-
-  getTrainingDays(exerciseKey, setState) {
-    const trainingDaysRef = this.getRealTimeDatabase().ref("training-days");
-
-    trainingDaysRef.on('value', snapshot => {
-        const trainingDays = snapshot.val();
-        const tempArray = [];
-        for(let day in trainingDays) {
-          if(this.isDayKeyIncludesExerciseKey(exerciseKey, day)) {
-              tempArray.push(trainingDays[day]);
-          }   
-        }
-        setState(tempArray);
-    })
-  }
 }
-
-
 
   
 

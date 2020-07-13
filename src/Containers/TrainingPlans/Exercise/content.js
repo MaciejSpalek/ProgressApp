@@ -31,12 +31,18 @@ const modifyInputStyles = {
     "width": "100%",
 }
 
-const StyledFormWrapper = styled(FlexComponent)`
+const StyledContainer = styled(FlexComponent)`
     border-bottom-right-radius: .3em;
     border-bottom-left-radius: .3em;
     width: calc(100% - .5em);
     background-color: white;
     flex-direction: column;
+`
+
+const StyledTrainingDaysWrapper = styled(FlexComponent)`
+    justify-content: center;
+    align-items: flex-start;
+    flex-wrap: wrap;
 `
 
 const StyledHeaderWrapper = styled(FlexComponent)`
@@ -47,11 +53,11 @@ const StyledHeaderWrapper = styled(FlexComponent)`
 `
 
 const Form = styled.form`
+    ${flexCenter};
     justify-content: space-between;
     background-color: white;
     width: calc(100%);
     padding: .5em 0 2em;
-    ${flexCenter};
 `
 
 
@@ -158,6 +164,7 @@ class Content extends Component {
             }
         }
     }
+
     addSeries(e){
         e.preventDefault()
          const { 
@@ -187,6 +194,7 @@ class Content extends Component {
             return app.getRealTimeDatabase().ref().update(updates);
         }
     }
+
     renderTrainingDays() {
         const { trainingDays, amountOfSeries, type } = this.props;
         return trainingDays.map((day, index) => {
@@ -202,11 +210,13 @@ class Content extends Component {
             )
         })
     }
+
     handleChartButton() {
         this.setState(prevState => ({
             isChartButtonHidden: !prevState.isChartButtonHidden
         }))
     }
+
     renderForm() {
         const { type } = this.props;
         return (
@@ -263,6 +273,7 @@ class Content extends Component {
             </Form>
         )
     }
+
     renderChart() {
         return (
             <Chart 
@@ -271,11 +282,12 @@ class Content extends Component {
             /> 
         )
     }
+
     render() {
         const { isChartButtonHidden, time } = this.state;
         const { type } = this.props;
         return (
-            <StyledFormWrapper>
+            <StyledContainer>
                 <StyledHeaderWrapper>
                     <Paragraph
                         color={variables.$gray}
@@ -292,8 +304,10 @@ class Content extends Component {
                     stopTimer={(e)=> this.stopTimer(e)}
                 />}
                 {!isChartButtonHidden ? this.renderChart() : null}
-                {this.renderTrainingDays()}
-            </StyledFormWrapper>
+                <StyledTrainingDaysWrapper>
+                    {this.renderTrainingDays()}
+                </StyledTrainingDaysWrapper>
+            </StyledContainer>
         )
     }
 }

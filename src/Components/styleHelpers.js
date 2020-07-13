@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 
 export const RWD = {
-  $tablet: 768,
+  $tablet: 767,
   $desktop: 1200
 }
 

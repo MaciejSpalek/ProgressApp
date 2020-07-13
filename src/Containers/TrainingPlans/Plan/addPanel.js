@@ -4,15 +4,17 @@ import Input from '../../../Components/input'
 import Button from '../../../Components/Button'
 import RadioLabel from '../../../Components/RadioLabel'
 import TogglePanel from '../../../Components/togglePanel';
-
+import SelectWrapper from '../../../Components/SelectWrapper';
+import InputLabel from '../../../Components/InputLabel';
+import Paragraph from '../../../Components/paragraph';
+import { faRunning } from '@fortawesome/free-solid-svg-icons';
 import { 
     variables, 
     flexCenter, 
-    Paragraph,
-    FlexComponent,
-    RWD
+    FlexComponent
 } from '../../../Components/styleHelpers';
-import { faRunning } from '@fortawesome/free-solid-svg-icons';
+
+
 
 const toggleFlexStyles = {
     "justifyContent": "space-between",
@@ -23,16 +25,19 @@ const StyledAddPanel = styled(FlexComponent)`
     flex-direction: column;
     padding: 0;
     @media only screen and (min-width: 768px) {
-        width: 400px;
+        width: 450px;
         height: 100%;
         box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
     }
 `
+
 const StyledRadioWrapper = styled(FlexComponent)`
-    padding: .5em 0;
+    padding: 0;
+    margin-top: .75em;
     flex-direction: column;
     align-items: flex-start;
-    `
+`
+
 const Form = styled.form`
     ${flexCenter};
     flex-direction: column;
@@ -47,16 +52,7 @@ const StyledPartWrapper = styled(FlexComponent)`
     flex-direction: column;
     padding: 0;
 `
-const Select = styled.select`
-    width: 100%;
-    height: 35px;
-    border: none;
-    font-size: 1.2em;
-    color: ${variables.$gray};
-`
-const Option = styled.option`
-    height: 35px;
-`
+
 
 const AddPanel = ({ 
     radio, 
@@ -71,53 +67,50 @@ const AddPanel = ({
         <StyledAddPanel>
             {!isAddPanelHidden ?
             <Form onSubmit={(e)=> addExercise(e, planKey)}>
-                <StyledPartWrapper>
-                    <Input  
+                <StyledPartWrapper>                
+                    <InputLabel
+                        handleFunction={()=> {}}
+                        text={"Nazwa ćwiczenia"} 
                         isRequired={true}
+                        maxLength={22} 
                         type="text" 
                         name="name" 
-                        placeholder="nazwa ćwiczenia" 
-                        handleFunction={()=> {}}
-                        style={{margin: ".5em 0"}}
                     />
-
-                    <Input  
+                    <InputLabel 
+                        handleFunction={()=> {}}
+                        name={"amountOfSeries"}  
+                        text={"Ilość serii"}
                         isRequired={true}
                         type={"number"} 
-                        name={"amountOfSeries"}  
-                        min={1}
                         max={20} 
-                        placeholder="ilość serii" 
-                        handleFunction={()=> {}}
-                        style={{margin: ".5em 0"}}
+                        min={1}
                     />
-                
-                    <Paragraph>Priorytet ćwiczenia</Paragraph>
-                    <Select name="priority">
-                        <Option value="0">Niski</Option>
-                        <Option value="1">Średni</Option>
-                        <Option value="2">Wysoki</Option>
-                    </Select>
-
-                    <Paragraph>Jak chcesz mierzyć serie ?</Paragraph>
+                    <SelectWrapper />
                     <StyledRadioWrapper>
+                        <Paragraph
+                            text={"Typ ćwiczenia"}
+                            color={variables.$gray}
+                            align={"flex-start"}
+                            fontSize={"1.3em"}
+                            fontWeight={"bold"}
+                        /> 
                         <RadioLabel  
                             value={"repsWithoutWeight"} 
                             isChecked={radio === "repsWithoutWeight"} 
                             handleFunction={(e) => handleRadioButton(e)}
-                            text={"na powt. bez ciężaru"}
+                            text={"powtórzenia bez ciężaru"}
                         />
                         <RadioLabel 
                             value={"repsWithWeight"} 
-                            checked={radio === "repsWithWeight"} 
+                            isChecked={radio === "repsWithWeight"} 
                             handleFunction={(e) => handleRadioButton(e)}
-                            text={"na powt. z ciężarem"}
+                            text={"powtórzenia z ciężarem"}
                         />
                         <RadioLabel 
                             value={"time"} 
                             isChecked={radio === "time"} 
                             handleFunction={(e) => handleRadioButton(e)}
-                            text={"na czas"}
+                            text={"czasówka"}
                         />
                     </StyledRadioWrapper>
                 </StyledPartWrapper>
