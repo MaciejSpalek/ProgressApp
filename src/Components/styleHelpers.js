@@ -1,6 +1,5 @@
 import styled from "styled-components";
 
-
 export const RWD = {
   $tablet: 767,
   $desktop: 1200
@@ -37,16 +36,18 @@ export const Container = styled.section`
   height: calc(100vh - 64px);
   background-color: ${variables.$lightGray};
 `
+
 export const Form = styled.form`
   ${flexCenter};
   position: relative;
   justify-content: space-evenly;
   flex-direction: column;
-  width: 250px;
-  height: 300px;
+  width: 350px;
+  min-height: 300px;
   background-color: ${variables.$gray};
   border-radius: .5em;
   padding: 4em 1em 1em 1em;
+  
 `
 
 export const Logo = styled.div`
@@ -62,47 +63,18 @@ export const Logo = styled.div`
   background-color: ${variables.$lightGray};
 `
 
-export const Input = styled.input`
-  background-color: white;
-  color: ${variables.$gray};
-  width: 100%;
-  height: 35px;
-  font-size: 1em;
-  border-radius: .2em;
-  border: none;
-  padding: 0 .3em;
-  &::placeholder {
-    color: ${variables.$gray};
-    font-weight: 100;
-  }
-`
+export const labelStyle = {
+  color: variables.$lightGray
+}
 
-export const Button = styled.button`
-  background-color: ${variables.$grayBlue};
-  color: white;
-  border: none;
-  height: 35px;
-  width: 100%;
-  border-radius: 0.2em;
-  font-size: 1em;
-  font-weight: bold;
-  padding: 0 .3em;
-  cursor: pointer;
-`
+export const inputStyle = {
+  maxWidth: "320px",
+}
 
-
-export const Caption = styled.p`
-    color: ${variables.$gray};
-    font-size: 1.3em;
-    font-weight: bold;
-`
-export const Paragraph = styled.p`
-  font-size: 1.3em;
-  font-weight: bold;
-  align-self: flex-start;
-  color: ${variables.$gray};
-`
-
+export const buttonStyle = {
+  maxWidth: "320px",
+  margin: ".5em 0"
+}
 
 // flex containers
 export const FlexWrapper = styled.div`

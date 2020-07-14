@@ -1,8 +1,8 @@
 import React, { useCallback, useContext } from "react";
 import app from "../../base";
 import Button from '../../Components/Button';
-import Input from '../../Components/input';
-import { Logo, Container, Form } from "../../Components/styleHelpers";
+import InputLabel from '../../Components/InputLabel';
+import { Logo, Container, Form, labelStyle, inputStyle, buttonStyle } from "../../Components/styleHelpers";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser } from '@fortawesome/free-solid-svg-icons';
 import { variables } from "../../Components/styleHelpers";
@@ -34,22 +34,42 @@ const Login = ({ history }) => {
 
   return (
     <Container>
-    <Form onSubmit={handleLogin}>
-      <Input type={"email"} name={"email"} placeholder={"email"} handleFunction={()=> {}}/>
-      <Input type={"password"} name={"password"} placeholder={"hasło"} handleFunction={()=> {}}/>
-      <Button handleClick={()=> {}} text={"Zaloguj"}/>
-      <Link style={{color: "white", fontWeight: "bold"}} to="/signup">
-        Stwórz konto
-      </Link>
-      <Logo>
-      <FontAwesomeIcon
-        icon={faUser}
-        color={variables.$gray}
-        style={{ fontSize: 60 }}
-      />
-    </Logo>
-    </Form>
-  </Container>
+      <Form onSubmit={handleLogin}>
+        <InputLabel
+          labelStyle={labelStyle}
+          style={inputStyle}
+          text={"Email"} 
+          type={"email"} 
+          name={"email"} 
+          handleFunction={()=> {}}
+          isRequired={true}
+        />
+        <InputLabel
+          labelStyle={labelStyle}
+          style={inputStyle}
+          text={"Hasło"} 
+          type={"password"} 
+          name={"password"} 
+          handleFunction={()=> {}}
+          isRequired={true}
+        />
+        <Button 
+          handleClick={()=> {}} 
+          text={"Zaloguj"}
+          style={buttonStyle}
+        />
+        <Link style={{color: "white", fontWeight: "bold", fontSize: "1.3em"}} to="/signup">
+          Stwórz konto
+        </Link>
+        <Logo>
+        <FontAwesomeIcon
+          icon={faUser}
+          color={variables.$gray}
+          style={{ fontSize: 60 }}
+        />
+        </Logo>
+      </Form>
+    </Container>
   );
 };
 
