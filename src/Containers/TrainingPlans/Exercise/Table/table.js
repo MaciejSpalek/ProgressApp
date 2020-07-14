@@ -1,12 +1,20 @@
 import React from 'react';
+import styled from 'styled-components'
 import TableHeader from './thead'
 import TableBody from './tbody'
 import TableFooter from './tfoot'
 import { Table } from '../../../../Components/styleHelpers';
 
+
+const StyledTable = styled(Table)`
+    @media only screen and (min-width: 768px) {
+        margin: 1em;
+        max-width: 400px;
+    }
+`
 const DayTable = ({ id, type, trainingDay, trainingDays, amountOfSeries }) => {
     return (
-        <Table>
+        <StyledTable>
             <TableHeader 
                 type={type}
                 id={id}
@@ -22,7 +30,7 @@ const DayTable = ({ id, type, trainingDay, trainingDays, amountOfSeries }) => {
                 type={type}
                 id={id} 
             />
-        </Table>
+        </StyledTable>
     )
 }
 

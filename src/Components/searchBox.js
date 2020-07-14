@@ -26,6 +26,7 @@ const StyledInputWrapper = styled(FlexComponent)`
     border-bottom: .1em solid ${props => props.array ? variables.$lightGray : "none"};
     @media only screen and (min-width: 500px) {
         border-radius: .3em;
+        max-width: calc(500px - 1em);
         padding: .2em .5em;
         border-bottom-left-radius: ${props => props.array ? "0" : ".3em"};
         border-bottom-right-radius: ${props => props.array ? "0" : ".3em"}; 
@@ -36,7 +37,7 @@ const StyledProfilesWrapper = styled(FlexComponent)`
     flex-direction: column;
     position: absolute;
     top: 100%;
-    max-width: 500px;
+    max-width: calc(500px - 1em);
     background-color: white;
     border-bottom-left-radius: .3em;
     border-bottom-right-radius: .3em;

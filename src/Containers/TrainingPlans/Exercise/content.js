@@ -31,12 +31,18 @@ const modifyInputStyles = {
     "width": "100%",
 }
 
-const StyledFormWrapper = styled(FlexComponent)`
+const StyledContainer = styled(FlexComponent)`
     border-bottom-right-radius: .3em;
     border-bottom-left-radius: .3em;
     width: calc(100% - .5em);
     background-color: white;
     flex-direction: column;
+`
+
+const StyledTrainingDaysWrapper = styled(FlexComponent)`
+    justify-content: center;
+    align-items: flex-start;
+    flex-wrap: wrap;
 `
 
 const StyledHeaderWrapper = styled(FlexComponent)`
@@ -45,12 +51,13 @@ const StyledHeaderWrapper = styled(FlexComponent)`
     padding: .5em 0;
     width: 100%;
 `
+
 const Form = styled.form`
+    ${flexCenter};
     justify-content: space-between;
     background-color: white;
     width: calc(100%);
     padding: .5em 0 2em;
-    ${flexCenter};
 `
 
 
@@ -62,8 +69,11 @@ class Content extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            isDisabledStartButton: false,
+            isDisabledStopButton: true,
             isChartButtonHidden: true,
-            time: 0
+            time: 0,
+            
         }
         this.timerInterval = null;
     }
@@ -75,6 +85,7 @@ class Content extends Component {
         const filteredArray = trainingDaysArray.filter(day => day.length === +amountOfSeries).map((el, index)=> index+1);
         return filteredArray;
     }
+
     // returns array with training volumes [1000, 1200, 1800, 1340 ...], which use to chart.js as values on Y axis
     getTrainingVolumesArray() {
         const { trainingDays, amountOfSeries, type } = this.props;
@@ -82,18 +93,27 @@ class Content extends Component {
         const filteredArray = trainingDaysArray.map(day => day.length === +amountOfSeries ? helpers.getTreningVolume(day, type) : null)
         return filteredArray;
     }
+
     startTimer() {
         this.timerInterval = setInterval(()=> {
             this.setState(prevState => ({
-                time: prevState.time + 1
+                time: prevState.time + 1,
+                isDisabledStartButton: true,
+                isDisabledStopButton: false
             }))
         }, 1000)
     }
+
     stopTimer(e){  
         clearInterval(this.timerInterval)
         this.addSeries(e)
-        this.setState({time: 0})
+        this.setState({
+            isDisabledStartButton: false,
+            isDisabledStopButton: true,
+            time: 0
+        })
     }
+    
     updateExerciseCounters() {
         const { 
             currentTraining,
@@ -153,6 +173,7 @@ class Content extends Component {
             }
         }
     }
+
     addSeries(e){
         e.preventDefault()
          const { 
@@ -182,6 +203,7 @@ class Content extends Component {
             return app.getRealTimeDatabase().ref().update(updates);
         }
     }
+
     renderTrainingDays() {
         const { trainingDays, amountOfSeries, type } = this.props;
         return trainingDays.map((day, index) => {
@@ -197,11 +219,13 @@ class Content extends Component {
             )
         })
     }
+
     handleChartButton() {
         this.setState(prevState => ({
             isChartButtonHidden: !prevState.isChartButtonHidden
         }))
     }
+
     renderForm() {
         const { type } = this.props;
         return (
@@ -230,9 +254,13 @@ class Content extends Component {
                         placeholder={"kg"}
                         handleFunction={()=> {}}
                     />
-                    <PlusButton styles={{
-                        marginLeft: ".5em"
-                    }}/>
+                    <PlusButton 
+                        onClickFunction={()=> {}}
+                        iconColor={variables.$grayBlue}
+                        styles={{
+                            marginLeft: ".5em"
+                        }}
+                    />
                 </> 
                 :
                 <>
@@ -243,27 +271,37 @@ class Content extends Component {
                         placeholder={"powtórzenia"}
                         handleFunction={()=> {}}
                     />                
-                     <PlusButton styles={{
-                        marginLeft: ".5em"
-                    }}/>
+                     <PlusButton 
+                        onClickFunction={()=> {}}
+                        iconColor={variables.$grayBlue}
+                        styles={{
+                            marginLeft: ".5em"
+                        }}
+                     />
                 </>} 
             </Form>
         )
     }
+
     renderChart() {
         return (
-                <Chart 
-                    trainingDays={this.getTrainingDaysArray()}
-                    trainingVolumes={this.getTrainingVolumesArray()}
-                /> 
-            )
-        
+            <Chart 
+                trainingDays={this.getTrainingDaysArray()}
+                trainingVolumes={this.getTrainingVolumesArray()}
+            /> 
+        )
     }
+
     render() {
-        const { isChartButtonHidden, time } = this.state;
+        const { 
+            isDisabledStartButton,
+            isDisabledStopButton,
+            isChartButtonHidden, 
+            time 
+        } = this.state;
         const { type } = this.props;
         return (
-            <StyledFormWrapper>
+            <StyledContainer>
                 <StyledHeaderWrapper>
                     <Paragraph
                         color={variables.$gray}
@@ -278,10 +316,14 @@ class Content extends Component {
                     time={time} 
                     startTimer={()=> this.startTimer()}
                     stopTimer={(e)=> this.stopTimer(e)}
+                    isDisabledStartButton={isDisabledStartButton}
+                    isDisabledStopButton={isDisabledStopButton}
                 />}
                 {!isChartButtonHidden ? this.renderChart() : null}
-                {this.renderTrainingDays()}
-            </StyledFormWrapper>
+                <StyledTrainingDaysWrapper>
+                    {this.renderTrainingDays()}
+                </StyledTrainingDaysWrapper>
+            </StyledContainer>
         )
     }
 }

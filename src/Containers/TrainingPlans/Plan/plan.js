@@ -6,12 +6,10 @@ import helpers from '../../../Components/helpers';
 import TogglePanel from '../../../Components/togglePanel';
 import { 
     variables, 
-    flexCenter, 
-    FlexWrapper,
-    Paragraph,
-    FlexComponent
+    flexCenter
 } from '../../../Components/styleHelpers';
-import { faTasks, faRunning } from '@fortawesome/free-solid-svg-icons';
+import { faTasks } from '@fortawesome/free-solid-svg-icons';
+import PlanContent from './planContent';
 
 
 const toggleFlexStyles = {
@@ -28,81 +26,6 @@ const Container = styled.div`
     height: ${props => props.isHidden ? "auto" : "100%"};
 `
 
-const StyledPlanList = styled(FlexComponent)`
-    flex-direction: column;
-    justify-content: flex-start;
-    overflow: scroll;
-    padding: 0;
-`
-const StyledAddPanel = styled(FlexComponent)`
-    flex-direction: column;
-    padding: 0;
-`
-
-const PlanContent = styled.div`
-    ${flexCenter};
-    flex-direction: column;
-    justify-content: ${props => props.isHidden ? "space-between" : "flex-end"};
-    width: 100%;
-    height: 100%;
-    overflow: scroll;
-`
-
-
-const Form = styled.form`
-    ${flexCenter};
-    flex-direction: column;
-    width: 100%;
-    padding: .5em;
-`
-const Input = styled.input`
-    width: 100%;
-    border: none;
-    border-radius: .3em;
-    font-size: 1.2em;
-    color: ${variables.$gray};
-    margin: .5em 0;
-    padding: .5em; 
-
-    
-`
-const Button = styled.button`
-    width: 100%;
-    background-color: ${variables.$grayBlue};
-    color: white;
-    font-weight: bold;
-    font-size: 1.2em;
-    padding: .5em; 
-    border: none;
-`
-const Label = styled.label`
-    font-size: 1.2em;
-    padding: .25em .5em;
-`
-const Radio = styled.input`
-    width: 1.2em;
-    height: 1.2em;
-`
-
-const Caption = styled.h2`
-    font-size: 1.5em;
-    color: ${variables.$gray};
-    padding: .5em;
-`
-
-
-const Select = styled.select`
-    width: 100%;
-    border: none;
-    font-size: 1.2em;
-    margin: .5em 0;
-    padding: .5em;
-    color: ${variables.$gray};
-`
-
-const Option = styled.option`
-    height: 35px;
-`
 
 class Plan extends Component {
     _isMounted = false;
@@ -112,27 +35,75 @@ class Plan extends Component {
             isAddPanelHidden: false,
             radio: "repsWithWeight",
             isHidden: true,
-            exercises: []
+            exercises: [],
+            trainingDays: []
         }
     }
 
     componentDidMount() {
         this._isMounted = true;
         this.assignExercisesToState();
+        this.getAllTrainingDays()
     }
+
     componentWillUnmount() {
         this._isMounted = false;
     }
+
     handleRadioButton(e) {
         this.setState({
             [e.target.name]: e.target.value
         })
     }
+
     handleAddPanel() {
         this.setState(prevState =>({
             isAddPanelHidden: !prevState.isAddPanelHidden
         }))
     }
+
+
+    getAllTrainingDays() {
+        const trainingDaysRef = app.getRealTimeDatabase().ref("training-days");
+        trainingDaysRef.on('value', snapshot => {
+            const trainingDays = snapshot.val();
+            const tempArray = [];
+            for(let day in trainingDays) {
+                tempArray.push(trainingDays[day])
+            }
+            this.setState({
+                trainingDays: tempArray 
+            })
+        })
+    }
+    
+
+    getCurrentTrainingDays(exerciseKey, amountOfSeries) {
+        const { trainingDays } = this.state
+        const tempArray = [];
+        let tempObject = {};
+        let seriesCounter = 0;
+
+        trainingDays.forEach(item => {
+            for(let series in item) {
+                if(exerciseKey === item[series].exerciseKey) {
+                    if(seriesCounter === 0) {
+                        tempArray.push(tempObject);
+                    }
+                    seriesCounter++;
+                    tempObject[series] = item[series];
+                    console.log(tempArray)
+                    if(seriesCounter >= amountOfSeries) {
+                        tempObject = {};
+                        seriesCounter = 0;
+                    }
+                }
+            }
+        })
+        return tempArray;
+    }
+
+
     assignExercisesToState() {
         const userID = app.getUserID();
         const usersPlansRef = app.getRealTimeDatabase().ref('users-plans').child(userID);
@@ -156,6 +127,7 @@ class Plan extends Component {
             }
         })
     }
+
     addExercise(e, planKey){
         e.preventDefault()
         const { radio } = this.state;
@@ -171,12 +143,11 @@ class Plan extends Component {
                 amountOfSeries: amountOfSeries.value,
                 priority: priority.value,
                 type: radio,
-
                 planKey: this.props.planKey,
                 exerciseKey: exerciseKey,
-                
                 currentTraining: 1,
-                currentSeries: 1
+                currentSeries: 1,
+                isOpened: false
             }
             updates[`users-plans/${userID}/${planKey}/${exerciseKey}`] = exerciseData;
             helpers.clearInput(name);
@@ -184,34 +155,46 @@ class Plan extends Component {
             return app.getRealTimeDatabase().ref().update(updates);
         }
     }
+
     filterExercisesByPlanKey(array) {
         return array.filter(item => item.planKey === this.props.planKey);
     }
+
+    filterExercisesByOpenedState(array) {
+        return array.filter(item => item.isOpened === true);
+    }
+
     renderExercise() {
-        const filteredArray = this.filterExercisesByPlanKey(this.state.exercises);
-        return filteredArray.map((exercise, index) => {
+        const firstFilteredArray = this.filterExercisesByPlanKey(this.state.exercises);
+        const secondFilteredArray = this.filterExercisesByOpenedState(firstFilteredArray);
+        let finalFilteredArray = [];
+
+        if (firstFilteredArray.every(item => item.isOpened === false)) {
+            finalFilteredArray = firstFilteredArray;
+        } else {
+            finalFilteredArray = secondFilteredArray;
+        }
+
+        return finalFilteredArray.map((exercise, index) => {
             return (
                 <Exercise
-                    currentTraining={exercise.currentTraining}
-                    amountOfSeries={exercise.amountOfSeries}
-                    currentSeries={exercise.currentSeries}
-                    exerciseKey={exercise.exerciseKey}
-                    priority={exercise.priority}
-                    planKey={exercise.planKey}
-                    type={exercise.type}
-                    name={exercise.name}
+                    exerciseObject={exercise}
+                    trainingDays={this.getCurrentTrainingDays(exercise.exerciseKey, exercise.amountOfSeries)}
                     key={index}                    
                 />
             )
         })
     }
+
     isExercisesExist() {
         return this.state.exercises.length > 0;
     }
+
     getAmountOfExercises() {
         const filteredArray = this.filterExercisesByPlanKey(this.state.exercises);
         return filteredArray.length;
     }
+
     changeHiddenState(planKey, isHidden) {
         app.getRealTimeDatabase()
             .ref("users-plans")
@@ -219,113 +202,38 @@ class Plan extends Component {
             .child(planKey)
             .update({isHidden: !isHidden})
     }
+
     render() {
         const { date, planKey, id, isHidden } = this.props;
         const { radio, isAddPanelHidden } = this.state;
-        const AddPanel =    <StyledAddPanel>
-                                {!isAddPanelHidden ?
-                                <Form onSubmit={(e)=> this.addExercise(e, planKey)}>
-                                    <Input  required
-                                            type="text" 
-                                            name="name" 
-                                            placeholder="nazwa ćwiczenia">
-                                    </Input>
-                                    <Input  required
-                                            type="number" 
-                                            name="amountOfSeries"  
-                                            min="1" 
-                                            max="20" 
-                                            placeholder="ilość serii">
-                                    </Input>
-
-                                    <Paragraph>Priorytet ćwiczenia</Paragraph>
-                                    <Select name="priority">
-                                        <Option value="0">Niski</Option>
-                                        <Option value="1">Średni</Option>
-                                        <Option value="2">Wysoki</Option>
-                                    </Select>
-
-                                    <Paragraph>Jak chcesz mierzyć serie ?</Paragraph>
-                                    <FlexWrapper style={{ 
-                                        padding: '.5em 0', 
-                                        flexDirection: "column", 
-                                        alignItems: "flex-start" }}>
-                                        <Label>
-                                            <Radio  type="radio" 
-                                                    name="radio" 
-                                                    value="repsWithoutWeight" 
-                                                    checked={radio === "repsWithoutWeight"} 
-                                                    onChange={(e) => this.handleRadioButton(e)}>
-                                            </Radio> 
-                                            na powt. bez ciężaru 
-                                        </Label>
-                                        <Label>
-                                            <Radio  type="radio" 
-                                                    name="radio" 
-                                                    value="repsWithWeight" 
-                                                    checked={radio === "repsWithWeight"} 
-                                                    onChange={(e) => this.handleRadioButton(e)}>
-                                            </Radio>
-                                            na powt. z ciężarem 
-                                        </Label>
-                                        <Label>
-                                            <Radio  type="radio" 
-                                                    name="radio" 
-                                                    value="time" 
-                                                    checked={radio === "time"} 
-                                                    onChange={(e) => this.handleRadioButton(e)}>
-                                            </Radio>
-                                            na czas 
-                                        </Label>
-                                    </FlexWrapper>
-                                    <Button>Dodaj</Button>
-                                </Form>
-                                : null}
-                                <TogglePanel 
-                                    text={`Nowe ćwiczenie`}   
-                                    textFontSize={"1.3em"}
-                                    textFontWeight={"bold"}
-
-                                    iconName={faRunning} 
-                                    iconColor={variables.$grayBlue}
-                                    iconFontSize={25}
-
-                                    buttonBackgroundColor={variables.$grayBlue}
-                                    buttonColor={variables.$orange}
-
-                                    flexStyles={toggleFlexStyles}
-                                    isHidden={isAddPanelHidden}
-                                    handleFunction={()=> this.handleAddPanel()} 
-                                />
-                            </StyledAddPanel>
-        const planContent = <PlanContent isHidden={isAddPanelHidden}>
-                                {isAddPanelHidden ?
-                                    <StyledPlanList>
-                                        <Caption> { this.isExercisesExist() ? `Lista ćwiczeń (${this.getAmountOfExercises()})` : "Brak dodanych ćwiczeń"}</Caption>
-                                        {this.renderExercise()}
-                                    </StyledPlanList> : null}
-                                {AddPanel}
-                            </PlanContent>
-
+        
         return (
             <Container isHidden={isHidden}>
                 <TogglePanel 
-                    text={`Plan ${id},  ${date}`} 
-                    textFontSize={"1.3em"}
-                    textFontWeight={"bold"}
-
-                    iconName={faTasks} 
-                    iconColor={variables.$grayBlue}
-                    iconFontSize={30}
-
-                    buttonBackgroundColor={variables.$grayBlue}
-                    buttonColor={variables.$orange}
-
-                    flexStyles={toggleFlexStyles}
                     handleFunction={()=> this.changeHiddenState(planKey, isHidden)} 
+                    buttonBackgroundColor={variables.$grayBlue}
+                    iconColor={variables.$grayBlue}
+                    iconName={faTasks} 
+                    iconFontSize={30}
+                    text={`Plan ${id},  ${date}`} 
+                    textFontWeight={"bold"}
+                    textFontSize={"1.3em"}
+                    flexStyles={toggleFlexStyles}
                     isHidden={isHidden}
                 />
-                {!isHidden ? planContent : null}
+                {!isHidden ? 
+                <PlanContent 
+                    getAmountOfExercises={()=> this.getAmountOfExercises()}
+                    handleRadioButton={(e)=> this.handleRadioButton(e)}
+                    isAddPanelHidden={isAddPanelHidden}
+                    isExercisesExist={()=> this.isExercisesExist()}
+                    handleAddPanel={()=> this.handleAddPanel()}
+                    renderExercise={()=> this.renderExercise()}
+                    addExercise={(e)=> this.addExercise(e, planKey)}
+                    planKey={planKey}
+                    radio={radio}
+                />
+                : null}
             </Container>
         )
     }

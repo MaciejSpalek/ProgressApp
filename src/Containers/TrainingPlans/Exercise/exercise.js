@@ -33,34 +33,30 @@ const Container = styled.div`
     justify-content: flex-start;
     flex-direction: column;
     width: 100%;
+
+    @media only screen and (min-width: 768px) {
+        width: ${props => props.isOpened ? "100%" : "400px"};
+    }
 `
 
 class exercise extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            isHidden: true,
-            trainingDays: []
-        }
-    }
-    handleArrowButton() {
-        this.setState( prevState => ({
-            isHidden: !prevState.isHidden
-        }), ()=> {
-            if(this.state.isHidden) {
-                this.setState({
-                    trainingDays: []
-                })
-            } else {
-                app.getTrainingDays(this.props.exerciseKey, (tempArray)=> {
-                    this.setState({
-                        trainingDays: tempArray
-                    })
-                })
-            }
-        })
-    }
+    changeExerciseOpenState() {
+        const {exerciseObject: {
+            exerciseKey, 
+            planKey,
+            isOpened
+        }} = this.props;
 
+        app.getRealTimeDatabase()
+            .ref("users-plans")
+            .child(app.getUserID())
+            .child(planKey)
+            .child(exerciseKey)
+            .update({
+                isOpened: !isOpened
+            })
+    }
+    
     setExerciseIcon(radioValue) {
         if(radioValue === "repsWithWeight") {
             return faDumbbell;
@@ -72,47 +68,47 @@ class exercise extends Component {
     }
 
     render() {
-        const { 
-            currentTraining,
-            amountOfSeries,
-            currentSeries, 
-            exerciseKey, 
-            priority,
-            planKey, 
-            name, 
-            type, 
-        } = this.props;
+        const {
+            trainingDays,
+                exerciseObject: {
+                    currentTraining,
+                    amountOfSeries,
+                    currentSeries, 
+                    exerciseKey, 
+                    priority,
+                    isOpened,
+                    planKey, 
+                    name, 
+                    type
+                }
+            } = this.props;
 
-        const { 
-            trainingDays, 
-            isHidden, 
-        } = this.state;
-        
         return (
-            <Container isHidden={isHidden}>
+            <Container isOpened={isOpened}>
                 <TogglePanel 
-                    flexStyles={!isHidden ? modifyToggleStyles: toggleStyles}
-                    handleFunction={()=> this.handleArrowButton()} 
+                    flexStyles={isOpened ? modifyToggleStyles: toggleStyles}
+                    handleFunction={()=> this.changeExerciseOpenState()} 
                     buttonBackgroundColor={variables.$grayBlue}
                     iconName={this.setExerciseIcon(type)} 
                     iconColor={variables.$grayBlue}
                     textFontWeight={"bold"}
                     textFontSize={"1.1em"}
                     buttonColor={"white"}
-                    isHidden={isHidden}
+                    isHidden={!isOpened}
                     iconFontSize={25}
                     text={name}  
                 />
-                {!isHidden ?    <Content 
-                                    currentTraining={currentTraining}
-                                    amountOfSeries={amountOfSeries}
-                                    currentSeries={currentSeries}
-                                    trainingDays={trainingDays}
-                                    exerciseKey={exerciseKey}
-                                    priority={priority}
-                                    planKey={planKey}
-                                    type={type} 
-                                /> : null}
+                {isOpened ?    
+                    <Content 
+                        currentTraining={currentTraining}
+                        amountOfSeries={amountOfSeries}
+                        currentSeries={currentSeries}
+                        trainingDays={trainingDays}
+                        exerciseKey={exerciseKey}
+                        priority={priority}
+                        planKey={planKey}
+                        type={type} 
+                    /> : null}
             </Container>
         )
     }

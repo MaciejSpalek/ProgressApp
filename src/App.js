@@ -16,7 +16,6 @@ import app from './base';
 
 const App = () => {
     const [ usersData, setUsersData ] = useState([]);
-    const [ addedStatus, setAddedStatus ] = useState(false);
     const renderProfile = () => {
       return usersData.map((user, index) => {
         return (
@@ -36,17 +35,7 @@ const App = () => {
           setUsersData(tempArray)
         })
       })
-    }, [usersData.length])
-
-    app.getRootRef('users').on("child_changed", snapshot => {
-      app.getAllUsers((tempArray) => {
-        setUsersData(tempArray)
-      })
-    })
-
-   
-    
-    
+    }, [usersData.length]) 
 
     return (
       <div className="App">
@@ -61,8 +50,8 @@ const App = () => {
                   <Switch>
                       {renderProfile()}
                       <PrivateRoute exact path="/" component={()=> <Home usersData={usersData} />} />
-                      <PrivateRoute exact path="/planBoard" component={PlanBoard}/>
-                      <PrivateRoute exact path="/measurements" component={Measurements}/>
+                      <PrivateRoute exact path="/plany" component={PlanBoard}/>
+                      <PrivateRoute exact path="/wymiary" component={Measurements}/>
                       <PrivateRoute exact path="/messanger" component={Messanger}/>
                       <Route exact path="/signup" component={SignUp} />
                       <Route exact path="/login" component={Login} />

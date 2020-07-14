@@ -5,7 +5,8 @@ import Thead from './thead';
 import { Table } from '../../../Components/styleHelpers';
 
 const StyledTable = styled(Table)`
-
+    max-width: 350px;
+    margin: 1em;
 `
 
 const MeasurementTable = ({ parameters }) => {

@@ -61,9 +61,8 @@ class PostBoard extends Component {
     }
 
     // return filtered array ( only your posts )
-    getUserPostsArray(array) {
-        const userID = app.getUserID();
-        return array.filter(item => item.userID === userID);
+    getUserPostsArray(array, postsOwner) {
+        return array.filter(item => item.userID === postsOwner);
     }
     
     // return filtered array ( your posts and your friends' posts )
@@ -89,9 +88,10 @@ class PostBoard extends Component {
     renderPosts() {
         let array = [];
         let destination = this.props.destination;
+        let postsOwner = this.props.postsOwner;
 
         const sortedArrayByDate = helpers.sortByDate(this.state.posts);
-        const userPostsArray = this.getUserPostsArray(sortedArrayByDate);
+        const userPostsArray = this.getUserPostsArray(sortedArrayByDate, postsOwner);
         const friendsPostsArray = this.getFriendsPostsArray(sortedArrayByDate);
 
         if(destination === "home") {

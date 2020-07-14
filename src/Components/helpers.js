@@ -64,7 +64,9 @@ class Helpers {
         return regex.test(nick)
     }
 
-
+    getInnerWidth() {
+        return window.innerWidth;
+    }
     
     // for TrainingPlans folder (trainingDay.js & content.js)
 
