@@ -18,10 +18,13 @@ const StyledButton = styled.button`
     cursor: pointer;
 `
 
-const Button = ({ text, style, handleClick }) => {
+const Button = ({ text, style, handleClick, isDisabled }) => {
     return (
-        <StyledButton style={style} onClick={(e)=> handleClick(e)}>
-            {text}
+        <StyledButton 
+            style={style} 
+            onClick={(e)=> handleClick(e)}
+            disabled={isDisabled}
+        > {text}
         </StyledButton>
     )
 }

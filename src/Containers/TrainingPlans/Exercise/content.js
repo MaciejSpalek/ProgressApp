@@ -69,8 +69,11 @@ class Content extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            isDisabledStartButton: false,
+            isDisabledStopButton: true,
             isChartButtonHidden: true,
-            time: 0
+            time: 0,
+            
         }
         this.timerInterval = null;
     }
@@ -94,7 +97,9 @@ class Content extends Component {
     startTimer() {
         this.timerInterval = setInterval(()=> {
             this.setState(prevState => ({
-                time: prevState.time + 1
+                time: prevState.time + 1,
+                isDisabledStartButton: true,
+                isDisabledStopButton: false
             }))
         }, 1000)
     }
@@ -102,7 +107,11 @@ class Content extends Component {
     stopTimer(e){  
         clearInterval(this.timerInterval)
         this.addSeries(e)
-        this.setState({time: 0})
+        this.setState({
+            isDisabledStartButton: false,
+            isDisabledStopButton: true,
+            time: 0
+        })
     }
     
     updateExerciseCounters() {
@@ -284,7 +293,12 @@ class Content extends Component {
     }
 
     render() {
-        const { isChartButtonHidden, time } = this.state;
+        const { 
+            isDisabledStartButton,
+            isDisabledStopButton,
+            isChartButtonHidden, 
+            time 
+        } = this.state;
         const { type } = this.props;
         return (
             <StyledContainer>
@@ -302,6 +316,8 @@ class Content extends Component {
                     time={time} 
                     startTimer={()=> this.startTimer()}
                     stopTimer={(e)=> this.stopTimer(e)}
+                    isDisabledStartButton={isDisabledStartButton}
+                    isDisabledStopButton={isDisabledStopButton}
                 />}
                 {!isChartButtonHidden ? this.renderChart() : null}
                 <StyledTrainingDaysWrapper>

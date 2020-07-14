@@ -12,6 +12,7 @@ const Button = styled.button`
     background-color: ${variables.$grayBlue};
     border: none;
     border-radius: .5em;
+    cursor: pointer;
 `
 const ChartButton = ({ handleFunction }) => {
     return (
