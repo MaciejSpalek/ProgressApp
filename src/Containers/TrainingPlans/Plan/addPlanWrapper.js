@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components'
 import PlusButton from '../../../Components/plusButton'
-import { variables, flexCenter, RWD } from '../../../Components/styleHelpers';
+import { variables, flexCenter } from '../../../Components/styleHelpers';
 
 const StyledContainer = styled.div`
     ${flexCenter}
@@ -10,9 +10,6 @@ const StyledContainer = styled.div`
     background-color: ${props => props.areThereTooManyPlans ? variables.$lightRed : "white"};
     margin-bottom: 1em;
     padding: .5em;
-    /* @media only screen and (min-width: 1200px) {
-        width: 500px;
-    } */
 `
 const Text = styled.h2`
     color: ${props => props.areThereTooManyPlans ? variables.$red : variables.$gray};

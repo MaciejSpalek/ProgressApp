@@ -226,8 +226,7 @@ class Messanger extends Component {
             if(this.isConversationExist(conversations, userID, converserID)) {
                 for(let conversation in conversations) {
                     const contributors = conversation.split("-")
-                    if(contributors[0] === userID && contributors[1] === converserID ||
-                        contributors[0] === converserID && contributors[1] === userID) {
+                    if(contributors[0] === userID && contributors[1] === converserID || contributors[0] === converserID && contributors[1] === userID) {
                         for(let messageID in conversations[conversation]) {
                             const message = conversations[conversation][messageID]
                             tempConversation.push(message)

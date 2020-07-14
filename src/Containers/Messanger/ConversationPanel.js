@@ -23,6 +23,7 @@ const MessageWindowHeader = styled.div`
 const StyledWrapper = styled(FlexComponent)`
     width: auto;
     padding: 0;
+    cursor: pointer;
 `
 const Nick = styled.p`
     color: ${variables.$grayBlue};

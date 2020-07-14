@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components'
-import { RWD, FlexComponent }  from '../../Components/styleHelpers';
+import { FlexComponent }  from '../../Components/styleHelpers';
 import TopWrapper from './topBox';
 import BottomWrapper from './bottomBox';
 

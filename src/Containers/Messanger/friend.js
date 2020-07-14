@@ -7,6 +7,7 @@ const Container = styled.div`
     justify-content:space-between;
     width: 100%;
     padding: .5em;
+    cursor: pointer;
 `
 
 const StyledWrapper = styled(FlexComponent)`

@@ -9,6 +9,7 @@ const StyledButton = styled.button`
     border: none;
     border-radius: .3em;
     background-color: transparent;
+    cursor: pointer;
 `
 const SquareButton = ({ 
     iconName, 

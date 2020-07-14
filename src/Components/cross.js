@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimes } from '@fortawesome/free-solid-svg-icons'
 
 const Icon = styled.span`
-
+    cursor: pointer;
 `
 
 const Cross = ({styled, fontSize, handleClick}) => {

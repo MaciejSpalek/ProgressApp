@@ -13,6 +13,7 @@ const Container = styled.div`
     justify-content:space-between;
     width: 100%;
     padding: .5em;
+    cursor: pointer;
 `
 const StyledWrapper = styled(FlexComponent)`
     width: auto;
@@ -83,7 +84,6 @@ class UserProfile extends Component {
     render() {
         const { user } = this.props
         const { isYourFriend } = this.state
-
         const plusFriendIcon = <FontAwesomeIcon icon={faUserPlus} style={{color: variables.$darkBlue, fontSize: "1.5em"}} onClick={() => this.addFriendToDatabase(user)}/>
         const checkedFriendIcon = <FontAwesomeIcon icon={faUserCheck} style={{color: variables.$darkBlue, fontSize: "1.5em"}}/>
        

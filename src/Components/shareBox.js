@@ -5,7 +5,7 @@ import Paragraph from './paragraph';
 import Button from './Button';
 import { FlexComponent, variables, flexCenter }  from './styleHelpers';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFileUpload, faAddressCard } from '@fortawesome/free-solid-svg-icons';
+import { faAddressCard } from '@fortawesome/free-solid-svg-icons';
 import helpers from "./helpers";
 
 

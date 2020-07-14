@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components'
-import { flexCenter, variables, FlexComponent, RWD }  from "../../Components/styleHelpers";
+import { flexCenter, variables, FlexComponent }  from "../../Components/styleHelpers";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch, faUsers } from "@fortawesome/free-solid-svg-icons";
 import Input from '../../Components/input';

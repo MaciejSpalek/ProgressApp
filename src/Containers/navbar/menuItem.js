@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components'
 import { NavLink } from 'react-router-dom';
-import { variables, flexCenter, RWD }  from '../../Components/styleHelpers'
+import { variables, flexCenter }  from '../../Components/styleHelpers'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 const activeStyle = {

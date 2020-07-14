@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import Input from '../../Components/input';
 import Button from '../../Components/Button';
 import SquareButton from '../../Components/Buttons/SquareButton';
-import { FlexComponent, variables, RWD, flexCenter } from '../../Components/styleHelpers';
+import { FlexComponent, variables, flexCenter } from '../../Components/styleHelpers';
 import { faUndoAlt } from "@fortawesome/free-solid-svg-icons";
 
 
@@ -92,7 +92,6 @@ const Form = ({ handleFunction, handleEditButton, user }) => {
                 />
                 <StyledTextArea 
                     style={{margin: ".25em 0"}} 
-                    name={"height"} 
                     name={"description"} 
                     placeholder="opis"
                     defaultValue={description}

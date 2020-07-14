@@ -60,8 +60,8 @@ const App = () => {
                   <Switch>
                       {renderProfile()}
                       <PrivateRoute exact path="/" component={()=> <Home usersData={usersData} />} />
-                      <PrivateRoute exact path="/planBoard" component={PlanBoard}/>
-                      <PrivateRoute exact path="/measurements" component={Measurements}/>
+                      <PrivateRoute exact path="/plany" component={PlanBoard}/>
+                      <PrivateRoute exact path="/wymiary" component={Measurements}/>
                       <PrivateRoute exact path="/messanger" component={Messanger}/>
                       <Route exact path="/signup" component={SignUp} />
                       <Route exact path="/login" component={Login} />

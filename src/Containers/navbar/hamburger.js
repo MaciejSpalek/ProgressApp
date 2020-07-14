@@ -2,7 +2,7 @@ import React from "react"
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBars, faTimes } from '@fortawesome/free-solid-svg-icons'
-import { variables, RWD } from "../../Components/styleHelpers";
+import { variables } from "../../Components/styleHelpers";
 
 const onStyle = {
     "fontSize": "40", 

@@ -40,11 +40,6 @@ const Container = styled.div`
 `
 
 class exercise extends Component {
-    constructor(props) {
-        super(props);
-    }
-
-  
     changeExerciseOpenState() {
         const {exerciseObject: {
             exerciseKey, 

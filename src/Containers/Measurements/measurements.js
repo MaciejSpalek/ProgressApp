@@ -5,7 +5,7 @@ import app from '../../base';
 import TogglePanel from '../../Components/togglePanel';
 import Form from './form';
 import helpers from '../../Components/helpers';
-import { variables, Container, FlexComponent, flexCenter, RWD } from '../../Components/styleHelpers';
+import { variables, Container, FlexComponent } from '../../Components/styleHelpers';
 import { faRuler } from '@fortawesome/free-solid-svg-icons'
 import Placeholder from './placeholder';
 
