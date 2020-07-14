@@ -1,4 +1,5 @@
 import React from "react"
+import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBars, faTimes } from '@fortawesome/free-solid-svg-icons'
 import { variables } from "../../Components/styleHelpers";
@@ -13,9 +14,15 @@ const offStyle = {
     "transition": ".4s cubic-bezier(0.785, 0.135, 0.15, 0.86)"
 }
 
+const StyledIcon = styled(FontAwesomeIcon)`
+    @media only screen and (min-width: 1200px) {
+       display: none;
+    }
+`
+
 const Hamburger = ({ handleFunction, isMenuActive }) => {
     return (
-        <FontAwesomeIcon 
+        <StyledIcon 
             icon={!isMenuActive ? faBars: faTimes} 
             style={!isMenuActive ? onStyle : offStyle} 
             onClick={()=> handleFunction()}

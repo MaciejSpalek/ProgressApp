@@ -22,7 +22,7 @@ const Square = styled.span`
     text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.5);
 `
 
-const Timer = ({ time, startTimer, stopTimer }) => {
+const Timer = ({ time, startTimer, stopTimer, isDisabledStartButton, isDisabledStopButton }) => {
     const getTimeParameter = parameter => {
         return parameter > 9 ? parameter : `0${parameter}`
     }
@@ -39,11 +39,20 @@ const Timer = ({ time, startTimer, stopTimer }) => {
         return `${minutes}:${seconds}`;
     }
   
+    
     return (
         <StyledContainer>
-            <Button  handleClick={()=> startTimer()} text={"Start"}/>
+            <Button  
+                isDisabled={isDisabledStartButton}
+                handleClick={()=> startTimer()} 
+                text={"Start"} 
+            />
             <Square> { getTime() } </Square>
-            <Button  handleClick={(e)=> stopTimer(e)} text={"Stop"}/>
+            <Button  
+                isDisabled={isDisabledStopButton}
+                handleClick={(e)=> stopTimer(e)} 
+                text={"Stop"}
+            />
         </StyledContainer>
     )
 }

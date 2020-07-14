@@ -2,6 +2,7 @@ import React, { useCallback } from "react";
 import app from "../../base";
 import Button from '../../Components/Button'
 import Input from '../../Components/input';
+import InputLabel from "../../Components/InputLabel";
 import userPhoto from "../../images/userPhoto.svg";
 import helpers from "../../Components/helpers";
 import { Logo, Container, Form } from "../../Components/styleHelpers"
@@ -9,7 +10,9 @@ import { withRouter } from "react-router";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUserPlus } from "@fortawesome/free-solid-svg-icons";
-import { variables } from "../../Components/styleHelpers";
+import { variables, labelStyle, inputStyle, buttonStyle } from "../../Components/styleHelpers";
+
+
 
 const SignUp = ({ history }) => {
   const handleSignUp = useCallback(
@@ -58,12 +61,53 @@ const SignUp = ({ history }) => {
   return (
     <Container>
       <Form onSubmit={handleSignUp}>
-        <Input type={"text"} name={"nick"} placeholder={"nick"} handleFunction={()=> {}} required />
-        <Input type={"text"} name={"age"} placeholder={"wiek"} handleFunction={()=> {}} required />
-        <Input type={"email"} name={"email"} placeholder={"email"} handleFunction={()=> {}} required />
-        <Input type={"password"} name={"password"} placeholder={"hasło"} handleFunction={()=> {}} required />
-        <Button handleClick={()=> {}} text={"Stwórz"}/>
-        <Link style={{color: "white", fontWeight: "bold"}} to="/login">
+        <InputLabel
+          labelStyle={labelStyle}
+          style={inputStyle}
+          text={"Nick"} 
+          type={"text"} 
+          name={"nick"}
+          maxLength={20}
+          handleFunction={()=> {}} 
+          isRequired={true}
+        />
+        <InputLabel
+          min={1}
+          max={200}
+          labelStyle={labelStyle}
+          style={inputStyle}
+          text={"Wiek"} 
+          type={"number"} 
+          name={"age"} 
+          handleFunction={()=> {}}
+          isRequired={true}
+        />
+        <InputLabel
+          maxLength={50}
+          labelStyle={labelStyle}
+          style={inputStyle}
+          text={"Email"} 
+          type={"email"} 
+          name={"email"} 
+          handleFunction={()=> {}}
+          isRequired={true}
+        />
+        <InputLabel
+          labelStyle={labelStyle}
+          style={inputStyle}
+          text={"Hasło"} 
+          type={"password"} 
+          name={"password"} 
+          handleFunction={()=> {}}
+          isRequired={true}
+        />
+ 
+        <Button 
+          handleClick={()=> {}} 
+          text={"Stwórz"}
+          style={buttonStyle}
+        />
+        <Link style={{color: "white", fontWeight: "bold", fontSize: "1.3em"}} to="/login">
           Przejdź do logowania
         </Link>
         <Logo>

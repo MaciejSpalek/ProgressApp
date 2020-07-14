@@ -15,6 +15,7 @@ const Button = styled.button`
     height: 35px;
     border-radius: .2em;
     padding: 0 .5em;
+    cursor: pointer;
 `;
 
 const ArrowButton = ({ isHide, handleFunction, fontColor, backgroundColor }) => {

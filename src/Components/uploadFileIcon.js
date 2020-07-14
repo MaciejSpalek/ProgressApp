@@ -8,6 +8,7 @@ const StyledLabel = styled.label`
     right: .5em;
     top: 3em;
     background-color: white;
+    cursor: pointer;
 `
 
 const UploadFileIcon = ({ icon, color, styles, onChangeFunction }) => {

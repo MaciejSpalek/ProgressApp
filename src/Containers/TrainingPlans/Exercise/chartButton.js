@@ -1,6 +1,6 @@
 import React from 'react'
 import { variables, flexCenter } from '../../../Components/styleHelpers'
-import { faChartBar, faChartArea } from '@fortawesome/free-solid-svg-icons'
+import { faChartArea } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import styled from 'styled-components'
 import Paragraph from '../../../Components/paragraph'
@@ -12,6 +12,7 @@ const Button = styled.button`
     background-color: ${variables.$grayBlue};
     border: none;
     border-radius: .5em;
+    cursor: pointer;
 `
 const ChartButton = ({ handleFunction }) => {
     return (

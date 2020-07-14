@@ -3,7 +3,6 @@ import styled from "styled-components";
 import app from "../../base";
 import Comments from "./comments";
 import Input from '../../Components/input';
-import ImageWrapper from '../../Components/ImageWrapper';
 import Helpers from "../../Components/helpers.js";
 import DataUserWrapper from './dataWrapper';
 import { flexCenter, variables, FlexComponent}  from '../../Components/styleHelpers';
@@ -73,7 +72,8 @@ const IconBox = styled.div`
     ${flexCenter};
     padding: .3em;
     font-size: 1.1em;
-    line-height:.8;
+    line-height: .8;
+    cursor: pointer;
 `
 const IconCaption = styled.span`
     font-size: 1.3em;
@@ -120,9 +120,11 @@ class Post extends Component  {
         this.setAllCommentsOnStart();
         
     }
+
     componentWillUnmount() {
         this._isMounted = false;
     }
+
     setUserData() {
         const rootRef = app.getRootRef("users");
         const userID = app.getUserID();
@@ -138,30 +140,6 @@ class Post extends Component  {
         })
     }
     
-    
-
-    // functions for handle likes
-    modifyLikeColor() {
-        this.setState(prevState => ({
-            didUserLike: !prevState.didUserLike 
-        }))
-    }
-    setDefaultLikes() {
-        const likesRef = app.getRootRef("likes");
-        const userID = app.getUserID();
-                   
-        likesRef.once('value', snapshot =>{
-        const posts = snapshot.val();
-            for(let post in posts) {
-                const likes = posts[post];
-                for(let like in likes) {
-                    if(userID === likes[like]) {
-                        this.modifyLikeColor();
-                    } 
-                }
-            }
-        });
-    }
     removeLike(likesRef, singlePost, userID, postKey) {
         for(let userLike in singlePost) { // iteration by single post - check all likes in current post
             if(userID === singlePost[userLike]) { // if user click, it executes comparing their userID and property value
@@ -169,6 +147,7 @@ class Post extends Component  {
             }
         }
     }
+
     handleLike = (postKey) => {
         const postsRef = app.getRootRef("posts");
         const likesRef = app.getRootRef("likes");
@@ -189,15 +168,14 @@ class Post extends Component  {
             if(this.isRepeatedValue(singlePost, userID)) {
                 this.removeLike(likesRef, singlePost, userID, postKey)
                 this.setLikesInPost(postsRef, postKey, true)
-                this.modifyLikeColor();
             } else {
                 likesRef.child(postKey).push(userID);
                 this.setLikesInPost(postsRef, postKey, false)
-                this.modifyLikeColor();
             }
             this.unlockLiking();
         })
     }
+
     unlockLiking() {
         setTimeout(()=> {
             this.setState({
@@ -218,6 +196,7 @@ class Post extends Component  {
         }
         return isRepeated;
     }
+
     setLikesInPost(postsRef, postKey, isRepeated) {
         postsRef.once('value', snapshot => { 
             const currentLikesValue = snapshot.val()[postKey].likes;
@@ -233,10 +212,12 @@ class Post extends Component  {
             }
         })
     }
+
     removePost = (postKey) => {
         const postsRef = app.getRootRef("posts");
         postsRef.child(postKey).remove();
     }
+
     isYourPost = (postKey) => {
         const postsRef = app.getRootRef("posts");
         const userID = app.getUserID();
@@ -258,6 +239,7 @@ class Post extends Component  {
             isCommentBoxActive: !prevState.isCommentBoxActive
         }))
     }
+
     setAllCommentsOnStart() {
         const commentsRef = app.getRootRef("comments");
         commentsRef.on("value", snapshot => {
@@ -267,6 +249,7 @@ class Post extends Component  {
             }
         })
     }
+
     addComment = (e, postKey) => {
         e.preventDefault();
         const { input } = e.target.elements;
@@ -287,18 +270,14 @@ class Post extends Component  {
             return app.getRealTimeDatabase().ref().update(updates);
         }
     }
+
     filterComments = (postKey, comments) => {
         return comments.filter(comment => comment.postKey === postKey)
     }
+
     countComments = (postKey, comments) => {
         return comments.filter(comment => comment.postKey === postKey).length
     }
-
-
-
-
- 
-   
 
     render() {
         dayjs.locale("pl")
@@ -352,20 +331,10 @@ class Post extends Component  {
                         <IconCaption>{ this.countComments(postKey, comments) }</IconCaption>
                     </IconBox>
                 </BottomBox>
-                {
-                isCommentBoxActive ? 
+                {isCommentBoxActive ? 
                 <CommentBox>
                     <Comments comments={this.filterComments(postKey, comments)}/>
                     <AddBox>
-                        <ImageWrapper 
-                            isLogged={true}
-                            imgHeight={"2.5em"}
-                            imgWidth={"2.5em"}
-                            dotSize={"0"}
-                            dotBorder={"0"}
-                            margin={"0 .5em 0 0"}
-                            url={url}
-                        />
                         <CommentForm onSubmit={(e) => this.addComment(e, postKey)}>
                             <Input 
                                 name={"input"}
