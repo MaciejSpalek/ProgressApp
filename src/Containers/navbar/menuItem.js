@@ -21,7 +21,7 @@ const StyledNavLink = styled(NavLink)`
             background-color: transparent;
         } 
         &:hover::before {
-            content: "ds";
+            content: "";
             position: absolute;
             bottom: 0%;
             width: 100%;
@@ -30,9 +30,18 @@ const StyledNavLink = styled(NavLink)`
         }
     }
 `
+
+
+const StyledIconWrapper = styled.div`
+    @media only screen and (max-width: 1200px) {
+        width: 3.5em;
+        margin: .5em 1em;
+    }
+`
+
 const Icon = styled(FontAwesomeIcon)`
     width: 1.5em;
-    font-size: 50px;
+    font-size: 60px;
     color: ${variables.$orange};
     @media only screen and (min-width: 1200px) {
         font-size: 30px;
@@ -61,9 +70,9 @@ const MenuItem = ({ route, iconName, caption, handleFunction  }) => {
     return (
         <StyledNavLink exact to={route} activeStyle={activeStyle} onClick={()=> handleFunction()}>
             <ListItem>
-                <Icon 
-                    icon={iconName} 
-                />
+                <StyledIconWrapper>
+                    <Icon icon={iconName} />
+                </StyledIconWrapper>
                 <Caption>{caption}</Caption>
             </ListItem>
         </StyledNavLink>

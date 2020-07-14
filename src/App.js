@@ -35,17 +35,7 @@ const App = () => {
           setUsersData(tempArray)
         })
       })
-    }, [usersData.length])
-
-    // app.getRootRef('users').on("child_changed", snapshot => {
-    //   app.getAllUsers((tempArray) => {
-    //     setUsersData(tempArray)
-    //   })
-    // })
-
-   
-    
-    
+    }, [usersData.length]) 
 
     return (
       <div className="App">

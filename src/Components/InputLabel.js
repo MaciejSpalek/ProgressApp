@@ -19,6 +19,7 @@ const InputLabel = ({
     handleFunction, 
     placeholder, 
     isRequired, 
+    labelStyle,
     maxLength,
     value, 
     style,
@@ -29,14 +30,13 @@ const InputLabel = ({
     max, 
  }) => {
     return (
-        <Label>
+        <Label style={labelStyle}>
             {text}
             <Input  
                 handleFunction={(e)=> handleFunction(e)}
                 placeholder={placeholder}
                 maxLength={maxLength}
                 isRequired={isRequired}
-                
                 value={value}
                 style={style}
                 name={name}  
