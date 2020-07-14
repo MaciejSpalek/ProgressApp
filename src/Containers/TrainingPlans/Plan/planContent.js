@@ -8,37 +8,46 @@ import {
     RWD
 } from '../../../Components/styleHelpers';
 
-const StyledWrapper = styled(FlexComponent)`
-    flex-direction: column;
-    justify-content: flex-start;
-    height: 100%;
-`
-
-const StyledExerciseList = styled(FlexComponent)`
-    flex-direction: column;
-    justify-content: center;
-    overflow: auto;
-    padding: 0;
-    @media only screen and (min-width: 768px) {
-        flex-direction: row;
-        align-items: flex-start;
-        flex-wrap: wrap;
-    }
-`
-
 const StyledPlanContent = styled.div`
     ${flexCenter};
     flex-direction: column;
-    justify-content: ${props => props.isHidden ? "space-between" : "flex-end"};
+    justify-content: space-between;
     width: 100%;
     height: 100%;
-    overflow: auto;
+    overflow: hidden;
+    position: relative;
 
     @media only screen and (min-width: 768px) {
         flex-direction: row;
         justify-content: center;
     }
 `
+
+
+const StyledWrapper = styled(FlexComponent)`
+    flex-direction: column;
+    justify-content: flex-start;
+    height: ${props => props.isAddPanelHidden ? "calc(100vh - 64px - 50px - 50px - .5em )" : "100%"};
+    position: ${props => props.isAddPanelHidden ? "absolute" : "static"};
+    top: 0;
+    left: 0;
+`
+
+const StyledExerciseList = styled(FlexComponent)`
+    flex-direction: column;
+    justify-content: flex-start;
+    overflow: auto;
+    padding: 0;
+    @media only screen and (min-width: 768px) {
+        flex-direction: row;
+        justify-content: center;
+
+        align-items: flex-start;
+        flex-wrap: wrap;
+    }
+`
+
+
 const StyledCaption = styled.h2`
     font-size: 1.5em;
     color: ${variables.$gray};
@@ -87,7 +96,7 @@ class PlanContent extends Component {
 
         if(windowWidth > RWD.$tablet) {
             return (
-                <StyledPlanContent isHidden={isAddPanelHidden}>
+                <StyledPlanContent>
                     <StyledWrapper>
                         <StyledCaption> { isExercisesExist() ? `Lista ćwiczeń (${getAmountOfExercises()})` : "Brak dodanych ćwiczeń"}</StyledCaption>
                         <StyledExerciseList>
@@ -107,9 +116,9 @@ class PlanContent extends Component {
             )
         } else  {
             return (
-                <StyledPlanContent isHidden={isAddPanelHidden}>
+                <StyledPlanContent isAddPanelHidden={isAddPanelHidden}>
                     {isAddPanelHidden ?
-                    <StyledWrapper>
+                    <StyledWrapper isAddPanelHidden={isAddPanelHidden}>
                         <StyledCaption> { isExercisesExist() ? `Lista ćwiczeń (${getAmountOfExercises()})` : "Brak dodanych ćwiczeń"}</StyledCaption>
                         <StyledExerciseList>
                             {renderExercise()}

@@ -10,6 +10,7 @@ const StyledContainer = styled(FlexComponent)`
     ${props => props.styles};
     justify-content: space-between;
     background-color: white;
+    height: 50px;
 `
 
 const StyledWrapper = styled(FlexComponent)`

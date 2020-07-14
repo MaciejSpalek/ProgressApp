@@ -6,7 +6,7 @@ const StyledButton = styled.button`
     position: relative;
     color: white;
     width: 100%;
-    height: 38px;
+    min-height: 38px;
     font-size: 1.2em;
     font-weight: bold;
     font-family: 'Patua One', cursive;

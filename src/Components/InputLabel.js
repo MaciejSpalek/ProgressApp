@@ -35,8 +35,9 @@ const InputLabel = ({
                 handleFunction={(e)=> handleFunction(e)}
                 placeholder={placeholder}
                 maxLength={maxLength}
-                required={isRequired}
-                defaultValue={value}
+                isRequired={isRequired}
+                
+                value={value}
                 style={style}
                 name={name}  
                 type={type}
