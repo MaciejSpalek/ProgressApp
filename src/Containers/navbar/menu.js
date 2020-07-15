@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect } from "./node_modules/react"
 import app from '../../base'
-import styled from 'styled-components'
+import styled from './node_modules/styled-components'
 import MenuItem from './menuItem';
-import { faRuler, faListOl, faSignOutAlt, faHome, faUser } from '@fortawesome/free-solid-svg-icons'
-import { faFacebookMessenger } from "@fortawesome/free-brands-svg-icons"
+import { faRuler, faListOl, faSignOutAlt, faHome, faUser } from './node_modules/@fortawesome/free-solid-svg-icons'
+import { faFacebookMessenger } from "./node_modules/@fortawesome/free-brands-svg-icons"
 
 
 const transformMenu = {

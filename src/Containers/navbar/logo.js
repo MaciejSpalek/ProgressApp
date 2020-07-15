@@ -1,7 +1,7 @@
-import React from 'react'
-import styled from 'styled-components';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChartLine } from '@fortawesome/free-solid-svg-icons';
+import React from './node_modules/react'
+import styled from './node_modules/styled-components';
+import { FontAwesomeIcon } from './node_modules/@fortawesome/react-fontawesome';
+import { faChartLine } from './node_modules/@fortawesome/free-solid-svg-icons';
 import { variables, flexCenter } from '../../Components/styleHelpers';
 
 const StyledLogo = styled.div`
