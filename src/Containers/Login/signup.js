@@ -1,15 +1,14 @@
 import React, { useCallback } from "react";
 import app from "../../base";
-import Button from '../../Components/Button'
+import Button from '../../Components/Button';
 import InputLabel from "../../Components/InputLabel";
 import userPhoto from "../../images/userPhoto.svg";
 import helpers from "../../Components/helpers";
-import { Logo, Container, Form } from "../../Components/styleHelpers"
+import { Logo, Container, Form, variables, labelStyle, inputStyle, buttonStyle } from "../../Components/styleHelpers"
 import { withRouter } from "react-router";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUserPlus } from "@fortawesome/free-solid-svg-icons";
-import { variables, labelStyle, inputStyle, buttonStyle } from "../../Components/styleHelpers";
 
 
 

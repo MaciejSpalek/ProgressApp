@@ -23,7 +23,7 @@ const Logo = () => {
             />
             <Title> ProgressApp </Title>
         </StyledLogo>
-    );
+    )
 }
 
 export default Logo;
