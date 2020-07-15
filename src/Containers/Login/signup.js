@@ -1,7 +1,6 @@
 import React, { useCallback } from "react";
 import app from "../../base";
 import Button from '../../Components/Button'
-import Input from '../../Components/input';
 import InputLabel from "../../Components/InputLabel";
 import userPhoto from "../../images/userPhoto.svg";
 import helpers from "../../Components/helpers";
