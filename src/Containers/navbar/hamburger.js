@@ -1,7 +1,7 @@
-import React from "./node_modules/react"
-import styled from './node_modules/styled-components';
-import { FontAwesomeIcon } from './node_modules/@fortawesome/react-fontawesome'
-import { faBars, faTimes } from './node_modules/@fortawesome/free-solid-svg-icons'
+import React from "react"
+import styled from 'styled-components';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faBars, faTimes } from '@fortawesome/free-solid-svg-icons'
 import { variables } from "../../Components/styleHelpers";
 
 const onStyle = {

@@ -1,8 +1,8 @@
-import React from './node_modules/react';
-import styled from './node_modules/styled-components'
-import { NavLink } from './node_modules/react-router-dom';
+import React from 'react';
+import styled from 'styled-components'
+import { NavLink } from 'react-router-dom';
 import { variables, flexCenter }  from '../../Components/styleHelpers'
-import { FontAwesomeIcon } from './node_modules/@fortawesome/react-fontawesome'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 const activeStyle = {
     "backgroundColor": "black"

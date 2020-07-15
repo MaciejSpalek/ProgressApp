@@ -1,7 +1,7 @@
-import React, { useState } from './node_modules/react';
+import React, { useState } from 'react';
 import Menu from './menu';
 import Logo from './logo';
-import styled from './node_modules/styled-components';
+import styled from 'styled-components';
 import Hamburger from './hamburger';
 import { flexCenter, variables }  from '../../Components/styleHelpers';
 
