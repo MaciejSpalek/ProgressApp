@@ -11,7 +11,7 @@ const StyledFigure = styled.figure`
     ${flexCenter};
 `
 const StyledFigCaption = styled.figcaption`
-
+    color: black;
 `
 
 const Image = ({ 

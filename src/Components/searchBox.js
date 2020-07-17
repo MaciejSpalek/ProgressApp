@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import InputLabel from './InputLabel';
 import helpers from './helpers';
-import UserProfile from '../Containers/Messanger/userProfile';
+import UserProfile from '../Containers/Messanger/userItem';
 import { variables, FlexComponent, flexCenter } from './styleHelpers';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';

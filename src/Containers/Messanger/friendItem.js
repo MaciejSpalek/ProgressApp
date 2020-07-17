@@ -1,8 +1,8 @@
 import React from 'react';
-import styled from "styled-components";
+import styled from 'styled-components';
 import { flexCenter } from "../../Components/styleHelpers";
 import Image from '../../Components/image';
-
+import OnlineDot from '../../Components/onlineDot';
 
 const imageCaptionStyle = {
     "color": "black",
@@ -11,19 +11,12 @@ const imageCaptionStyle = {
     "marginLeft": ".5em"
 }
 
-const Container = styled.div`
+const Container = styled.li`
     ${flexCenter};
     justify-content:space-between;
     width: 100%;
     padding: .5em;
     cursor: pointer;
-`
-
-const LogDot = styled.span`
-    width: .6em;
-    height: .6em;
-    background-color: ${props => props.isLogged ? "green" : "red"};
-    border-radius: 50%;
 `
 
 const FriendBoxItem = ({ user, handleConversation }) => {
@@ -37,7 +30,12 @@ const FriendBoxItem = ({ user, handleConversation }) => {
                 figCaption={user.nick}
                 figCaptionStyle={imageCaptionStyle}
             />
-            <LogDot isLogged={user.isLogged} />
+            <OnlineDot 
+                isLogged={user.isLogged}
+                position={"static"}
+                dotBorder={"0"}
+                size={".6em"}
+            />
         </Container>
     )
 }

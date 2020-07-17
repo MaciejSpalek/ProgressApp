@@ -2,22 +2,28 @@ import React from 'react';
 import styled from 'styled-components'
 
 const StyledDot = styled.span`
-    position: absolute;
+    position: ${props => props.position};
     bottom: 10%;
     right: 10%;
-    background-color: ${props => props.isLogged ? "green" : "red"};
     width: ${props => props.size};
     height: ${props => props.size};
     border: ${props => props.dotBorder} solid white;
     border-radius: 50%;
+    background-color: ${props => props.isLogged ? "green" : "red"};
 `
 
-const OnlineDot = ({ size, isLogged, dotBorder }) => {
+const OnlineDot = ({ 
+    dotBorder, 
+    isLogged, 
+    position, 
+    size, 
+}) => {
     return (
         <StyledDot 
-            size={size}
-            isLogged={isLogged}
             dotBorder={dotBorder}
+            position={position}
+            isLogged={isLogged}
+            size={size}
         />
     )
 }

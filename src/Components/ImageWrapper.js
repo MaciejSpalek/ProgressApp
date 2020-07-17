@@ -22,15 +22,16 @@ const ImageWrapper = ({
     return (
         <StyledImageWrapper margin={margin}>
             <Image 
+                height={imgHeight}
+                width={imgWidth}
                 alt={alt}
                 url={url}
-                width={imgWidth}
-                height={imgHeight}
             />
             <OnlineDot 
-                size={dotSize}
-                isLogged={isLogged}
+                position={"absolute"}
                 dotBorder={dotBorder}
+                isLogged={isLogged}
+                size={dotSize}
             />
         </StyledImageWrapper>
     )
