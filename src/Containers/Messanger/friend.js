@@ -1,6 +1,15 @@
 import React from 'react';
 import styled from "styled-components";
-import { flexCenter, FlexComponent } from "../../Components/styleHelpers";
+import { flexCenter } from "../../Components/styleHelpers";
+import Image from '../../Components/image';
+
+
+const imageCaptionStyle = {
+    "color": "black",
+    "fontSize": "1em",
+    "fontWeight": "bold",
+    "marginLeft": ".5em"
+}
 
 const Container = styled.div`
     ${flexCenter};
@@ -8,26 +17,6 @@ const Container = styled.div`
     width: 100%;
     padding: .5em;
     cursor: pointer;
-`
-
-const StyledWrapper = styled(FlexComponent)`
-    width: auto;
-    padding: 0;
-`
-const Image = styled.div`
-    position: relative;
-    border-radius: 50%;
-    width: 3.5em;
-    height: 3.5em;
-    background-image: url(${props => props.url});
-    background-position: center;
-    background-size: cover;
-    margin-right: .5em;
-`
-const Nick = styled.div`
-    color: black;
-    font-size: 1em;
-    font-weight: bold;
 `
 
 const LogDot = styled.span`
@@ -40,10 +29,14 @@ const LogDot = styled.span`
 const FriendBoxItem = ({ user, handleConversation }) => {
     return (
         <Container onClick={() => handleConversation(user)}>
-            <StyledWrapper>
-                <Image url={user.url}/>
-                <Nick> {user.nick} </Nick>
-            </StyledWrapper>
+            <Image 
+                height={"3.5em"}
+                width={"3.5em"}
+                url={user.url}
+                alt={user.nick}
+                figCaption={user.nick}
+                figCaptionStyle={imageCaptionStyle}
+            />
             <LogDot isLogged={user.isLogged} />
         </Container>
     )

@@ -92,7 +92,6 @@ class Plan extends Component {
                     }
                     seriesCounter++;
                     tempObject[series] = item[series];
-                    console.log(tempArray)
                     if(seriesCounter >= amountOfSeries) {
                         tempObject = {};
                         seriesCounter = 0;

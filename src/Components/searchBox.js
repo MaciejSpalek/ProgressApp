@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import Input from './input';
+import InputLabel from './InputLabel';
 import helpers from './helpers';
 import UserProfile from '../Containers/Messanger/userProfile';
-import { variables, FlexComponent } from './styleHelpers';
+import { variables, FlexComponent, flexCenter } from './styleHelpers';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
@@ -33,11 +33,12 @@ const StyledInputWrapper = styled(FlexComponent)`
     }
 `
 
-const StyledProfilesWrapper = styled(FlexComponent)`
+const StyledProfilesWrapper = styled.ul`
+    ${flexCenter};
     flex-direction: column;
+    width: 100%;
     position: absolute;
     top: 100%;
-    max-width: calc(500px - 1em);
     background-color: white;
     border-bottom-left-radius: .3em;
     border-bottom-right-radius: .3em;
@@ -45,6 +46,7 @@ const StyledProfilesWrapper = styled(FlexComponent)`
     z-index: 999;
     @media only screen and (min-width: 500px) {
         top: calc(100% - .5em);
+        max-width: calc(500px - 1em);
     }
 `
 
@@ -81,18 +83,19 @@ const SearchBox = ({ usersData }) => {
     return (
         <StyledContainer>
             <StyledInputWrapper array={mutableUsersArray.length}>
-                <Input 
+                <InputLabel 
                     name={"search"}  
-                    type={"text"}
-                    placeholder={"Szukaj"}
+                    type={"search"}
+                    placeholder={"Szukaj znajomych"}
+                    ariaLabel={"Szukaj znajomych"}
                     handleFunction={(e)=> {filterUsers(e)}}
                 />
                 <FontAwesomeIcon 
                     icon={faSearch} 
-                    color={variables.$gray} 
                     style={{
+                        color: variables.$gray,
+                        marginLeft: ".5em",
                         fontSize: "1.5em",
-                        marginLeft: ".5em"
                     }}
                 />
             </StyledInputWrapper>

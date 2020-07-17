@@ -1,39 +1,28 @@
-import React, { Component } from "react";
-import styled from "styled-components";
-import Helpers from "../../Components/helpers"
-import app from "../../base"
+import React, { Component } from 'react';
+import styled from 'styled-components';
+import Helpers from '../../Components/helpers';
+import Image from '../../Components/image';
+import app from '../../base';
 import { Link } from 'react-router-dom';
-import { variables, flexCenter, FlexComponent } from "../../Components/styleHelpers";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUserPlus, faUserCheck } from "@fortawesome/free-solid-svg-icons";
+import { variables, flexCenter, FlexComponent } from '../../Components/styleHelpers';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faUserPlus, faUserCheck } from '@fortawesome/free-solid-svg-icons';
 
 
-const Container = styled.div`
+const Container = styled.li`
     ${flexCenter};
     justify-content:space-between;
     width: 100%;
     padding: .5em;
     cursor: pointer;
 `
-const StyledWrapper = styled(FlexComponent)`
-    width: auto;
-    padding: 0;
-`
-const Image = styled.div`
-    border-radius: 50%;
-    width: 3.5em;
-    height: 3.5em;
-    background-position: center;
-    background-size: cover;
-    background-image: url(${props => props.url});
-    margin-right: .5em;
-`
-const Nick = styled.div`
-    color: black;
-    font-size: 1em;
-    font-weight: bold;
-`
-  
+
+const imageCaptionStyle = {
+    "color": "black",
+    "fontSize": "1em",
+    "fontWeight": "bold",
+    "marginLeft": ".5em"
+}
 
 class UserProfile extends Component {
     _isMounted = false;
@@ -78,9 +67,6 @@ class UserProfile extends Component {
         })
     }
 
-    showProfile() {
-
-    }
     render() {
         const { user } = this.props
         const { isYourFriend } = this.state
@@ -90,10 +76,14 @@ class UserProfile extends Component {
         return (
             <Container>
                 <Link style={{textDecoration: "none"}} to={`/${user.nick}`}>
-                    <StyledWrapper>
-                        <Image url={user.url}/>
-                        <Nick> { Helpers.capitalizeFirstLetter(user.nick) }</Nick>
-                    </StyledWrapper>
+                    <Image 
+                        height={"3.5em"}
+                        width={"3.5em"}
+                        url={user.url}
+                        alt={user.nick}
+                        figCaption={user.nick}
+                        figCaptionStyle={imageCaptionStyle}
+                    />
                 </Link>
                 { user.userID === app.getUserID() ? null
                 : (isYourFriend ? checkedFriendIcon : plusFriendIcon)}

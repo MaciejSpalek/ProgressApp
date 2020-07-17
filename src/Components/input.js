@@ -15,6 +15,7 @@ const Input = ({
     placeholder, 
     isRequired, 
     maxLength,
+    ariaLabel,
     value, 
     style, 
     name, 
@@ -35,7 +36,7 @@ const Input = ({
             type={type}
             min={min}
             max={max}
-            aria-label={"coś tam"}
+            aria-label={ariaLabel}
         />
     )
 }

@@ -16,12 +16,13 @@ const Radio = styled.input`
 const RadioLabel = ({ text, handleFunction, isChecked, value }) => {
     return (
         <Label>
-            <Radio  type={"radio"} 
-                    name={"radio"}
-                    value={value} 
-                    checked={isChecked} 
-                    onChange={(e) => handleFunction(e)}>
-            </Radio> 
+            <Radio  
+                type={"radio"} 
+                name={"radio"}
+                value={value} 
+                checked={isChecked} 
+                onChange={(e) => handleFunction(e)} 
+            />
             {text}
     </Label>
     )

@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components'
 
-const StyledDot = styled.input`
+const StyledDot = styled.span`
     position: absolute;
     bottom: 10%;
     right: 10%;

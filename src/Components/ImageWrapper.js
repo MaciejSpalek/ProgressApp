@@ -11,6 +11,7 @@ const StyledImageWrapper = styled.div`
 
 const ImageWrapper = ({ 
     url, 
+    alt,
     imgWidth, 
     imgHeight, 
     dotSize, 
@@ -21,6 +22,7 @@ const ImageWrapper = ({
     return (
         <StyledImageWrapper margin={margin}>
             <Image 
+                alt={alt}
                 url={url}
                 width={imgWidth}
                 height={imgHeight}
