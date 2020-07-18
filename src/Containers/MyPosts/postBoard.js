@@ -4,7 +4,7 @@ import styled from "styled-components";
 import helpers from "../../Components/helpers.js";
 import Post from './post';
 
-const Container = styled.div`
+const StyledPostsList = styled.ul`
     width: 100%;
     max-width: 500px;
 `
@@ -119,9 +119,9 @@ class PostBoard extends Component {
  
     render() {
         return (
-            <Container>
+            <StyledPostsList>
                 {app.getCurrentUser() ? this.renderPosts() : null}
-            </Container>
+            </StyledPostsList>
         )
     }
 }

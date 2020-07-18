@@ -2,16 +2,33 @@ import React from "react";
 import styled from "styled-components";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimes } from '@fortawesome/free-solid-svg-icons'
+import { variables } from './styleHelpers'
 
-const Icon = styled.span`
+const StyledIcon = styled(FontAwesomeIcon)`
+    color: ${variables.$gray};
+`
+const StyledIconButton = styled.div`
     cursor: pointer;
 `
 
-const Cross = ({styled, fontSize, handleClick}) => {
+const Cross = ({
+    styled, 
+    fontSize, 
+    color, 
+    handleClick
+}) => {
     return (
-        <Icon style={styled} onClick={() => handleClick()}>
-            <FontAwesomeIcon icon={faTimes} style={fontSize}/>
-        </Icon>
+        <StyledIconButton 
+            onClick={() => handleClick()}
+            style={styled} 
+            role="button"
+            aria-label="Close">
+            <StyledIcon 
+                style={{fontSize: fontSize}}
+                icon={faTimes} 
+                color={color}
+            />
+        </StyledIconButton>
     )
 }
 

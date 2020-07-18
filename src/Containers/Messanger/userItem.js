@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
-import Helpers from '../../Components/helpers';
 import Image from '../../Components/image';
 import app from '../../base';
 import { Link } from 'react-router-dom';
-import { variables, flexCenter, FlexComponent } from '../../Components/styleHelpers';
+import { variables, flexCenter } from '../../Components/styleHelpers';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUserPlus, faUserCheck } from '@fortawesome/free-solid-svg-icons';
 

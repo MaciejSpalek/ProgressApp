@@ -5,7 +5,7 @@ import { flexCenter } from '../styleHelpers'
 
 const StyledButton = styled.button`
     ${flexCenter};
-    position: absolute;
+    position: ${props => props.position ? props.position : "static"};
     border: none;
     border-radius: .3em;
     background-color: transparent;
@@ -13,13 +13,17 @@ const StyledButton = styled.button`
 `
 const SquareButton = ({ 
     iconName, 
-    iconColor, 
+    position, 
+    iconColor,
     iconStyle,
     buttonStyles, 
     handleFunction 
 }) => {
     return (
-        <StyledButton style={buttonStyles} onClick={(e)=> handleFunction(e)}>
+        <StyledButton 
+            onClick={(e)=> handleFunction(e)}
+            style={buttonStyles}
+            position={position}>
             <FontAwesomeIcon 
                 icon={iconName} 
                 color={iconColor} 

@@ -79,8 +79,10 @@ const FriendPanel = ({
                     />
                     <FontAwesomeIcon 
                         icon={faSearch} 
-                        color={variables.$gray} 
-                        style={{fontSize: "1.5em"}}
+                        style={{
+                            fontSize: "1.5em",
+                            color: variables.$gray
+                        }}
                     />
                 </SearchBox> 
             </StyledTopWrapper>
@@ -88,8 +90,10 @@ const FriendPanel = ({
                 <Caption> Znajomi ({amountOfFriends}) </Caption>
                 <FontAwesomeIcon 
                     icon={faUsers} 
-                    color={variables.$grayBlue} 
-                    style={{fontSize: 30}}
+                    style={{
+                        fontSize: 30,
+                        color: variables.$grayBlue
+                    }}
                 /> 
             </StyledBottomWrapper>
         </StyledContainer> 
