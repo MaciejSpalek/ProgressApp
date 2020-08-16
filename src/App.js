@@ -4,15 +4,18 @@ import Login from './Containers/Login/login';
 import SignUp from './Containers/Login/signup';
 import Home from './Containers/Home/home';
 import Measurements from './Containers/Measurements/measurements';
-import Profile from './Containers/Profile/profile'
+import Profile from './Containers/Profile/profile';
 import Messanger from './Containers/Messanger/messanger';
 import PlanBoard from './Containers/TrainingPlans/Plan/planBoard'
 import PrivateRoute from "./PrivateRoute";
+import app from './base';
 import { AuthProvider, AuthContext } from "./Auth";
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import './App.scss';
-import app from './base';
+// import './App.scss';
+import styled from 'styled-components';
+import GlobalStyle from './GlobalStyle';
 
+const StyledContainer = styled.div``
 
 const App = () => {
     const [ usersData, setUsersData ] = useState([]);
@@ -38,7 +41,8 @@ const App = () => {
     }, [usersData.length]) 
 
     return (
-      <div className="App">
+      <StyledContainer>
+        <GlobalStyle />
           <AuthProvider>
             <AuthContext.Consumer>
               { currentUser => (
@@ -60,7 +64,7 @@ const App = () => {
               )}
             </AuthContext.Consumer>
           </AuthProvider>
-      </div>
+      </StyledContainer>
     )
 }
   
