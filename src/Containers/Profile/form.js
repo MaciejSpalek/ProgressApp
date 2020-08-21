@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components'
-import Input from '../../Components/input';
+import InputLabel from '../../Components/InputLabel';
 import Button from '../../Components/Button';
 import SquareButton from '../../Components/Buttons/SquareButton';
 import { FlexComponent, variables, flexCenter } from '../../Components/styleHelpers';
@@ -66,29 +66,26 @@ const Form = ({ handleFunction, handleEditButton, user }) => {
     return (
         <StyledForm onSubmit={(e)=> handleFunction(e)}>
             <StyledInputWrapper>
-                <Input 
-                    value={trainingExperience}
-                    style={{margin: ".25em 0"}} 
-                    type={"number"} 
+                <InputLabel 
                     name={"trainingExperience"} 
-                    placeholder="staż treningowy"
+                    value={trainingExperience}
                     handleFunction={()=> {}}
-                />
-                <Input 
-                    value={weight}
-                    style={{margin: ".25em 0"}} 
+                    text="staż treningowy"
                     type={"number"} 
+                />
+                <InputLabel 
+                    handleFunction={()=> {}}
+                    text="waga [kg]" 
                     name={"weight"} 
-                    placeholder="waga [kg]" 
-                    handleFunction={()=> {}}
-                />
-                <Input 
-                    value={height}
-                    style={{margin: ".25em 0"}} 
                     type={"number"} 
-                    name={"height"} 
-                    placeholder="wzrost [cm]" 
+                    value={weight}
+                />
+                <InputLabel 
                     handleFunction={()=> {}}
+                    text="wzrost [cm]" 
+                    name={"height"} 
+                    type={"number"} 
+                    value={height}
                 />
                 <StyledTextArea 
                     style={{margin: ".25em 0"}} 

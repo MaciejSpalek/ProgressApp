@@ -38,6 +38,7 @@ const TopWrapper = ({
                 imgHeight={height}
                 imgWidth={width}
                 dotSize={"22px"}
+                gap={"15px"}
                 url={url}
             />
 
@@ -52,12 +53,13 @@ const TopWrapper = ({
                 <SquareButton 
                     handleFunction={()=> handleEditButton()}
                     iconColor={variables.$grayBlue}
+                    iconName={faPenSquare}
+                    position={"absolute"}
                     buttonStyles={{
                         top: ".1em",
                         right: ".2em",
                         fontSize: 35
                     }}
-                    iconName={faPenSquare}
                 />
             </>
             

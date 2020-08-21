@@ -1,24 +1,42 @@
 import React from 'react';
 import styled from 'styled-components'
+import { flexCenter } from '../Components/styleHelpers';
 
-const ImageWrapper = styled.img`
+const StyledImage = styled.img`
     width: ${props => props.width};
     height: ${props => props.height};
-    background-image: url(${props => props.url});
-    background-position: center;
-    background-size: cover;
     border-radius: 50%;
 `
+const StyledFigure = styled.figure`
+    ${flexCenter};
+`
+const StyledFigCaption = styled.figcaption`
+    color: black;
+`
 
-const Image = ({ url, height, width, margin }) => {
+const Image = ({ 
+    url, 
+    alt,
+    width, 
+    height, 
+    margin,
+    figCaption,
+    figCaptionStyle 
+}) => {
     return (
-        <ImageWrapper 
-            url={url} 
-            width={width}
-            height={height}
-            style={{margin: margin}}
-        />
-       
+        <StyledFigure>
+            <StyledImage 
+                alt={alt}
+                src={url} 
+                width={width}
+                height={height}
+                style={{margin: margin}}
+            />
+            <StyledFigCaption 
+                style={figCaptionStyle}>
+                {figCaption}
+            </StyledFigCaption>
+        </StyledFigure>
     )
 }
 

@@ -117,16 +117,25 @@ class ShareBox extends Component {
             <Container onSubmit={(e) => this.addPost(e)}>
                 <StyledWrapper>
                     <HeaderWrapper>
-                        <FontAwesomeIcon icon={faAddressCard} style={{fontSize: 25, margin: '.2em'}} color={variables.$grayBlue} />
+                        <FontAwesomeIcon 
+                            icon={faAddressCard} 
+                            style={{fontSize: 25, margin: '.2em', color: variables.$grayBlue}} 
+                        />
                         <Paragraph
                             color={variables.$grayBlue}
                             text={"Stwórz post"}
                             fontSize={"1.4em"}
                         />
                     </HeaderWrapper>
-                    <TextArea name="textarea" placeholder="Napisz coś..."></TextArea>
+                    <TextArea 
+                        name="textarea" 
+                        placeholder="Napisz coś...">
+                    </TextArea>
                 </StyledWrapper>
-                <Button handleClick={()=> {}} text={"Opublikuj"}/>
+                <Button 
+                    handleClick={()=> {}} 
+                    text={"Opublikuj"}
+                />
             </Container>
         )
     }

@@ -4,7 +4,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPaperPlane } from '@fortawesome/free-solid-svg-icons';
 import { flexCenter, variables, FlexComponent }  from '../../Components/styleHelpers';
 import Cross from '../../Components/cross';
-import Input from '../../Components/input';
+import InputLabel from '../../Components/InputLabel';
+import ImageWrapper from '../../Components/ImageWrapper';
+import SquareButton from '../../Components/Buttons/SquareButton';
+
 
 const StyledContainer = styled(FlexComponent)`
     flex-direction: column;
@@ -13,13 +16,31 @@ const StyledContainer = styled(FlexComponent)`
     height: 100%;
     padding: 0;
 `
-const MessageWindowHeader = styled.div`
-    ${flexCenter};
+
+const StyledMessageWindowHeader = styled(FlexComponent)`
+    border-bottom: .05em solid ${variables.$lightGray};   
     justify-content: space-between;
+`
+
+const StyledMessageList = styled.ul`
+    ${flexCenter}
+    justify-content: flex-start;
+    flex-direction: column;
+    height: 100%;
     width: 100%;
     padding: .5em;
-    border-bottom: .05em solid ${variables.$lightGray};   
+    overflow-y: scroll;
 `
+
+const StyledForm = styled.form`
+    ${flexCenter};
+    width: 100%;
+    height: 50px;
+    padding: .25em .5em;
+    border-top: .05em solid ${variables.$lightGray};
+    background-color: ${variables.$blue};
+`
+
 const StyledWrapper = styled(FlexComponent)`
     width: auto;
     padding: 0;
@@ -29,53 +50,8 @@ const Nick = styled.p`
     color: ${variables.$grayBlue};
     font-size: 1.5em;
     font-weight: bold;
+    margin-left: .5em;
 `
-const Image = styled.div`
-    position:relative;
-    width:2.5em;
-    height: 2.5em;
-    background-image: url(${props => props.url});
-    background-position: center;
-    background-size: cover;
-    border-radius: 50%;
-    margin-right: .5em;
-`
-
-const LogDot = styled.span`
-    position: absolute;
-    bottom: .02em;
-    right:.02em;
-    width: .8em;
-    height: .8em;
-    background-color: ${props => props.isLogged ? "green" : "red"};
-    border-radius: 50%;
-    border: .15em solid white;
-`
-
-const MessageWindowContent = styled.div`
-    ${flexCenter}
-    justify-content: flex-start;
-    flex-direction: column;
-    width: 100%;
-    height: 100%;
-    overflow-y: scroll;
-    padding: .5em;
-`
-
-const FormBox = styled.form`
-    ${flexCenter};
-    width: 100%;
-    height: 50px;
-    padding: .25em .5em;
-    border-top: .05em solid ${variables.$lightGray};
-    background-color: ${variables.$blue};
-`
-
-
-const crossStyled = {
-    color: `${variables.$gray}`
-}
-
 
 
 
@@ -93,37 +69,45 @@ const ConversationPanel = ({
 
     return (
         <StyledContainer>
-            <MessageWindowHeader>
+            <StyledMessageWindowHeader>
                 <StyledWrapper>
-                    <Image url={converserPhotoURL}>
-                        <LogDot isLogged={isConversationUserLogged}/>
-                    </Image>
+                    <ImageWrapper 
+                        isLogged={isConversationUserLogged}
+                        url={converserPhotoURL}
+                        alt={converserNick}
+                        imgHeight={"3.5em"}
+                        imgWidth={"3.5em"}
+                        dotSize={".9em"}
+                        gap={".15em"}
+                        />
                     <Nick> {converserNick} </Nick>
                 </StyledWrapper>
                 <Cross 
                     handleClick={()=> hideConversation()}
-                    styled={crossStyled}
-                    fontSize={{ fontSize: "2em" }}
+                    fontSize={"2em"}
                 />
-            </MessageWindowHeader>
-            <MessageWindowContent >
+            </StyledMessageWindowHeader>
+            <StyledMessageList >
                 {renderMessages()}
                 <div ref={messageWindowRef} />
-            </MessageWindowContent>
-            <FormBox onSubmit = {(e) => sendMessage(e)}>
-                <Input 
+            </StyledMessageList>
+            <StyledForm onSubmit = {(e) => sendMessage(e)}>
+                <InputLabel 
+                    ariaLabel={"Napisz wiadomość"}
                     style={{ margin: ".25em 0" }} 
-                    type={"text"} 
-                    name={"input"} 
-                    placeholder="Napisz..."
                     handleFunction={()=> {}}
+                    placeholder="Napisz..."
+                    maxLength={150}
+                    name={"input"} 
+                    type={"text"} 
                 />
-                <FontAwesomeIcon 
-                    icon={faPaperPlane} 
-                    color={variables.$grayBlue} 
-                    style={{ fontSize: "1.5em" }}
+                <SquareButton 
+                    iconName={faPaperPlane}
+                    iconColor={variables.$grayBlue}
+                    iconStyle={{ fontSize: "1.5em" }}
+                    handleFunction={()=> {}} 
                 />
-            </FormBox>
+            </StyledForm>
         </StyledContainer>
     )
 }

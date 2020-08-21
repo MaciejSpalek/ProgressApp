@@ -1,9 +1,9 @@
 import React from 'react';
+import InputLabel from '../../Components/InputLabel';
 import styled from 'styled-components'
 import { flexCenter, variables, FlexComponent }  from "../../Components/styleHelpers";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch, faUsers } from "@fortawesome/free-solid-svg-icons";
-import Input from '../../Components/input';
 
 
 const StyledContainer = styled(FlexComponent)`
@@ -32,7 +32,7 @@ const StyledBottomWrapper = styled(FlexComponent)`
     padding: .5em;
 `
 
-const StyledUsersWrapper = styled.div`
+const StyledUsersList = styled.ul`
     height: 100%;
     width: 100%;
     padding: .5em;
@@ -59,25 +59,30 @@ const Caption = styled.p`
 const FriendPanel = ({ 
     inputText, 
     renderFriends, 
-    renderProfiles,  
+    renderUsers,  
     filterNicks,
     amountOfFriends
 }) => {
     return (
         <StyledContainer>
             <StyledTopWrapper>
-                <StyledUsersWrapper>
-                    {inputText === "" ? renderFriends() : renderProfiles()}
-                </StyledUsersWrapper>
+                <StyledUsersList>
+                    {inputText === "" ? renderFriends() : renderUsers()}
+                </StyledUsersList>
                 <SearchBox>
-                    <Input 
-                        placeholder="Szukaj znajomych..." 
+                    <InputLabel
                         handleFunction={(e)=> filterNicks(e)} 
+                        placeholder="Szukaj znajomych..." 
+                        ariaLabel={"Szukaj znajomych"}
+                        name={"search"}  
+                        type={"search"}
                     />
                     <FontAwesomeIcon 
                         icon={faSearch} 
-                        color={variables.$gray} 
-                        style={{fontSize: "1.5em"}}
+                        style={{
+                            fontSize: "1.5em",
+                            color: variables.$gray
+                        }}
                     />
                 </SearchBox> 
             </StyledTopWrapper>
@@ -85,8 +90,10 @@ const FriendPanel = ({
                 <Caption> Znajomi ({amountOfFriends}) </Caption>
                 <FontAwesomeIcon 
                     icon={faUsers} 
-                    color={variables.$grayBlue} 
-                    style={{fontSize: 30}}
+                    style={{
+                        fontSize: 30,
+                        color: variables.$grayBlue
+                    }}
                 /> 
             </StyledBottomWrapper>
         </StyledContainer> 
