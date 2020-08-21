@@ -3,7 +3,7 @@ import styled from "styled-components";
 import app from '../../base';
 import { flexCenter, variables }  from "../../Components/styleHelpers";
 
-const Container = styled.div`
+const Container = styled.li`
     ${flexCenter}
     flex-direction: column;
     align-self: flex-start;
@@ -53,6 +53,7 @@ const containerStyle = {
 const dateStyle = {
     "alignSelf": "flex-end"
 }
+
 const Message = ({userID, text, date}) => {
     const [isDateShow, changeDateState] = useState(false)
     const isUser = (userID) => {

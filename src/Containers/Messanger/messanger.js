@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 
 import app from '../../base';
-import UserProfile from './userProfile';
-import Friend from './friend';
+import UserItem from './userItem';
+import FriendItem from './friendItem';
 import Message from './message';
 import helpers from '../../Components/helpers';
 import FriendPanel from './FriendPanel';
@@ -136,10 +136,10 @@ class Messanger extends Component {
         } 
     }
 
-    renderProfiles() {
+    renderUsers() {
         return this.state.mutableUsersArray.map((user, index) => {
             return (
-                <UserProfile
+                <UserItem
                     user={user}
                     key = {index}
                 />
@@ -151,7 +151,7 @@ class Messanger extends Component {
     renderFriends() {
         return this.state.friends.map((friend, index) => {
             return (
-                <Friend
+                <FriendItem
                     user={friend}
                     key={index}
                     handleConversation={()=> this.openConversation(friend)}
@@ -267,7 +267,7 @@ class Messanger extends Component {
                         windowWidth={windowWidth}
                         inputText={inputText}
                         renderFriends={()=> this.renderFriends()}
-                        renderProfiles={()=> this.renderProfiles()}  
+                        renderUsers={()=> this.renderUsers()}  
                         filterNicks={(e)=> this.filterNicks(e)}
                         amountOfFriends={amountOfFriends}
                     />
@@ -276,10 +276,11 @@ class Messanger extends Component {
         } else  {
             return (
                 <Container>
-                    {!isConversationOpen ? <FriendPanel 
+                    {!isConversationOpen ? 
+                    <FriendPanel 
                         inputText={inputText}
                         renderFriends={()=> this.renderFriends()}
-                        renderProfiles={()=> this.renderProfiles()}  
+                        renderUsers={()=> this.renderUsers()}  
                         filterNicks={(e)=> this.filterNicks(e)}
                         amountOfFriends={amountOfFriends}
                     /> :

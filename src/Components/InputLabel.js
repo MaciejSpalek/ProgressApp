@@ -16,35 +16,13 @@ const Label = styled.label`
 `
 
 const InputLabel = ({ 
-    handleFunction, 
-    placeholder, 
-    isRequired, 
-    labelStyle,
-    maxLength,
-    value, 
-    style,
-    text, 
-    name, 
-    type, 
-    min, 
-    max, 
+    text, labelStyle, ...props
  }) => {
     return (
         <Label style={labelStyle}>
             {text}
-            <Input  
-                handleFunction={(e)=> handleFunction(e)}
-                placeholder={placeholder}
-                maxLength={maxLength}
-                isRequired={isRequired}
-                value={value}
-                style={style}
-                name={name}  
-                type={type}
-                min={min}
-                max={max}
-            />
-    </Label>
+            <Input  {...props} />
+        </Label>
     )
 }
 

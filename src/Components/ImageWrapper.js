@@ -5,30 +5,39 @@ import OnlineDot from './onlineDot';
 
 
 const StyledImageWrapper = styled.div`
-    position:relative;
+    position: relative;
     margin: ${props => props.margin};
 `
 
 const ImageWrapper = ({ 
-    url, 
-    imgWidth, 
+    figCaptionStyle,
+    figCaption, 
+    dotBorder,
     imgHeight, 
-    dotSize, 
-    dotBorder, 
+    imgWidth, 
     isLogged, 
-    margin 
+    dotSize, 
+    margin, 
+    url, 
+    alt,
+    gap
 }) => {
     return (
         <StyledImageWrapper margin={margin}>
             <Image 
-                url={url}
-                width={imgWidth}
+                figCaptionStyle={figCaptionStyle}
+                figCaption={figCaption}
                 height={imgHeight}
+                width={imgWidth}
+                alt={alt}
+                url={url}
             />
             <OnlineDot 
-                size={dotSize}
-                isLogged={isLogged}
+                position={"absolute"}
                 dotBorder={dotBorder}
+                isLogged={isLogged}
+                size={dotSize}
+                gap={gap}
             />
         </StyledImageWrapper>
     )
