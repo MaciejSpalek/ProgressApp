@@ -11,7 +11,6 @@ import PrivateRoute from "./PrivateRoute";
 import app from './base';
 import { AuthProvider, AuthContext } from "./Auth";
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-// import './App.scss';
 import styled from 'styled-components';
 import GlobalStyle from './GlobalStyle';
 

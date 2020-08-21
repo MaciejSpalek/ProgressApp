@@ -8,7 +8,6 @@ const StyledButton = styled.button`
     width: 100%;
     min-height: 38px;
     font-size: 1.2em;
-    font-weight: bold;
     font-family: 'Patua One', cursive;
     background-color: ${variables.$grayBlue};
     border-radius: .2em;
